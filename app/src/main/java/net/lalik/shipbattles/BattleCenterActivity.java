@@ -2,6 +2,7 @@ package net.lalik.shipbattles;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
@@ -34,12 +35,18 @@ public class BattleCenterActivity extends Activity {
         new FindOpponentTask().execute();
     }
 
+    private void enterBattle() {
+        Intent intent = new Intent(this, BattleActivity.class);
+        startActivity(intent);
+    }
+
     private class FindOpponentTask extends AsyncTask<Void, Void, Void> {
         @Override
         protected Void doInBackground(Void... params) {
             try {
                 Thread.sleep(2000);
                 findOpponentProgress.dismiss();
+                enterBattle();
             } catch (InterruptedException e) {
             }
             return null;

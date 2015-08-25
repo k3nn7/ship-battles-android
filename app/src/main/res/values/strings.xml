@@ -13,4 +13,5 @@
 
     <string name="new_battle_button">Nowa bitwa</string>
     <string name="we_are_finding_opponnent_for_you">Wyszukujemy dla Ciebie godnego przeciwnika...</string>
+    <string name="title_activity_battle">BattleActivity</string>
 </resources>
