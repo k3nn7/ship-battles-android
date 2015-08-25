@@ -1,24 +1,22 @@
 package net.lalik.shipbattles;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 
-public class BattleActivity extends Activity {
+public class DeployFleetActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_battle);
+        setContentView(R.layout.activity_deploy_fleet);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_battle, menu);
+        getMenuInflater().inflate(R.menu.menu_deploy_fleet, menu);
         return true;
     }
 
@@ -35,10 +33,5 @@ public class BattleActivity extends Activity {
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    public void deployFleetClicked(View view) {
-        Intent intent = new Intent(this, DeployFleetActivity.class);
-        startActivity(intent);
     }
 }

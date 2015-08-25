@@ -33,11 +33,20 @@
         <activity
             android:name=".BattleActivity"
             android:label="@string/title_activity_battle"
-            android:theme="@style/BattleCenter"
-            android:parentActivityName=".BattleCenterActivity">
+            android:parentActivityName=".BattleCenterActivity"
+            android:theme="@style/BattleCenter" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="net.lalik.shipbattles.BattleCenterActivity" />
+        </activity>
+        <activity
+            android:name=".DeployFleetActivity"
+            android:label="@string/title_activity_deploy_fleet"
+            android:parentActivityName=".BattleActivity"
+            android:theme="@style/BattleCenter">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="net.lalik.shipbattles.BattleActivity" />
         </activity>
     </application>
 

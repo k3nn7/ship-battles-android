@@ -68,7 +68,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Rozmieść flotę"
-            android:id="@+id/button" />
+            android:id="@+id/deploy_fleet_button"
+            android:onClick="deployFleetClicked" />
 
         <Button
             android:layout_width="wrap_content"
