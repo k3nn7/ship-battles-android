@@ -1,11 +1,16 @@
 package net.lalik.shipbattles;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
+import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 public class EntryActivity extends Activity {
+    private ProgressDialog registerProgress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -13,25 +18,37 @@ public class EntryActivity extends Activity {
         setContentView(R.layout.activity_entry);
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_entry, menu);
-        return true;
+    public void signInClicked(View view) {
+        Intent intent = new Intent(this, SignInActivity.class);
+        startActivity(intent);
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
+    public void registerClicked(View view) {
+        registerProgress = ProgressDialog.show(
+                this,
+                getText(R.string.app_name),
+                getText(R.string.registering_account),
+                true
+        );
+        new RegisterAccountTask().execute();
+    }
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+    private void enterBattleCenter() {
+        Intent intent = new Intent(this, BattleCenterActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
+    private class RegisterAccountTask extends AsyncTask<Void, Void, Void> {
+        @Override
+        protected Void doInBackground(Void... params) {
+            try {
+                Thread.sleep(2000);
+                registerProgress.dismiss();
+                enterBattleCenter();
+            } catch (InterruptedException e) {
+            }
+            return null;
         }
-
-        return super.onOptionsItemSelected(item);
     }
 }

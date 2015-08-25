@@ -6,15 +6,30 @@
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/EntryTheme" >
         <activity
             android:name=".EntryActivity"
-            android:label="@string/app_name" >
+            android:label="@string/app_name"
+            android:theme="@style/EntryTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name=".SignInActivity"
+            android:label="@string/title_activity_sign_in"
+            android:parentActivityName=".EntryActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="net.lalik.shipbattles.EntryActivity" />
+        </activity>
+
+        <activity
+            android:name=".BattleCenterActivity"
+            android:label="@string/title_activity_battle_center"
+            android:theme="@style/BattleCenter">
         </activity>
     </application>
 
