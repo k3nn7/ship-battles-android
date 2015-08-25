@@ -43,12 +43,8 @@ public class BattleCenterActivity extends Activity {
     private class FindOpponentTask extends AsyncTask<Void, Void, Void> {
         @Override
         protected Void doInBackground(Void... params) {
-            try {
-                Thread.sleep(2000);
-                findOpponentProgress.dismiss();
-                enterBattle();
-            } catch (InterruptedException e) {
-            }
+            findOpponentProgress.dismiss();
+            enterBattle();
             return null;
         }
     }

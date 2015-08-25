@@ -42,12 +42,8 @@ public class EntryActivity extends Activity {
     private class RegisterAccountTask extends AsyncTask<Void, Void, Void> {
         @Override
         protected Void doInBackground(Void... params) {
-            try {
-                Thread.sleep(2000);
-                registerProgress.dismiss();
-                enterBattleCenter();
-            } catch (InterruptedException e) {
-            }
+            registerProgress.dismiss();
+            enterBattleCenter();
             return null;
         }
     }
