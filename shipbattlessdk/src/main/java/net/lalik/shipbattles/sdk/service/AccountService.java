@@ -15,7 +15,8 @@ public class AccountService {
     public Account createRandomAccount() {
         long timestamp = System.currentTimeMillis() / 1000L;
         String nick = String.format("user%d", timestamp);
-        return accountRepository.save(new Account(nick));
+        String authToken = String.format("%d", timestamp);
+        return accountRepository.save(new Account(nick, authToken));
     }
 
     public Account authenticate(String nick, String password) throws InvalidCredentialsException {

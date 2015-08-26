@@ -6,8 +6,9 @@ public class Account {
     private String authToken;
     private String password;
 
-    public Account(String nick) {
+    public Account(String nick, String authToken) {
         this.nick = nick;
+        this.authToken = authToken;
     }
 
     public Account(int id, String nick, String password, String authToken) {
