@@ -9,8 +9,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import net.lalik.shipbattles.sdk.ShipBattlesSDK;
+import net.lalik.shipbattles.sdk.entity.Account;
+
 public class EntryActivity extends Activity {
     private ProgressDialog registerProgress;
+    public final static String AUTH_TOKEN = "net.lalik.shipbattles.AUTH_TOKEN";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,8 +37,9 @@ public class EntryActivity extends Activity {
         new RegisterAccountTask().execute();
     }
 
-    private void enterBattleCenter() {
+    private void enterBattleCenter(Account account) {
         Intent intent = new Intent(this, BattleCenterActivity.class);
+        intent.putExtra(AUTH_TOKEN, account.getAuthToken());
         startActivity(intent);
         finish();
     }
@@ -42,8 +47,9 @@ public class EntryActivity extends Activity {
     private class RegisterAccountTask extends AsyncTask<Void, Void, Void> {
         @Override
         protected Void doInBackground(Void... params) {
+            Account account = ShipBattlesSDK.getInstance().createRandomAccount();
             registerProgress.dismiss();
-            enterBattleCenter();
+            enterBattleCenter(account);
             return null;
         }
     }

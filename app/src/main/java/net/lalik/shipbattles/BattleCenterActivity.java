@@ -8,14 +8,32 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
+
+import net.lalik.shipbattles.sdk.ShipBattlesSDK;
+import net.lalik.shipbattles.sdk.entity.Account;
+import net.lalik.shipbattles.sdk.service.exception.InvalidCredentialsException;
 
 public class BattleCenterActivity extends Activity {
     private ProgressDialog findOpponentProgress;
+    private Account account;
+    private TextView userNick;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_battle_center);
+        userNick = (TextView)findViewById(R.id.user_nick);
+        Intent intent = getIntent();
+        try {
+            account = ShipBattlesSDK
+                    .getInstance()
+                    .authenticate(intent.getStringExtra(EntryActivity.AUTH_TOKEN));
+            userNick.setText(account.getNick());
+        } catch (InvalidCredentialsException e) {
+            finish();
+        }
+
     }
 
     @Override
