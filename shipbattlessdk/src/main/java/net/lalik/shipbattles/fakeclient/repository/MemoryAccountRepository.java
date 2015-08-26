@@ -37,7 +37,12 @@ public class MemoryAccountRepository implements AccountRepository {
     }
 
     @Override
-    public Account findByToken(String token) {
-        return null;
+    public Account findByToken(String token) throws EntityNotFoundException {
+        for (Account account : accounts) {
+            if (token.equals(account.getAuthToken())) {
+                return account;
+            }
+        }
+        throw new EntityNotFoundException();
     }
 }

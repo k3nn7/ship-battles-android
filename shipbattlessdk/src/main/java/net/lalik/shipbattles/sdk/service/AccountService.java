@@ -25,4 +25,12 @@ public class AccountService {
             throw new InvalidCredentialsException();
         }
     }
+
+    public Account authenticate(String token) throws InvalidCredentialsException {
+        try {
+            return accountRepository.findByToken(token);
+        } catch (EntityNotFoundException e) {
+            throw new InvalidCredentialsException();
+        }
+    }
 }

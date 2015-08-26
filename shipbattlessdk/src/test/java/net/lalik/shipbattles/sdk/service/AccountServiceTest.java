@@ -44,4 +44,22 @@ public class AccountServiceTest {
     public void authenticateAccountForInvalidCredentials() throws Exception {
         accountService.authenticate("foo", "bar");
     }
+
+    @Test
+    public void authenticateAccountWithValidToken() throws Exception {
+        Account expectedAccount = accountRepository.save(
+                new Account(5, "user", "password", "foobar")
+        );
+
+        Account authenticatedAccount = accountService.authenticate("foobar");
+        assertEquals(
+                expectedAccount,
+                authenticatedAccount
+        );
+    }
+
+    @Test(expected=InvalidCredentialsException.class)
+    public void authenticateAccountWithInvalidToken() throws Exception {
+        accountService.authenticate("foo");
+    }
 }
