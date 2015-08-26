@@ -11,10 +11,14 @@ import android.view.View;
 
 import net.lalik.shipbattles.R;
 
+import java.util.ArrayList;
+import java.util.Stack;
+
 public class Battlefield extends View {
     private boolean showGrid;
     private Paint textPaint, shipPaint;
     private int width, height, gridSize;
+    private Stack<Ship> ships;
 
     public Battlefield(Context context, AttributeSet attributeSet) {
         super(context, attributeSet);
@@ -31,7 +35,20 @@ public class Battlefield extends View {
             attributes.recycle();
         }
 
+        ships = new Stack<>();
         initPaints();
+    }
+
+    public void deployShip(Ship ship) {
+        ships.push(ship);
+        invalidate();
+        requestLayout();
+    }
+
+    public void clear() {
+        ships.clear();
+        invalidate();
+        requestLayout();
     }
 
     @Override
@@ -50,7 +67,9 @@ public class Battlefield extends View {
         drawLabels(canvas);
         drawGrid(canvas);
 
-        drawShip(canvas, new Coordinate(1, 1), new Coordinate(3, 2));
+        for (Ship ship : ships) {
+            drawShip(canvas, ship.getTopCoordinate(), ship.getBottomCoordinate());
+        }
     }
 
     private void drawLabels(Canvas canvas) {
@@ -100,10 +119,10 @@ public class Battlefield extends View {
     private void drawShip(Canvas canvas, Coordinate start, Coordinate end) {
         float x1, y1, x2, y2;
 
-        x1 = start.getX() * gridSize + gridSize;
-        y1 = start.getY() * gridSize + gridSize;
-        x2 = end.getX() * gridSize + gridSize;
-        y2 = end.getY() * gridSize + gridSize;
+        x1 = (start.getX() - 1) * gridSize + gridSize;
+        y1 = (start.getY() - 1) * gridSize + gridSize;
+        x2 = (end.getX() - 1) * gridSize + gridSize;
+        y2 = (end.getY() - 1) * gridSize + gridSize;
         canvas.drawRect(x1, y1, x2, y2, shipPaint);
     }
 

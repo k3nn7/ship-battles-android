@@ -57,17 +57,45 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Dostępne okręty:\nKuter(4) Fregata (3) Krążownik (2) Pancernik (1)"
+        android:text="Dostępne okręty:"
         android:id="@+id/textView11" />
 
-    <Button
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Woduj okręt"
-        android:id="@+id/button3" />
+        android:text="Kuter(4) Fregata (3) Krążownik (2) Pancernik (1)"
+        android:id="@+id/ships_inventory_text" />
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Woduj okręt"
+            android:id="@+id/deploy_ship_button"
+            android:onClick="deployShipClicked" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Od nowa"
+            android:id="@+id/clear_battlefield_button"
+            android:onClick="clearBattlefieldClicked"/>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Gotowy"
+            android:id="@+id/deploy_finished_button"
+            android:onClick="deployFinishedClicked"/>
+    </LinearLayout>
 
     <net.lalik.shipbattles.views.Battlefield
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        shipbattles:showGrid="true" />
+        shipbattles:showGrid="true"
+        android:id="@+id/battlefield" />
 </LinearLayout>

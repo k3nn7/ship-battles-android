@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/ShipBattles.iml" filepath="$PROJECT_DIR$/ShipBattles.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/shipbattlessdk/shipbattlessdk.iml" filepath="$PROJECT_DIR$/shipbattlessdk/shipbattlessdk.iml" />
     </modules>
   </component>
 </project>
