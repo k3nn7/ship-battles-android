@@ -1,5 +1,6 @@
 package net.lalik.shipbattles.sdk.service;
 
+import net.lalik.shipbattles.fakeclient.repository.MemoryAccountRepository;
 import net.lalik.shipbattles.fakeclient.repository.MemoryBattleRepository;
 import net.lalik.shipbattles.sdk.entity.Battle;
 import net.lalik.shipbattles.sdk.repository.BattleRepository;
@@ -15,7 +16,7 @@ public class BattleServiceTest {
 
     @Before
     public void setUp() {
-        battleRepository = new MemoryBattleRepository();
+        battleRepository = new MemoryBattleRepository(new MemoryAccountRepository());
         battleService = new BattleService(battleRepository);
     }
 

@@ -3,8 +3,8 @@ package net.lalik.shipbattles.sdk.entity;
 import java.util.Arrays;
 
 public class Battle {
-    private final int leftAccount;
-    private final int rightAccount;
+    private final Account leftAccount;
+    private final Account rightAccount;
     private STATE state;
 
     public enum STATE {
@@ -14,17 +14,17 @@ public class Battle {
         FINISHED
     }
 
-    public Battle(int leftAccount, int rightAccount, STATE state) {
+    public Battle(Account leftAccount, Account rightAccount, STATE state) {
         this.leftAccount = leftAccount;
         this.rightAccount = rightAccount;
         this.state = state;
     }
 
-    public int getLeftAccount() {
+    public Account getLeftAccount() {
         return leftAccount;
     }
 
-    public int getRightAccount() {
+    public Account getRightAccount() {
         return rightAccount;
     }
 
@@ -38,11 +38,11 @@ public class Battle {
     }
 
     public boolean isAccountIdParticipant(int accountId) {
-        return ((leftAccount == accountId) || (rightAccount == accountId));
+        return ((leftAccount.getId() == accountId) || (rightAccount.getId() == accountId));
     }
 
-    public int getSecondAccountId(int firstAccount) {
-        if (leftAccount == firstAccount) {
+    public Account getSecondAccountId(int firstAccount) {
+        if (leftAccount.getId() == firstAccount) {
             return rightAccount;
         }
         return leftAccount;

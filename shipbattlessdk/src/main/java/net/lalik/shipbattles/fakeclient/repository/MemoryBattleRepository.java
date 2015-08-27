@@ -1,17 +1,36 @@
 package net.lalik.shipbattles.fakeclient.repository;
 
 import net.lalik.shipbattles.sdk.entity.Battle;
+import net.lalik.shipbattles.sdk.repository.AccountRepository;
 import net.lalik.shipbattles.sdk.repository.BattleRepository;
+import net.lalik.shipbattles.sdk.repository.exception.EntityNotFoundException;
 
 import java.util.ArrayList;
 
 public class MemoryBattleRepository implements BattleRepository {
     ArrayList<Battle> battles;
+    private AccountRepository accountRepository;
 
-    public MemoryBattleRepository() {
+    public MemoryBattleRepository(AccountRepository accountRepository) {
+        this.accountRepository = accountRepository;
         battles = new ArrayList<>();
-        battles.add(new Battle(1, 2, Battle.STATE.FINISHED));
-        battles.add(new Battle(2, 1, Battle.STATE.LEFT_ATTACKS));
+        createSampleBattles();
+    }
+
+    private void createSampleBattles() {
+        try {
+            battles.add(new Battle(
+                    accountRepository.findById(1),
+                    accountRepository.findById(2),
+                    Battle.STATE.FINISHED
+            ));
+            battles.add(new Battle(
+                    accountRepository.findById(2),
+                    accountRepository.findById(1),
+                    Battle.STATE.LEFT_ATTACKS
+            ));
+        } catch (EntityNotFoundException e) {
+        }
     }
 
     @Override

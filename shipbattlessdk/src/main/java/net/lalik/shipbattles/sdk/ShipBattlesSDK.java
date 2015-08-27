@@ -22,7 +22,7 @@ public class ShipBattlesSDK {
     private ShipBattlesSDK() {
         accountRepository = new MemoryAccountRepository();
         accountService = new AccountService(accountRepository);
-        battleRepository = new MemoryBattleRepository();
+        battleRepository = new MemoryBattleRepository(accountRepository);
         battleService = new BattleService(battleRepository);
     }
 
