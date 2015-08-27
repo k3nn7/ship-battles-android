@@ -5,7 +5,7 @@ import java.util.Arrays;
 public class Battle {
     private final Account leftAccount;
     private final Account rightAccount;
-    private STATE state;
+    public STATE state;
 
     public enum STATE {
         DEPLOY,
@@ -46,5 +46,12 @@ public class Battle {
             return rightAccount;
         }
         return leftAccount;
+    }
+
+    public Account getCurrentAccount() {
+        if (state == STATE.LEFT_ATTACKS) {
+            return leftAccount;
+        }
+        return rightAccount;
     }
 }

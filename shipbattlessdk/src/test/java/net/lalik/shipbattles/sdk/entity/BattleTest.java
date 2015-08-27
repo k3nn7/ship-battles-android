@@ -69,4 +69,18 @@ public class BattleTest {
                 Battle.STATE.FINISHED
         ).getSecondAccountId(1));
     }
+
+    @Test
+    public void getCurrentAccount() throws Exception {
+        assertEquals(accountRepository.findById(1), new Battle(
+                accountRepository.findById(1),
+                accountRepository.findById(2),
+                Battle.STATE.LEFT_ATTACKS
+        ).getCurrentAccount());
+        assertEquals(accountRepository.findById(2), new Battle(
+                accountRepository.findById(1),
+                accountRepository.findById(2),
+                Battle.STATE.RIGHT_ATTACKS
+        ).getCurrentAccount());
+    }
 }
