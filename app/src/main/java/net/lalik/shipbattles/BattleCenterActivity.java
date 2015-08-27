@@ -2,28 +2,41 @@ package net.lalik.shipbattles;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import net.lalik.shipbattles.sdk.ShipBattlesSDK;
 import net.lalik.shipbattles.sdk.entity.Account;
+import net.lalik.shipbattles.sdk.entity.Battle;
 import net.lalik.shipbattles.sdk.service.exception.InvalidCredentialsException;
+import net.lalik.shipbattles.views.ActiveBattleListViewAdapter;
+
+import java.util.List;
 
 public class BattleCenterActivity extends Activity {
     public final static String AUTH_TOKEN = "net.lalik.shipbattles.AUTH_TOKEN";
     private ProgressDialog findOpponentProgress;
     private Account account;
     private TextView userNick;
+    private Battle[] activeBattles;
+    private ListView activeBattlesList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_battle_center);
+
+        activeBattlesList = (ListView)findViewById(R.id.active_battles_list);
         userNick = (TextView)findViewById(R.id.user_nick);
+
         Intent intent = getIntent();
         try {
             account = ShipBattlesSDK
@@ -34,6 +47,21 @@ public class BattleCenterActivity extends Activity {
             finish();
         }
 
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        activeBattles = ShipBattlesSDK
+                .getInstance()
+                .getActiveBattlesForAccountId(account.getId());
+
+        ActiveBattleListViewAdapter adapter = new ActiveBattleListViewAdapter(
+                this,
+                activeBattles,
+                account
+        );
+        activeBattlesList.setAdapter(adapter);
     }
 
     @Override
@@ -65,5 +93,13 @@ public class BattleCenterActivity extends Activity {
             enterBattle();
             return null;
         }
+    }
+
+    private class BattlesArrayAdapter extends ArrayAdapter<Battle> {
+        public BattlesArrayAdapter(Context context, int textViewResourceId, List<Battle> objects) {
+            super(context, textViewResourceId, objects);
+        }
+
+
     }
 }
