@@ -7,4 +7,5 @@ public interface AccountRepository {
     Account save(Account account);
     Account findByNickAndPassword(String nick, String password) throws EntityNotFoundException;
     Account findByToken(String token) throws EntityNotFoundException;
+    Account findById(int id) throws EntityNotFoundException;
 }

@@ -11,12 +11,29 @@ public class MemoryAccountRepository implements AccountRepository {
 
     public MemoryAccountRepository() {
         accounts = new ArrayList<>();
+        createTestAccounts();
+    }
 
+    private void createTestAccounts() {
         accounts.add(new Account(
                 1,
                 "testuser",
                 "dev123",
-                "foobar"
+                "foo1"
+        ));
+
+        accounts.add(new Account(
+                2,
+                "opponent1",
+                "dev123",
+                "foo2"
+        ));
+
+        accounts.add(new Account(
+                3,
+                "opponent2",
+                "dev123",
+                "foo3"
         ));
     }
 
@@ -35,21 +52,25 @@ public class MemoryAccountRepository implements AccountRepository {
 
     @Override
     public Account findByNickAndPassword(String nick, String password) throws EntityNotFoundException {
-        for (Account account : accounts) {
-            if (nick.equals(account.getNick()) && account.isPasswordValid(password)) {
+        for (Account account : accounts)
+            if (nick.equals(account.getNick()) && account.isPasswordValid(password))
                 return account;
-            }
-        }
         throw new EntityNotFoundException();
     }
 
     @Override
     public Account findByToken(String token) throws EntityNotFoundException {
-        for (Account account : accounts) {
-            if (token.equals(account.getAuthToken())) {
+        for (Account account : accounts)
+            if (token.equals(account.getAuthToken()))
                 return account;
-            }
-        }
+        throw new EntityNotFoundException();
+    }
+
+    @Override
+    public Account findById(int id) throws EntityNotFoundException {
+        for (Account account : accounts)
+            if (account.getId() == id)
+                return account;
         throw new EntityNotFoundException();
     }
 }
