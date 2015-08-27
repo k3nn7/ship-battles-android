@@ -11,11 +11,18 @@ public class MemoryAccountRepository implements AccountRepository {
 
     public MemoryAccountRepository() {
         accounts = new ArrayList<>();
+
+        accounts.add(new Account(
+                1,
+                "testuser",
+                "dev123",
+                "foobar"
+        ));
     }
 
     @Override
     public Account save(Account account) {
-        int newId = accounts.size();
+        int newId = accounts.size() + 1;
         Account persistedAccount = new Account(
                 newId,
                 account.getNick(),

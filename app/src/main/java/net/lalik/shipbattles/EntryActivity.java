@@ -5,8 +5,6 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 
 import net.lalik.shipbattles.sdk.ShipBattlesSDK;
@@ -14,7 +12,6 @@ import net.lalik.shipbattles.sdk.entity.Account;
 
 public class EntryActivity extends Activity {
     private ProgressDialog registerProgress;
-    public final static String AUTH_TOKEN = "net.lalik.shipbattles.AUTH_TOKEN";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,7 +36,7 @@ public class EntryActivity extends Activity {
 
     private void enterBattleCenter(Account account) {
         Intent intent = new Intent(this, BattleCenterActivity.class);
-        intent.putExtra(AUTH_TOKEN, account.getAuthToken());
+        intent.putExtra(BattleCenterActivity.AUTH_TOKEN, account.getAuthToken());
         startActivity(intent);
         finish();
     }
