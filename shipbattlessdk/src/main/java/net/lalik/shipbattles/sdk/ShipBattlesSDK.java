@@ -56,4 +56,8 @@ public class ShipBattlesSDK {
     public Battle attackRandomOpponent(Account attacker) {
         return battleService.attackRandomOpponent(attacker);
     }
+
+    public Battle getBattleById(int battleId) throws EntityNotFoundException {
+        return battleRepository.findByid(battleId);
+    }
 }

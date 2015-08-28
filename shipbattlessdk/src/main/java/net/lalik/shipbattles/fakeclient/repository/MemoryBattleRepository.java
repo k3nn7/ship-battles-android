@@ -52,4 +52,12 @@ public class MemoryBattleRepository implements BattleRepository {
         battles.add(battle);
         return battle;
     }
+
+    @Override
+    public Battle findByid(int battleId) throws EntityNotFoundException {
+        for (Battle battle: battles)
+            if (battle.getId() == battleId)
+                return battle;
+        throw new EntityNotFoundException();
+    }
 }
