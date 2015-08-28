@@ -93,4 +93,26 @@ public class BattleTest {
                 Battle.STATE.RIGHT_ATTACKS
         ).getCurrentAccount());
     }
+
+    @Test
+    public void getBattlefieldIdForAccountId() throws Exception {
+        assertEquals(
+                5,
+                new Battle(
+                        accountRepository.findById(1),
+                        accountRepository.findById(2),
+                        5, 10,
+                        Battle.STATE.RIGHT_ATTACKS
+                ).getBattlefieldIdForAccountId(1)
+        );
+        assertEquals(
+                10,
+                new Battle(
+                        accountRepository.findById(1),
+                        accountRepository.findById(2),
+                        5, 10,
+                        Battle.STATE.RIGHT_ATTACKS
+                ).getBattlefieldIdForAccountId(2)
+        );
+    }
 }

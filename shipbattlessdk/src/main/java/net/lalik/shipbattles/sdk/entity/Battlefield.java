@@ -17,6 +17,10 @@ public class Battlefield {
         this.deployedShips = deployedShips;
     }
 
+    public void setId(int id) {
+        this.id = id;
+    }
+
     public int getId() {
         return id;
     }

@@ -10,6 +10,12 @@ public class Battle {
     private final int rightBattlefieldId;
     private STATE state;
 
+    public int getBattlefieldIdForAccountId(int accountId) {
+        if (leftAccount.getId() == accountId)
+            return leftBattlefieldId;
+        return rightBattlefieldId;
+    }
+
     public enum STATE {
         DEPLOY,
         LEFT_ATTACKS,
