@@ -1,4 +1,4 @@
-package net.lalik.shipbattles.sdk.service.exception;
+package net.lalik.shipbattles.sdk.service;
 
 import net.lalik.shipbattles.sdk.entity.Battlefield;
 import net.lalik.shipbattles.sdk.entity.ShipClass;

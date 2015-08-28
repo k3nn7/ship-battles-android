@@ -15,7 +15,7 @@ import net.lalik.shipbattles.sdk.repository.ShipClassRepository;
 import net.lalik.shipbattles.sdk.repository.exception.EntityNotFoundException;
 import net.lalik.shipbattles.sdk.service.AccountService;
 import net.lalik.shipbattles.sdk.service.BattleService;
-import net.lalik.shipbattles.sdk.service.exception.BattlefieldService;
+import net.lalik.shipbattles.sdk.service.BattlefieldService;
 import net.lalik.shipbattles.sdk.service.exception.InvalidCredentialsException;
 
 public class ShipBattlesSDK {

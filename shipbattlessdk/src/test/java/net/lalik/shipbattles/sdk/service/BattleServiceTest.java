@@ -8,7 +8,6 @@ import net.lalik.shipbattles.sdk.entity.Battle;
 import net.lalik.shipbattles.sdk.repository.AccountRepository;
 import net.lalik.shipbattles.sdk.repository.BattleRepository;
 import net.lalik.shipbattles.sdk.repository.BattlefieldRepository;
-import net.lalik.shipbattles.sdk.service.exception.BattlefieldService;
 
 import org.junit.Before;
 import org.junit.Test;
