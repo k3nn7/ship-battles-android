@@ -1,6 +1,5 @@
 package net.lalik.shipbattles.fragments;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
@@ -12,72 +11,93 @@ import android.view.View;
 import android.widget.NumberPicker;
 
 import net.lalik.shipbattles.R;
-import net.lalik.shipbattles.views.Coordinate;
-import net.lalik.shipbattles.views.Ship;
+import net.lalik.shipbattles.sdk.values.Coordinate;
+import net.lalik.shipbattles.sdk.values.Orientation;
 
 public class CoordinatesDialogFragment extends DialogFragment {
     public interface CoordinatesDialogListener {
-        public void onDeployClicked(Coordinate coordinate, Ship.Orientation orientation);
+        void onDeployClicked(Coordinate coordinate, Orientation orientation);
     }
 
     private CoordinatesDialogListener listener;
+    private NumberPicker xCoordinatePicker;
+    private NumberPicker yCoordinatePicker;
+    private NumberPicker orientationPicker;
+    private View view;
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         LayoutInflater inflater = getActivity().getLayoutInflater();
+        view = inflater.inflate(R.layout.dialog_coordinates, null);
+        initXCoordinatePicker();
+        initYCoordinatePicket();
+        initOrientationPicker();
+        return buildDialog();
+    }
 
+    public void setListener(CoordinatesDialogListener listener) {
+        this.listener = listener;
+    }
 
-        View view = inflater.inflate(R.layout.dialog_coordinates, null);
-        final NumberPicker picker = (NumberPicker)view.findViewById(R.id.x_coordinate_picker);
-        picker.setMinValue(1);
-        picker.setMaxValue(10);
-        picker.setDisplayedValues(
+    private void initOrientationPicker() {
+        orientationPicker = (NumberPicker)view.findViewById(R.id.orientation_picker);
+        orientationPicker.setMinValue(0);
+        orientationPicker.setMaxValue(1);
+        orientationPicker.setDisplayedValues(new String[]{"Poziomo", "Pionowo"});
+    }
+
+    private void initYCoordinatePicket() {
+        yCoordinatePicker = (NumberPicker)view.findViewById(R.id.y_coordinate_picker);
+        yCoordinatePicker.setMinValue(1);
+        yCoordinatePicker.setMaxValue(10);
+    }
+
+    private void initXCoordinatePicker() {
+        xCoordinatePicker = (NumberPicker)view.findViewById(R.id.x_coordinate_picker);
+        xCoordinatePicker.setMinValue(1);
+        xCoordinatePicker.setMaxValue(10);
+        xCoordinatePicker.setDisplayedValues(
                 new String[]{"A", "B", "C", "D", "E", "F", "G", "H", "I", "J"}
         );
+    }
 
-        final NumberPicker picker2 = (NumberPicker)view.findViewById(R.id.y_coordinate_picker);
-        picker2.setMinValue(1);
-        picker2.setMaxValue(10);
-
-        final NumberPicker picker3 = (NumberPicker)view.findViewById(R.id.orientation_picker);
-        picker3.setMinValue(0);
-        picker3.setMaxValue(1);
-        picker3.setDisplayedValues(
-                new String[]{"Poziomo", "Pionowo"}
-        );
-
+    private Dialog buildDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setView(view)
                 .setPositiveButton("Woduj", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        if (listener != null) {
-                            Ship.Orientation orientation;
-                            if (picker3.getValue() == 0) {
-                                orientation = Ship.Orientation.HORIZONTAL;
-                            } else {
-                                orientation = Ship.Orientation.VERTICAL;
-                            }
-                            listener.onDeployClicked(
-                                    new Coordinate(picker2.getValue(), picker.getValue()),
-                                    orientation
-                                    );
-                        }
-                        Log.d("abc", String.format("X: %d Y: %d", picker2.getValue(), picker.getValue()));
+                        onDeployClicked();
                     }
                 })
                 .setNegativeButton("Anuluj", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-
                     }
                 });
-
-
         return builder.create();
     }
 
-    public void setListener(CoordinatesDialogListener listener) {
-        this.listener = listener;
+    private void onDeployClicked() {
+        if (listener == null)
+            return;
+
+        listener.onDeployClicked(
+                getCoordinate(),
+                getOrientation()
+        );
+    }
+
+    private Orientation getOrientation() {
+        if (orientationPicker.getValue() == 0)
+            return Orientation.HORIZONTAL;
+        return Orientation.VERTICAL;
+    }
+
+    private Coordinate getCoordinate() {
+        return new Coordinate(
+                yCoordinatePicker.getValue(),
+                xCoordinatePicker.getValue()
+        );
     }
 }
