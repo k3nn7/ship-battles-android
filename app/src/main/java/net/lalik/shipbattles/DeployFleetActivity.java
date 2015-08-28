@@ -3,22 +3,31 @@ package net.lalik.shipbattles;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
 import net.lalik.shipbattles.fragments.CoordinatesDialogFragment;
+import net.lalik.shipbattles.sdk.ShipBattlesSDK;
+import net.lalik.shipbattles.sdk.entity.Account;
+import net.lalik.shipbattles.sdk.entity.Battle;
+import net.lalik.shipbattles.sdk.repository.exception.EntityNotFoundException;
+import net.lalik.shipbattles.sdk.service.exception.InvalidCredentialsException;
+import net.lalik.shipbattles.sdk.values.ShipsInventory;
 import net.lalik.shipbattles.views.Battlefield;
 import net.lalik.shipbattles.views.Coordinate;
 import net.lalik.shipbattles.views.Ship;
 import net.lalik.shipbattles.views.ShipInventory;
-import net.lalik.shipbattles.views.ShipInventoryItem;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class DeployFleetActivity extends Activity {
-    Battlefield battlefield;
+    private Account account;
+    private Battle battle;
+    private net.lalik.shipbattles.sdk.entity.Battlefield battlefield;
+    Battlefield oldBattlefield;
     ShipInventory shipsInventory;
     TextView shipsInventoryText;
 
@@ -26,12 +35,27 @@ public class DeployFleetActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_deploy_fleet);
-        battlefield = (Battlefield)findViewById(R.id.battlefield);
+        oldBattlefield = (Battlefield)findViewById(R.id.battlefield);
         shipsInventoryText = (TextView)findViewById(R.id.ships_inventory_text);
 
         shipsInventory = new ShipInventory();
         shipsInventory.addShips(Ship.Type.KEEL, 4);
         shipsInventory.addShips(Ship.Type.FRIGATE, 3);
+
+        Intent intent = getIntent();
+        try {
+            account = ShipBattlesSDK
+                    .getInstance()
+                    .authenticate(intent.getStringExtra(BattleCenterActivity.AUTH_TOKEN));
+            battle = ShipBattlesSDK
+                    .getInstance()
+                    .getBattleById(intent.getIntExtra(BattleActivity.BATTLE_ID, -1));
+            battlefield = ShipBattlesSDK.getInstance().getBattlefieldById(
+                    battle.getBattlefieldIdForAccountId(account.getId())
+            );
+        } catch (InvalidCredentialsException e) {
+        } catch (EntityNotFoundException e) {
+        }
 
         updateInventoryDisplay();
     }
@@ -62,7 +86,7 @@ public class DeployFleetActivity extends Activity {
     }
 
     public void clearBattlefieldClicked(View view) {
-        battlefield.clear();
+        oldBattlefield.clear();
     }
 
     public void deployFinishedClicked(View view) {
@@ -84,7 +108,7 @@ public class DeployFleetActivity extends Activity {
 
         @Override
         public void onDeployClicked(Coordinate coordinate, Ship.Orientation orientation) {
-            battlefield.deployShip(new Ship(
+            oldBattlefield.deployShip(new Ship(
                     coordinate,
                     orientation,
                     shipType.getSize()
@@ -96,12 +120,11 @@ public class DeployFleetActivity extends Activity {
 
     private void updateInventoryDisplay() {
         shipsInventoryText.setText("");
-        for (Map.Entry<Ship.Type, Integer> item : shipsInventory.availableShips()) {
+        for (ShipsInventory.Item item : battlefield.shipsInInventory())
             shipsInventoryText.append(String.format(
                     "%s (%d) ",
-                    item.getKey().getName(),
-                    item.getValue()
+                    item.getShipClass().getName(),
+                    item.getCount()
             ));
-        }
     }
 }

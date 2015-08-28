@@ -49,6 +49,8 @@ public class BattleActivity extends Activity {
 
     public void deployFleetClicked(View view) {
         Intent intent = new Intent(this, DeployFleetActivity.class);
+        intent.putExtra(BattleActivity.BATTLE_ID, battle.getId());
+        intent.putExtra(BattleCenterActivity.AUTH_TOKEN, account.getAuthToken());
         startActivity(intent);
     }
 }
