@@ -2,10 +2,13 @@ package net.lalik.shipbattles.sdk;
 
 import net.lalik.shipbattles.fakeclient.repository.MemoryAccountRepository;
 import net.lalik.shipbattles.fakeclient.repository.MemoryBattleRepository;
+import net.lalik.shipbattles.fakeclient.repository.MemoryShipClassRepository;
 import net.lalik.shipbattles.sdk.entity.Account;
 import net.lalik.shipbattles.sdk.entity.Battle;
+import net.lalik.shipbattles.sdk.entity.ShipClass;
 import net.lalik.shipbattles.sdk.repository.AccountRepository;
 import net.lalik.shipbattles.sdk.repository.BattleRepository;
+import net.lalik.shipbattles.sdk.repository.ShipClassRepository;
 import net.lalik.shipbattles.sdk.repository.exception.EntityNotFoundException;
 import net.lalik.shipbattles.sdk.service.AccountService;
 import net.lalik.shipbattles.sdk.service.BattleService;
@@ -15,14 +18,18 @@ public class ShipBattlesSDK {
     private static ShipBattlesSDK instance = null;
 
     private AccountRepository accountRepository;
-    private AccountService accountService;
     private BattleRepository battleRepository;
+    private ShipClassRepository shipClassRepository;
+
+    private AccountService accountService;
     private BattleService battleService;
 
     private ShipBattlesSDK() {
         accountRepository = new MemoryAccountRepository();
-        accountService = new AccountService(accountRepository);
         battleRepository = new MemoryBattleRepository(accountRepository);
+        shipClassRepository = new MemoryShipClassRepository();
+
+        accountService = new AccountService(accountRepository);
         battleService = new BattleService(battleRepository, accountRepository);
     }
 
@@ -59,5 +66,9 @@ public class ShipBattlesSDK {
 
     public Battle getBattleById(int battleId) throws EntityNotFoundException {
         return battleRepository.findByid(battleId);
+    }
+
+    public ShipClass[] getAllShipClasses() {
+        return shipClassRepository.findAll();
     }
 }
