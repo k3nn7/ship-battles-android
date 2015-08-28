@@ -73,4 +73,12 @@ public class MemoryAccountRepository implements AccountRepository {
                 return account;
         throw new EntityNotFoundException();
     }
+
+    @Override
+    public Account findRandomWithIdOtherThan(int id) {
+        if (1 == id) {
+            return accounts.get(2);
+        }
+        return accounts.get(1);
+    }
 }

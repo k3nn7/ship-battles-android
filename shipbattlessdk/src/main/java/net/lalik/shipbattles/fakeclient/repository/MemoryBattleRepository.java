@@ -44,4 +44,12 @@ public class MemoryBattleRepository implements BattleRepository {
 
         return activeBattles.toArray(new Battle[activeBattles.size()]);
     }
+
+    @Override
+    public Battle save(Battle battle) {
+        int newId = battles.size() + 1;
+        battle.setId(newId);
+        battles.add(battle);
+        return battle;
+    }
 }

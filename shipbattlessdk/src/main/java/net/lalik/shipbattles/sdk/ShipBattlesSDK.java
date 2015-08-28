@@ -23,7 +23,7 @@ public class ShipBattlesSDK {
         accountRepository = new MemoryAccountRepository();
         accountService = new AccountService(accountRepository);
         battleRepository = new MemoryBattleRepository(accountRepository);
-        battleService = new BattleService(battleRepository);
+        battleService = new BattleService(battleRepository, accountRepository);
     }
 
     static public ShipBattlesSDK getInstance() {
@@ -51,5 +51,9 @@ public class ShipBattlesSDK {
 
     public Battle[] getActiveBattlesForAccountId(int accountId) {
         return battleService.getActiveBattlesForAccountId(accountId);
+    }
+
+    public Battle attackRandomOpponent(Account attacker) {
+        return battleService.attackRandomOpponent(attacker);
     }
 }

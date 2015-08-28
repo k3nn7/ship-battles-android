@@ -3,6 +3,7 @@ package net.lalik.shipbattles.sdk.entity;
 import java.util.Arrays;
 
 public class Battle {
+    private int id;
     private final Account leftAccount;
     private final Account rightAccount;
     public STATE state;
@@ -18,6 +19,14 @@ public class Battle {
         this.leftAccount = leftAccount;
         this.rightAccount = rightAccount;
         this.state = state;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public Account getLeftAccount() {
