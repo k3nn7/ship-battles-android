@@ -23,16 +23,19 @@ public class BattleTest {
         assertFalse(new Battle(
                 accountRepository.findById(1),
                 accountRepository.findById(2),
+                0, 0,
                 Battle.STATE.FINISHED).isActive()
         );
         assertTrue(new Battle(
                         accountRepository.findById(1),
                         accountRepository.findById(2),
+                        0, 0,
                         Battle.STATE.DEPLOY).isActive()
         );
         assertTrue(new Battle(
                         accountRepository.findById(1),
                         accountRepository.findById(2),
+                        0, 0,
                         Battle.STATE.LEFT_ATTACKS).isActive()
         );
     }
@@ -42,16 +45,19 @@ public class BattleTest {
         assertTrue(new Battle(
                         accountRepository.findById(1),
                         accountRepository.findById(2),
+                        0, 0,
                         Battle.STATE.FINISHED).isAccountIdParticipant(1)
         );
         assertTrue(new Battle(
                         accountRepository.findById(1),
                         accountRepository.findById(2),
+                        0, 0,
                         Battle.STATE.FINISHED).isAccountIdParticipant(2)
         );
         assertFalse(new Battle(
                         accountRepository.findById(1),
                         accountRepository.findById(2),
+                        0, 0,
                         Battle.STATE.FINISHED).isAccountIdParticipant(3)
         );
     }
@@ -61,11 +67,13 @@ public class BattleTest {
         assertEquals(accountRepository.findById(1), new Battle(
                 accountRepository.findById(1),
                 accountRepository.findById(2),
+                0, 0,
                 Battle.STATE.FINISHED
         ).getSecondAccountId(2));
         assertEquals(accountRepository.findById(2), new Battle(
                 accountRepository.findById(1),
                 accountRepository.findById(2),
+                0, 0,
                 Battle.STATE.FINISHED
         ).getSecondAccountId(1));
     }
@@ -75,11 +83,13 @@ public class BattleTest {
         assertEquals(accountRepository.findById(1), new Battle(
                 accountRepository.findById(1),
                 accountRepository.findById(2),
+                0, 0,
                 Battle.STATE.LEFT_ATTACKS
         ).getCurrentAccount());
         assertEquals(accountRepository.findById(2), new Battle(
                 accountRepository.findById(1),
                 accountRepository.findById(2),
+                0, 0,
                 Battle.STATE.RIGHT_ATTACKS
         ).getCurrentAccount());
     }

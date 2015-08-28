@@ -20,7 +20,12 @@ public class BattleService {
 
     public Battle attackRandomOpponent(Account attacker) {
         Account opponent = accountRepository.findRandomWithIdOtherThan(attacker.getId());
-        Battle battle = new Battle(attacker, opponent, Battle.STATE.DEPLOY);
+        Battle battle = new Battle(
+                attacker,
+                opponent,
+                0, 0,
+                Battle.STATE.DEPLOY
+        );
         return battleRepository.save(battle);
     }
 }

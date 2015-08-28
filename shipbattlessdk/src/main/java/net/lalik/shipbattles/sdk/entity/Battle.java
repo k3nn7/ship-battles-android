@@ -6,7 +6,9 @@ public class Battle {
     private int id;
     private final Account leftAccount;
     private final Account rightAccount;
-    public STATE state;
+    private final int leftBattlefieldId;
+    private final int rightBattlefieldId;
+    private STATE state;
 
     public enum STATE {
         DEPLOY,
@@ -15,9 +17,17 @@ public class Battle {
         FINISHED
     }
 
-    public Battle(Account leftAccount, Account rightAccount, STATE state) {
+    public Battle(
+            Account leftAccount,
+            Account rightAccount,
+            int leftBattlefieldId,
+            int rightBattlefieldId,
+            STATE state
+    ) {
         this.leftAccount = leftAccount;
         this.rightAccount = rightAccount;
+        this.leftBattlefieldId = leftBattlefieldId;
+        this.rightBattlefieldId = rightBattlefieldId;
         this.state = state;
     }
 
@@ -35,6 +45,14 @@ public class Battle {
 
     public Account getRightAccount() {
         return rightAccount;
+    }
+
+    public int getLeftBattlefieldId() {
+        return leftBattlefieldId;
+    }
+
+    public int getRightBattlefieldId() {
+        return rightBattlefieldId;
     }
 
     public STATE getState() {

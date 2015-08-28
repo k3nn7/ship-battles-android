@@ -22,11 +22,13 @@ public class MemoryBattleRepository implements BattleRepository {
             battles.add(new Battle(
                     accountRepository.findById(1),
                     accountRepository.findById(2),
+                    0, 0,
                     Battle.STATE.FINISHED
             ));
             battles.add(new Battle(
                     accountRepository.findById(2),
                     accountRepository.findById(1),
+                    0, 0,
                     Battle.STATE.LEFT_ATTACKS
             ));
         } catch (EntityNotFoundException e) {
