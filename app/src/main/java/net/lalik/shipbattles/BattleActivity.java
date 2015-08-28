@@ -6,35 +6,45 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
+
+import net.lalik.shipbattles.sdk.ShipBattlesSDK;
+import net.lalik.shipbattles.sdk.entity.Account;
+import net.lalik.shipbattles.sdk.entity.Battle;
+import net.lalik.shipbattles.sdk.repository.exception.EntityNotFoundException;
+import net.lalik.shipbattles.sdk.service.exception.InvalidCredentialsException;
+
+import org.w3c.dom.Text;
 
 public class BattleActivity extends Activity {
+    public static final String BATTLE_ID = "net.lalik.shipbattles.BATTLE_ID";
+    private Account account;
+    private Battle battle;
+    private TextView attackerNick;
+    private TextView defenderNick;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_battle);
-    }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_battle, menu);
-        return true;
-    }
+        attackerNick = (TextView)findViewById(R.id.attacker_nick);
+        defenderNick = (TextView)findViewById(R.id.defender_nick);
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        Intent intent = getIntent();
+        try {
+            account = ShipBattlesSDK
+                    .getInstance()
+                    .authenticate(intent.getStringExtra(BattleCenterActivity.AUTH_TOKEN));
+            battle = ShipBattlesSDK
+                    .getInstance()
+                    .getBattleById(intent.getIntExtra(BATTLE_ID, -1));
+        } catch (InvalidCredentialsException e) {
+        } catch (EntityNotFoundException e) {
         }
 
-        return super.onOptionsItemSelected(item);
+        attackerNick.setText(battle.getLeftAccount().getNick());
+        defenderNick.setText(battle.getRightAccount().getNick());
     }
 
     public void deployFleetClicked(View view) {
