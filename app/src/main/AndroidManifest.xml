@@ -10,16 +10,17 @@
         <activity
             android:name=".EntryActivity"
             android:label="@string/app_name"
-            android:theme="@style/EntryTheme" >
+            android:theme="@style/EntryTheme"
+            android:screenOrientation="landscape" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
             android:name=".SignInActivity"
             android:label="@string/title_activity_sign_in"
+            android:screenOrientation="landscape"
             android:parentActivityName=".EntryActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
