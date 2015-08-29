@@ -22,6 +22,7 @@ public class BattleActivity extends Activity {
     private Battle battle;
     private TextView attackerNick;
     private TextView defenderNick;
+    private TextView battleState;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +31,7 @@ public class BattleActivity extends Activity {
 
         attackerNick = (TextView)findViewById(R.id.attacker_nick);
         defenderNick = (TextView)findViewById(R.id.defender_nick);
+        battleState = (TextView)findViewById(R.id.battle_state);
 
         Intent intent = getIntent();
         try {
@@ -45,6 +47,7 @@ public class BattleActivity extends Activity {
 
         attackerNick.setText(battle.getLeftAccount().getNick());
         defenderNick.setText(battle.getRightAccount().getNick());
+        battleState.setText(formatBattleState());
     }
 
     public void deployFleetClicked(View view) {
@@ -52,5 +55,15 @@ public class BattleActivity extends Activity {
         intent.putExtra(BattleActivity.BATTLE_ID, battle.getId());
         intent.putExtra(BattleCenterActivity.AUTH_TOKEN, account.getAuthToken());
         startActivity(intent);
+    }
+
+    private String formatBattleState() {
+        switch (battle.getState()) {
+            case DEPLOY:
+                return "wodowanie statków";
+            case FIRE_EXCHANGE:
+                return "w trakcie bitwy";
+        }
+        return "invalid ";
     }
 }

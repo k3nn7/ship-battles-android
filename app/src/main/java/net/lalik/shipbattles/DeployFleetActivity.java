@@ -2,9 +2,12 @@ package net.lalik.shipbattles;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -62,8 +65,8 @@ public class DeployFleetActivity extends Activity {
         oldBattlefield.clear();
     }
 
-    public void deployFinishedClicked(View view) {
-        finish();
+    public void commitBattlefieldClicked(View view) {
+        new CommitBattlefieldTask().execute();
     }
 
     private void updateInventoryDisplay() {
@@ -106,5 +109,43 @@ public class DeployFleetActivity extends Activity {
             }
         });
         return dialog;
+    }
+
+    private class CommitBattlefieldTask extends AsyncTask<Void, Void, Void> {
+        private ProgressDialog commitBattlefieldProgress;
+
+        @Override
+        protected void onPreExecute() {
+            commitBattlefieldProgress = ProgressDialog.show(
+                    DeployFleetActivity.this,
+                    "ShipBattles",
+                    "Wodowanie okrętów...",
+                    true
+            );
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            try {
+                ShipBattlesSDK.getInstance().deployShipsToBattlefield(battlefield);
+            } catch (EntityNotFoundException e) {
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            try {
+                Log.d("A", "BATTLE STATE: " + ShipBattlesSDK.getInstance().getBattleById(
+                        battle.getId()
+                ).getState());
+            } catch (Exception e) {
+
+            }
+
+            commitBattlefieldProgress.dismiss();
+            finish();
+        }
     }
 }
