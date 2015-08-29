@@ -17,10 +17,8 @@ import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertNotNull;
 
-public class BattleServiceTest {
+public class BattlefieldServiceTest {
     private AccountRepository accountRepository;
     private BattleRepository battleRepository;
     private BattlefieldRepository battlefieldRepository;
@@ -39,34 +37,27 @@ public class BattleServiceTest {
                 battlefieldRepository,
                 battlefieldService
         );
+        battlefieldService.setBattleService(battleService);
     }
 
     @Test
-    public void getActiveBattlesForAccountId() {
-        int accountId = 1;
-        Battle[] battles = battleService.getActiveBattlesForAccountId(accountId);
-
-        assertEquals(
-                1,
-                battles.length
-        );
-    }
-
-    @Test
-    public void attackRandomOpponent() throws Exception {
-        Battle battle1, battle2;
+    public void changeBattleStateAfterBattlefieldsDeployed() throws Exception {
         Account attacker = accountRepository.findById(1);
+        Battle battle = battleService.attackRandomOpponent(attacker);
+        assertEquals(Battle.STATE.DEPLOY, battle.getState());
 
-        battle1 = battleService.attackRandomOpponent(attacker);
-        battle2 = battleService.attackRandomOpponent(attacker);
+        deployAllShipsForBattlefieldId(battle.getLeftBattlefieldId());
+        assertEquals(Battle.STATE.DEPLOY, battleRepository.findByid(battle.getId()).getState());
 
-        assertNotEquals(battle1.getId(), battle2.getId());
-        assertNotEquals(attacker.getId(), battle1.getRightAccount());
-        assertNotEquals(attacker.getId(), battle2.getRightAccount());
+        deployAllShipsForBattlefieldId(battle.getRightBattlefieldId());
+        assertEquals(Battle.STATE.FIRE_EXCHANGE, battleRepository.findByid(battle.getId()).getState());
+    }
 
-        assertNotNull(battlefieldRepository.findById(battle1.getLeftBattlefieldId()));
-        assertNotNull(battlefieldRepository.findById(battle1.getRightBattlefieldId()));
-        assertNotNull(battlefieldRepository.findById(battle2.getLeftBattlefieldId()));
-        assertNotNull(battlefieldRepository.findById(battle2.getRightBattlefieldId()));
+    private void deployAllShipsForBattlefieldId(int battlefieldId) throws Exception {
+        Battlefield battlefield = battlefieldRepository.findById(battlefieldId);
+        for (ShipsInventory.Item item : battlefield.shipsInInventory())
+            for (int i = 0; i < item.getCount(); i++)
+                battlefield.deployShip(new Coordinate(1, 1), Orientation.VERTICAL, item.getShipClass());
+        battlefieldService.commitBattlefield(battlefield);
     }
 }

@@ -11,16 +11,16 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 public class BattlefieldTest {
-    private Battlefield battlefield;
-
     @Test
     public void deployExistingShip() throws Exception {
         ShipClass keel = new ShipClass(1, "Keel", 1);
         ShipsInventory shipsInventory = new ShipsInventory();
         shipsInventory.addShips(keel, 3);
-        battlefield = new Battlefield(1, shipsInventory, new ArrayList<Battlefield.Ship>());
+        Battlefield battlefield = new Battlefield(1, shipsInventory, new ArrayList<Battlefield.Ship>());
 
         battlefield.deployShip(new Coordinate(2, 3), Orientation.HORIZONTAL, keel);
 
@@ -38,5 +38,20 @@ public class BattlefieldTest {
                 keel,
                 battlefield.deployedShips()[0].getShipClass()
         );
+    }
+
+    @Test
+    public void isDeployedWhenAllShipsDeployed() throws Exception {
+        ShipClass keel = new ShipClass(1, "Keel", 1);
+        ShipsInventory shipsInventory = new ShipsInventory();
+        shipsInventory.addShips(keel, 2);
+        Battlefield battlefield = new Battlefield(1, shipsInventory, new ArrayList<Battlefield.Ship>());
+
+        assertFalse(battlefield.isDeployed());
+
+        battlefield.deployShip(new Coordinate(1, 3), Orientation.HORIZONTAL, keel);
+        battlefield.deployShip(new Coordinate(2, 3), Orientation.HORIZONTAL, keel);
+
+        assertTrue(battlefield.isDeployed());
     }
 }

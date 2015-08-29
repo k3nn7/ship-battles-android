@@ -6,8 +6,8 @@ public class Battle {
     private int id;
     private final Account leftAccount;
     private final Account rightAccount;
-    private final int leftBattlefieldId;
-    private final int rightBattlefieldId;
+    private int leftBattlefieldId;
+    private int rightBattlefieldId;
     private STATE state;
 
     public int getBattlefieldIdForAccountId(int accountId) {
@@ -20,6 +20,7 @@ public class Battle {
         DEPLOY,
         LEFT_ATTACKS,
         RIGHT_ATTACKS,
+        FIRE_EXCHANGE,
         FINISHED
     }
 
@@ -35,6 +36,24 @@ public class Battle {
         this.leftBattlefieldId = leftBattlefieldId;
         this.rightBattlefieldId = rightBattlefieldId;
         this.state = state;
+    }
+
+    public Battle(
+            Account leftAccount,
+            Account rightAccount,
+            STATE state
+    ) {
+        this.leftAccount = leftAccount;
+        this.rightAccount = rightAccount;
+        this.state = state;
+    }
+
+    public void setLeftBattlefieldId(int leftBattlefieldId) {
+        this.leftBattlefieldId = leftBattlefieldId;
+    }
+
+    public void setRightBattlefieldId(int rightBattlefieldId) {
+        this.rightBattlefieldId = rightBattlefieldId;
     }
 
     public int getId() {
@@ -63,6 +82,10 @@ public class Battle {
 
     public STATE getState() {
         return state;
+    }
+
+    public void setState(STATE state) {
+        this.state = state;
     }
 
     public boolean isActive() {

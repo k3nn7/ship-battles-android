@@ -17,6 +17,9 @@ import net.lalik.shipbattles.sdk.service.AccountService;
 import net.lalik.shipbattles.sdk.service.BattleService;
 import net.lalik.shipbattles.sdk.service.BattlefieldService;
 import net.lalik.shipbattles.sdk.service.exception.InvalidCredentialsException;
+import net.lalik.shipbattles.sdk.values.Coordinate;
+import net.lalik.shipbattles.sdk.values.Orientation;
+import net.lalik.shipbattles.sdk.values.ShipsInventory;
 
 public class ShipBattlesSDK {
     private static ShipBattlesSDK instance = null;
@@ -38,7 +41,13 @@ public class ShipBattlesSDK {
 
         accountService = new AccountService(accountRepository);
         battlefieldService = new BattlefieldService(battlefieldRepository);
-        battleService = new BattleService(battleRepository, accountRepository, battlefieldService);
+        battleService = new BattleService(
+                battleRepository,
+                accountRepository,
+                battlefieldRepository,
+                battlefieldService
+        );
+        battlefieldService.setBattleService(battleService);
     }
 
     static public ShipBattlesSDK getInstance() {
@@ -82,5 +91,22 @@ public class ShipBattlesSDK {
 
     public Battlefield getBattlefieldById(int battlefieldId) throws EntityNotFoundException {
         return battlefieldRepository.findById(battlefieldId);
+    }
+
+    public void deployShipsToBattlefield(Battlefield battlefield) throws EntityNotFoundException {
+        battlefieldService.commitBattlefield(battlefield);
+
+        Battle battle = battleRepository.findByid(battlefield.getBattleId());
+        Battlefield secondBattlefield;
+        if (battle.getLeftBattlefieldId() == battlefield.getId()) {
+            secondBattlefield = battlefieldRepository.findById(battle.getRightBattlefieldId());
+        } else {
+            secondBattlefield = battlefieldRepository.findById(battle.getLeftBattlefieldId());
+        }
+
+        for (ShipsInventory.Item item : secondBattlefield.shipsInInventory())
+            for (int i = 0; i < item.getCount(); i++)
+                secondBattlefield.deployShip(new Coordinate(1, 1), Orientation.VERTICAL, item.getShipClass());
+        battlefieldService.commitBattlefield(secondBattlefield);
     }
 }

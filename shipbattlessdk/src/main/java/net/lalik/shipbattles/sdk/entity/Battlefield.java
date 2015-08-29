@@ -8,6 +8,7 @@ import java.util.ArrayList;
 
 public class Battlefield {
     private int id;
+    private int battleId;
     private ShipsInventory shipsInventory;
     private ArrayList<Ship> deployedShips;
 
@@ -25,6 +26,14 @@ public class Battlefield {
         return id;
     }
 
+    public int getBattleId() {
+        return battleId;
+    }
+
+    public void setBattleId(int battleId) {
+        this.battleId = battleId;
+    }
+
     public void deployShip(Coordinate coordinate, Orientation orientation, ShipClass shipClass) {
         shipsInventory.pickShip(shipClass);
         deployedShips.add(new Ship(coordinate, orientation, shipClass));
@@ -36,6 +45,10 @@ public class Battlefield {
 
     public Ship[] deployedShips() {
         return deployedShips.toArray(new Ship[deployedShips.size()]);
+    }
+
+    public boolean isDeployed() {
+        return shipsInventory.isEmpty();
     }
 
     public class Ship {

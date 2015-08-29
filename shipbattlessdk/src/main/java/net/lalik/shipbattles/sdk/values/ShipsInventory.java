@@ -34,6 +34,10 @@ public class ShipsInventory {
         return items;
     }
 
+    public boolean isEmpty() {
+        return inventory.isEmpty();
+    }
+
     public class Item {
         private final ShipClass shipClass;
         private final int count;

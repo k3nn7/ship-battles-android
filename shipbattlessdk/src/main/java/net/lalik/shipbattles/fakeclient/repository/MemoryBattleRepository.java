@@ -49,8 +49,17 @@ public class MemoryBattleRepository implements BattleRepository {
 
     @Override
     public Battle save(Battle battle) {
-        int newId = battles.size() + 1;
-        battle.setId(newId);
+        if (battle.getId() > 0) {
+            try {
+                Battle oldBattle = findByid(battle.getId());
+                battles.remove(oldBattle);
+            } catch (EntityNotFoundException e) {
+
+            }
+        } else {
+            int newId = battles.size() + 1;
+            battle.setId(newId);
+        }
         battles.add(battle);
         return battle;
     }

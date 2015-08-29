@@ -15,8 +15,16 @@ public class MemoryBattlefieldRepository implements BattlefieldRepository {
 
     @Override
     public Battlefield save(Battlefield battlefield) {
-        int newId = battlefields.size() + 1;
-        battlefield.setId(newId);
+        if (battlefield.getId() > 0) {
+            try {
+                Battlefield oldBattlefield = findById(battlefield.getId());
+                battlefields.remove(oldBattlefield);
+            } catch (EntityNotFoundException e) {
+            }
+        } else {
+            int newId = battlefields.size() + 1;
+            battlefield.setId(newId);
+        }
         battlefields.add(battlefield);
         return battlefield;
     }
