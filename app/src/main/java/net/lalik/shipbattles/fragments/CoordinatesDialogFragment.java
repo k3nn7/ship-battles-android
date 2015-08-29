@@ -5,7 +5,6 @@ import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.NumberPicker;
@@ -20,8 +19,8 @@ public class CoordinatesDialogFragment extends DialogFragment {
     }
 
     private CoordinatesDialogListener listener;
-    private NumberPicker xCoordinatePicker;
     private NumberPicker yCoordinatePicker;
+    private NumberPicker xCoordinatePicker;
     private NumberPicker orientationPicker;
     private View view;
 
@@ -30,7 +29,7 @@ public class CoordinatesDialogFragment extends DialogFragment {
         LayoutInflater inflater = getActivity().getLayoutInflater();
         view = inflater.inflate(R.layout.dialog_coordinates, null);
         initXCoordinatePicker();
-        initYCoordinatePicket();
+        initYCoordinatePicker();
         initOrientationPicker();
         return buildDialog();
     }
@@ -46,17 +45,17 @@ public class CoordinatesDialogFragment extends DialogFragment {
         orientationPicker.setDisplayedValues(new String[]{"Poziomo", "Pionowo"});
     }
 
-    private void initYCoordinatePicket() {
-        yCoordinatePicker = (NumberPicker)view.findViewById(R.id.y_coordinate_picker);
-        yCoordinatePicker.setMinValue(1);
-        yCoordinatePicker.setMaxValue(10);
-    }
-
     private void initXCoordinatePicker() {
         xCoordinatePicker = (NumberPicker)view.findViewById(R.id.x_coordinate_picker);
         xCoordinatePicker.setMinValue(1);
         xCoordinatePicker.setMaxValue(10);
-        xCoordinatePicker.setDisplayedValues(
+    }
+
+    private void initYCoordinatePicker() {
+        yCoordinatePicker = (NumberPicker)view.findViewById(R.id.y_coordinate_picker);
+        yCoordinatePicker.setMinValue(1);
+        yCoordinatePicker.setMaxValue(10);
+        yCoordinatePicker.setDisplayedValues(
                 new String[]{"A", "B", "C", "D", "E", "F", "G", "H", "I", "J"}
         );
     }

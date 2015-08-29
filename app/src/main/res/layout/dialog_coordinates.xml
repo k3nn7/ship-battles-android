@@ -6,12 +6,12 @@
     <NumberPicker
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/x_coordinate_picker" />
+        android:id="@+id/y_coordinate_picker" />
 
     <NumberPicker
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/y_coordinate_picker" />
+        android:id="@+id/x_coordinate_picker" />
 
     <NumberPicker
         android:layout_width="fill_parent"

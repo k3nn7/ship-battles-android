@@ -10,6 +10,7 @@ import android.util.AttributeSet;
 import android.view.View;
 
 import net.lalik.shipbattles.R;
+import net.lalik.shipbattles.sdk.values.Coordinate;
 
 import java.util.ArrayList;
 import java.util.Stack;
