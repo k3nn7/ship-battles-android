@@ -77,6 +77,12 @@ public class BattleActivity extends Activity {
         startActivity(intent);
     }
 
+    public void attackClicked(View view) {
+        Intent intent = new Intent(this, AttackActivity.class);
+        intent.putExtra(BATTLE_ID, battle.getId());
+        startActivity(intent);
+    }
+
     private String formatBattleState() {
         switch (battle.getState()) {
             case DEPLOY:

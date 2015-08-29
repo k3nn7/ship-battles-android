@@ -10,18 +10,19 @@
         <activity
             android:name=".EntryActivity"
             android:label="@string/app_name"
-            android:theme="@style/EntryTheme"
-            android:screenOrientation="landscape" >
+            android:screenOrientation="landscape"
+            android:theme="@style/EntryTheme" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
             android:name=".SignInActivity"
             android:label="@string/title_activity_sign_in"
-            android:screenOrientation="landscape"
-            android:parentActivityName=".EntryActivity" >
+            android:parentActivityName=".EntryActivity"
+            android:screenOrientation="landscape" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="net.lalik.shipbattles.EntryActivity" />
@@ -44,7 +45,16 @@
             android:name=".DeployFleetActivity"
             android:label="@string/title_activity_deploy_fleet"
             android:parentActivityName=".BattleActivity"
-            android:theme="@style/BattleCenter">
+            android:theme="@style/BattleCenter" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="net.lalik.shipbattles.BattleActivity" />
+        </activity>
+        <activity
+            android:name=".AttackActivity"
+            android:label="@string/title_activity_attack"
+            android:parentActivityName=".BattleActivity"
+            android:theme="@style/BattleCenter" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="net.lalik.shipbattles.BattleActivity" />
