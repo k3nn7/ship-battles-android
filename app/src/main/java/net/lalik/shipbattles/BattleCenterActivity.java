@@ -2,7 +2,9 @@ package net.lalik.shipbattles;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
@@ -31,21 +33,27 @@ public class BattleCenterActivity extends Activity {
 
         activeBattlesList = (ListView)findViewById(R.id.active_battles_list);
         userNick = (TextView)findViewById(R.id.user_nick);
-
-        Intent intent = getIntent();
-        try {
-            account = ShipBattlesSDK
-                    .getInstance()
-                    .authenticate(intent.getStringExtra(AUTH_TOKEN));
-            userNick.setText(account.getNick());
-        } catch (InvalidCredentialsException e) {
-            finish();
-        }
     }
 
     @Override
     protected void onStart() {
         super.onStart();
+
+        SharedPreferences sharedPreferences = getSharedPreferences(
+                "net.lalik.shipbattles.SECRETS",
+                Context.MODE_PRIVATE
+        );
+        String authToken = sharedPreferences.getString("AUTH_TOKEN", "");
+
+        try {
+            account = ShipBattlesSDK
+                    .getInstance()
+                    .authenticate(authToken);
+            userNick.setText(account.getNick());
+        } catch (InvalidCredentialsException e) {
+            finish();
+        }
+
         activeBattles = ShipBattlesSDK
                 .getInstance()
                 .getActiveBattlesForAccountId(account.getId());
@@ -90,7 +98,6 @@ public class BattleCenterActivity extends Activity {
         private void enterBattle(Battle battle) {
             Intent intent = new Intent(BattleCenterActivity.this, BattleActivity.class);
             intent.putExtra(BattleActivity.BATTLE_ID, battle.getId());
-            intent.putExtra(AUTH_TOKEN, account.getAuthToken());
             startActivity(intent);
         }
     }

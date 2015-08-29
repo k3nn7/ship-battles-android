@@ -3,7 +3,9 @@ package net.lalik.shipbattles;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
@@ -78,8 +80,15 @@ public class SignInActivity extends Activity {
         }
 
         private void enterBattleCenter(Account account) {
+            SharedPreferences sharedPreferences = getSharedPreferences(
+                    "net.lalik.shipbattles.SECRETS",
+                    Context.MODE_PRIVATE
+            );
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putString("AUTH_TOKEN", account.getAuthToken());
+            editor.commit();
+
             Intent intent = new Intent(SignInActivity.this, BattleCenterActivity.class);
-            intent.putExtra(BattleCenterActivity.AUTH_TOKEN, account.getAuthToken());
             startActivity(intent);
             finish();
         }

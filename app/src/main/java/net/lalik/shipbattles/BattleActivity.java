@@ -1,8 +1,11 @@
 package net.lalik.shipbattles;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -32,15 +35,32 @@ public class BattleActivity extends Activity {
         attackerNick = (TextView)findViewById(R.id.attacker_nick);
         defenderNick = (TextView)findViewById(R.id.defender_nick);
         battleState = (TextView)findViewById(R.id.battle_state);
+    }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Log.d("A", "ON START INVOKED");
+        SharedPreferences sharedPreferences = getSharedPreferences(
+                "net.lalik.shipbattles.SECRETS",
+                Context.MODE_PRIVATE
+        );
+        String authToken = sharedPreferences.getString("AUTH_TOKEN", "");
         Intent intent = getIntent();
+        int battleId;
+        if (intent.getIntExtra(BATTLE_ID, -1) != -1) {
+            battleId = intent.getIntExtra(BATTLE_ID, -1);
+        } else {
+            battleId = battle.getId();
+        }
+
         try {
             account = ShipBattlesSDK
                     .getInstance()
-                    .authenticate(intent.getStringExtra(BattleCenterActivity.AUTH_TOKEN));
+                    .authenticate(authToken);
             battle = ShipBattlesSDK
                     .getInstance()
-                    .getBattleById(intent.getIntExtra(BATTLE_ID, -1));
+                    .getBattleById(battleId);
         } catch (InvalidCredentialsException e) {
         } catch (EntityNotFoundException e) {
         }
