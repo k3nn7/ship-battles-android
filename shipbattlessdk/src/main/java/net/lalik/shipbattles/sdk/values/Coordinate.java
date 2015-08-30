@@ -16,4 +16,12 @@ public class Coordinate {
     public int getY() {
         return y;
     }
+
+    @Override
+    public boolean equals(Object other) {
+        if (other.getClass() != Coordinate.class)
+            return false;
+        Coordinate coordinate = (Coordinate)other;
+        return (coordinate.getX() == x) && (coordinate.getY() == y);
+    }
 }

@@ -23,8 +23,8 @@ public class BattlefieldService {
 
     public Battlefield prepareBattlefield(Battle battle) {
         ShipsInventory shipsInventory = new ShipsInventory();
-        shipsInventory.addShips(new ShipClass(1, "Keel", 1), 4);
-        shipsInventory.addShips(new ShipClass(2, "Destroyer", 2), 3);
+        shipsInventory.addShips(new ShipClass(1, "Keel", 1), 1);
+//        shipsInventory.addShips(new ShipClass(2, "Destroyer", 2), 3);
         Battlefield battlefield = new Battlefield(0, shipsInventory, new ArrayList<Battlefield.Ship>());
         battlefield.setBattleId(battle.getId());
         return battlefieldRepository.save(battlefield);
