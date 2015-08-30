@@ -11,7 +11,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
-import net.lalik.shipbattles.fragments.CoordinatesDialogFragment;
+import net.lalik.shipbattles.fragments.CoordinatesOrientationDialogFragment;
 import net.lalik.shipbattles.sdk.ShipBattlesSDK;
 import net.lalik.shipbattles.sdk.entity.Account;
 import net.lalik.shipbattles.sdk.entity.Battle;
@@ -91,14 +91,14 @@ public class DeployFleetActivity extends Activity {
                         dialog.dismiss();
                         getSelectCoordinatesDialog(
                                 battlefield.shipsInInventory()[which].getShipClass()
-                        ).show(getFragmentManager(), "CoordinatesDialogFragment");
+                        ).show(getFragmentManager(), "CoordinatesOrientationDialogFragment");
                     }
                 });
     }
 
-    private CoordinatesDialogFragment getSelectCoordinatesDialog(final ShipClass shipClass) {
-        CoordinatesDialogFragment dialog = new CoordinatesDialogFragment();
-        dialog.setListener(new CoordinatesDialogFragment.CoordinatesDialogListener() {
+    private CoordinatesOrientationDialogFragment getSelectCoordinatesDialog(final ShipClass shipClass) {
+        CoordinatesOrientationDialogFragment dialog = new CoordinatesOrientationDialogFragment();
+        dialog.setListener(new CoordinatesOrientationDialogFragment.CoordinatesDialogListener() {
             @Override
             public void onDeployClicked(Coordinate coordinate, Orientation orientation) {
                 battlefield.deployShip(coordinate, orientation, shipClass);

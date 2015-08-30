@@ -63,8 +63,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Atakuj"
-            android:id="@+id/deploy_ship_button"
-            android:onClick="deployShipClicked" />
+            android:id="@+id/attack_button"
+            android:onClick="attackClicked" />
 
         <Button
             android:layout_width="wrap_content"

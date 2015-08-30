@@ -13,27 +13,36 @@ import net.lalik.shipbattles.R;
 import net.lalik.shipbattles.sdk.values.Coordinate;
 import net.lalik.shipbattles.sdk.values.Orientation;
 
-public class CoordinatesDialogFragment extends DialogFragment {
+public class CoordinatesOrientationDialogFragment extends DialogFragment {
     public interface CoordinatesDialogListener {
-        void onDeployClicked(Coordinate coordinate);
+        void onDeployClicked(Coordinate coordinate, Orientation orientation);
     }
 
     private CoordinatesDialogListener listener;
     private NumberPicker yCoordinatePicker;
     private NumberPicker xCoordinatePicker;
+    private NumberPicker orientationPicker;
     private View view;
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         LayoutInflater inflater = getActivity().getLayoutInflater();
-        view = inflater.inflate(R.layout.dialog_coordinates, null);
+        view = inflater.inflate(R.layout.dialog_coordinates_orientation, null);
         initXCoordinatePicker();
         initYCoordinatePicker();
+        initOrientationPicker();
         return buildDialog();
     }
 
     public void setListener(CoordinatesDialogListener listener) {
         this.listener = listener;
+    }
+
+    private void initOrientationPicker() {
+        orientationPicker = (NumberPicker)view.findViewById(R.id.orientation_picker);
+        orientationPicker.setMinValue(0);
+        orientationPicker.setMaxValue(1);
+        orientationPicker.setDisplayedValues(new String[]{"Poziomo", "Pionowo"});
     }
 
     private void initXCoordinatePicker() {
@@ -73,8 +82,15 @@ public class CoordinatesDialogFragment extends DialogFragment {
             return;
 
         listener.onDeployClicked(
-                getCoordinate()
+                getCoordinate(),
+                getOrientation()
         );
+    }
+
+    private Orientation getOrientation() {
+        if (orientationPicker.getValue() == 0)
+            return Orientation.HORIZONTAL;
+        return Orientation.VERTICAL;
     }
 
     private Coordinate getCoordinate() {
