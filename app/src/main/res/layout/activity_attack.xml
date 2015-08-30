@@ -74,9 +74,24 @@
             android:onClick="commitBattlefieldClicked"/>
     </LinearLayout>
 
-    <net.lalik.shipbattles.views.Battlefield
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        shipbattles:showGrid="true"
-        android:id="@+id/battlefield" />
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <net.lalik.shipbattles.views.BattlefieldView
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            shipbattles:showGrid="true"
+            android:id="@+id/battlefield2"
+            android:layout_weight="1" />
+
+        <net.lalik.shipbattles.views.BattlefieldView
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            shipbattles:showGrid="true"
+            android:id="@+id/battlefield"
+            android:layout_weight="1" />
+    </LinearLayout>
+
 </LinearLayout>

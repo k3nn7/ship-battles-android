@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <declare-styleable name="Battlefield">
+    <declare-styleable name="BattlefieldView">
         <attr name="showGrid" format="boolean" />
     </declare-styleable>
 </resources>

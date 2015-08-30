@@ -21,7 +21,7 @@ import net.lalik.shipbattles.sdk.service.exception.InvalidCredentialsException;
 import net.lalik.shipbattles.sdk.values.Coordinate;
 import net.lalik.shipbattles.sdk.values.Orientation;
 import net.lalik.shipbattles.sdk.values.ShipsInventory;
-import net.lalik.shipbattles.views.Battlefield;
+import net.lalik.shipbattles.views.BattlefieldView;
 import net.lalik.shipbattles.views.Ship;
 import net.lalik.shipbattles.views.ShipsInventoryListAdapter;
 
@@ -29,14 +29,14 @@ public class DeployFleetActivity extends Activity {
     private Account account;
     private Battle battle;
     private net.lalik.shipbattles.sdk.entity.Battlefield battlefield;
-    Battlefield oldBattlefield;
+    BattlefieldView oldBattlefield;
     TextView shipsInventoryText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_deploy_fleet);
-        oldBattlefield = (Battlefield)findViewById(R.id.battlefield);
+        oldBattlefield = (BattlefieldView)findViewById(R.id.battlefield);
         shipsInventoryText = (TextView)findViewById(R.id.ships_inventory_text);
 
         Intent intent = getIntent();
@@ -50,6 +50,7 @@ public class DeployFleetActivity extends Activity {
             battlefield = ShipBattlesSDK.getInstance().getBattlefieldById(
                     battle.getBattlefieldIdForAccountId(account.getId())
             );
+            oldBattlefield.setBattlefield(battlefield);
         } catch (InvalidCredentialsException e) {
         } catch (EntityNotFoundException e) {
         }
@@ -102,9 +103,7 @@ public class DeployFleetActivity extends Activity {
             @Override
             public void onDeployClicked(Coordinate coordinate, Orientation orientation) {
                 battlefield.deployShip(coordinate, orientation, shipClass);
-                oldBattlefield.deployShip(
-                        new Ship(coordinate, orientation, shipClass)
-                );
+                oldBattlefield.updateShots();
                 updateInventoryDisplay();
             }
         });

@@ -93,7 +93,7 @@
             android:onClick="commitBattlefieldClicked"/>
     </LinearLayout>
 
-    <net.lalik.shipbattles.views.Battlefield
+    <net.lalik.shipbattles.views.BattlefieldView
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         shipbattles:showGrid="true"

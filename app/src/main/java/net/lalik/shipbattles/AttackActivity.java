@@ -18,17 +18,23 @@ import net.lalik.shipbattles.sdk.repository.exception.EntityNotFoundException;
 import net.lalik.shipbattles.sdk.service.exception.InvalidCredentialsException;
 import net.lalik.shipbattles.sdk.values.AttackResult;
 import net.lalik.shipbattles.sdk.values.Coordinate;
+import net.lalik.shipbattles.views.BattlefieldView;
 
 public class AttackActivity extends Activity {
 
     private Account account;
     private Battle battle;
     private Battlefield battlefield;
+    private BattlefieldView battlefieldView;
+    private BattlefieldView myBattlefieldView;
+    private Battlefield myBattlefield;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_attack);
+        battlefieldView = (BattlefieldView)findViewById(R.id.battlefield);
+        myBattlefieldView = (BattlefieldView)findViewById(R.id.battlefield2);
 
         Intent intent = getIntent();
         try {
@@ -43,6 +49,11 @@ public class AttackActivity extends Activity {
                             battle.getSecondAccountId(account.getId()).getId()
                     )
             );
+            myBattlefield = ShipBattlesSDK.getInstance().getBattlefieldById(
+                    battle.getBattlefieldIdForAccountId(account.getId())
+            );
+            battlefieldView.setBattlefield(battlefield);
+            myBattlefieldView.setBattlefield(myBattlefield);
         } catch (InvalidCredentialsException e) {
         } catch (EntityNotFoundException e) {
         }
@@ -58,7 +69,9 @@ public class AttackActivity extends Activity {
             @Override
             public void onDeployClicked(Coordinate coordinate) {
                 AttackResult result = ShipBattlesSDK.getInstance().attackBattlefield(battlefield, coordinate);
-                Log.d("A", result.toString());
+                battlefieldView.updateShots();
+                myBattlefield.attack(new Coordinate(1, 1));
+                myBattlefieldView.updateShots();
             }
         });
         return dialog;

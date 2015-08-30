@@ -10,34 +10,45 @@ import android.util.AttributeSet;
 import android.view.View;
 
 import net.lalik.shipbattles.R;
+import net.lalik.shipbattles.sdk.entity.Battlefield;
 import net.lalik.shipbattles.sdk.values.Coordinate;
+import net.lalik.shipbattles.sdk.values.Orientation;
 
-import java.util.ArrayList;
 import java.util.Stack;
 
-public class Battlefield extends View {
+public class BattlefieldView extends View {
     private boolean showGrid;
     private Paint textPaint, shipPaint;
     private int width, height, gridSize;
     private Stack<Ship> ships;
+    private Battlefield battlefield = null;
 
-    public Battlefield(Context context, AttributeSet attributeSet) {
+    public BattlefieldView(Context context, AttributeSet attributeSet) {
         super(context, attributeSet);
         TypedArray attributes = context.getTheme().obtainStyledAttributes(
                 attributeSet,
-                R.styleable.Battlefield,
+                R.styleable.BattlefieldView,
                 0,
                 0
         );
 
         try {
-            showGrid = attributes.getBoolean(R.styleable.Battlefield_showGrid, true);
+            showGrid = attributes.getBoolean(R.styleable.BattlefieldView_showGrid, true);
         } finally {
             attributes.recycle();
         }
 
         ships = new Stack<>();
         initPaints();
+    }
+
+    public void setBattlefield(Battlefield battlefield) {
+        this.battlefield = battlefield;
+    }
+
+    public void updateShots() {
+        invalidate();
+        requestLayout();
     }
 
     public void deployShip(Ship ship) {
@@ -71,6 +82,14 @@ public class Battlefield extends View {
         for (Ship ship : ships) {
             drawShip(canvas, ship.getTopCoordinate(), ship.getBottomCoordinate());
         }
+
+        if (null != battlefield)
+            for (Battlefield.Ship ship : battlefield.deployedShips()) {
+                drawShip(canvas, ship);
+            }
+
+            for (Battlefield.Shot shot : battlefield.getShots())
+                drawShot(canvas, shot.getCoordinate());
     }
 
     private void drawLabels(Canvas canvas) {
@@ -117,6 +136,14 @@ public class Battlefield extends View {
         }
     }
 
+    private void drawShip(Canvas canvas, Battlefield.Ship ship) {
+        drawShip(
+                canvas,
+                ship.getCoordinate(),
+                getBottomCoordinate(ship)
+        );
+    }
+
     private void drawShip(Canvas canvas, Coordinate start, Coordinate end) {
         float x1, y1, x2, y2;
 
@@ -125,6 +152,16 @@ public class Battlefield extends View {
         x2 = (end.getX() - 1) * gridSize + gridSize;
         y2 = (end.getY() - 1) * gridSize + gridSize;
         canvas.drawRect(x1, y1, x2, y2, shipPaint);
+    }
+
+    private void drawShot(Canvas canvas, Coordinate coordinate) {
+        float x1, y1, x2, y2;
+        x1 = (coordinate.getX() - 1) * gridSize + gridSize;
+        x2 = x1 + gridSize;
+        y1 = (coordinate.getY() - 1) * gridSize + gridSize;
+        y2 = y1 + gridSize;
+        canvas.drawLine(x1, y1, x2, y2, shipPaint);
+        canvas.drawLine(x2, y1, x1, y2, shipPaint);
     }
 
     private void initPaints() {
@@ -136,5 +173,18 @@ public class Battlefield extends View {
         shipPaint.setColor(Color.rgb(255, 0, 0));
         shipPaint.setStyle(Paint.Style.STROKE);
         shipPaint.setStrokeWidth(4);
+    }
+
+    public Coordinate getBottomCoordinate(Battlefield.Ship ship) {
+        int x = 0, y = 0;
+        if (ship.getOrientation() == Orientation.HORIZONTAL) {
+            x = ship.getCoordinate().getX() + ship.getShipClass().getSize();
+            y = ship.getCoordinate().getY() + 1;
+        }
+        if (ship.getOrientation()== Orientation.VERTICAL) {
+            x = ship.getCoordinate().getX() + 1;
+            y = ship.getCoordinate().getY() + ship.getShipClass().getSize();
+        }
+        return new Coordinate(y, x);
     }
 }
