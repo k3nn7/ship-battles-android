@@ -7,7 +7,9 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -65,6 +67,15 @@ public class BattleCenterActivity extends Activity {
         );
 
         activeBattlesList.setAdapter(adapter);
+
+        activeBattlesList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long battleId) {
+                Intent intent = new Intent(BattleCenterActivity.this, BattleActivity.class);
+                intent.putExtra(BattleActivity.BATTLE_ID, (int)battleId);
+                startActivity(intent);
+            }
+        });
     }
 
     public void newBattleClicked(View view) {

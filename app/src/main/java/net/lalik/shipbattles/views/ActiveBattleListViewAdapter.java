@@ -61,4 +61,14 @@ public class ActiveBattleListViewAdapter extends ArrayAdapter<Battle> {
         Account opponent = battle.getSecondAccountId(account.getId());
         return String.format("z %s", opponent.getNick());
     }
+
+    @Override
+    public long getItemId(int position) {
+        return battles[position].getId();
+    }
+
+    @Override
+    public boolean hasStableIds() {
+        return true;
+    }
 }
