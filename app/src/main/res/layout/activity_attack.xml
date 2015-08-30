@@ -65,13 +65,6 @@
             android:text="Atakuj"
             android:id="@+id/attack_button"
             android:onClick="attackClicked" />
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Gotowy"
-            android:id="@+id/commit_battlefield_button"
-            android:onClick="commitBattlefieldClicked"/>
     </LinearLayout>
 
     <LinearLayout

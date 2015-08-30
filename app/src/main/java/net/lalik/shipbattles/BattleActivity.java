@@ -21,6 +21,7 @@ import org.w3c.dom.Text;
 
 public class BattleActivity extends Activity {
     public static final String BATTLE_ID = "net.lalik.shipbattles.BATTLE_ID";
+    private Integer battleId = null;
     private Account account;
     private Battle battle;
     private TextView attackerNick;
@@ -47,11 +48,8 @@ public class BattleActivity extends Activity {
         );
         String authToken = sharedPreferences.getString("AUTH_TOKEN", "");
         Intent intent = getIntent();
-        int battleId;
         if (intent.getIntExtra(BATTLE_ID, -1) != -1) {
             battleId = intent.getIntExtra(BATTLE_ID, -1);
-        } else {
-            battleId = battle.getId();
         }
 
         try {
