@@ -66,6 +66,13 @@ public class Battlefield {
         return shots.toArray(new Shot[shots.size()]);
     }
 
+    public boolean isConquered() {
+        for (Ship ship : deployedShips())
+            if (!ship.isDestroyed())
+                return false;
+        return true;
+    }
+
     public class Ship {
         private final Coordinate coordinate;
         private final Orientation orientation;
@@ -108,6 +115,10 @@ public class Battlefield {
                 return AttackResult.DESTROYED;
             }
             return AttackResult.HIT;
+        }
+
+        public boolean isDestroyed() {
+            return hits >= shipClass.getSize();
         }
     }
 

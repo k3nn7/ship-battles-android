@@ -107,13 +107,13 @@ public class ShipBattlesSDK {
 
         for (ShipsInventory.Item item : secondBattlefield.shipsInInventory())
             for (int i = 0; i < item.getCount(); i++)
-                secondBattlefield.deployShip(new Coordinate(1, 1), Orientation.VERTICAL, item.getShipClass());
+                secondBattlefield.deployShip(new Coordinate(i + 1, 1), Orientation.VERTICAL, item.getShipClass());
         battlefieldService.commitBattlefield(secondBattlefield);
     }
 
-    public AttackResult attackBattlefield(Battlefield battlefield, Coordinate coordinate) {
+    public AttackResult attackBattlefield(Battlefield battlefield, Coordinate coordinate) throws EntityNotFoundException {
         AttackResult result = battlefield.attack(coordinate);
-        battlefieldRepository.save(battlefield);
+        battlefieldService.commitBattlefield(battlefield);
         return result;
     }
 }

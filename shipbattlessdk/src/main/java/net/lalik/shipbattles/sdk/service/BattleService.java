@@ -67,6 +67,12 @@ public class BattleService {
                 if (firstBattlefield.isDeployed() && secondBattlefield.isDeployed()) {
                     return Battle.STATE.FIRE_EXCHANGE;
                 }
+                break;
+            case FIRE_EXCHANGE:
+                if (firstBattlefield.isConquered() || secondBattlefield.isConquered()) {
+                    return Battle.STATE.FINISHED;
+                }
+                break;
         }
         return battle.getState();
     }

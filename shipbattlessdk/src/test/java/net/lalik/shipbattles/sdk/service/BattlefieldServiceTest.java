@@ -57,7 +57,7 @@ public class BattlefieldServiceTest {
         Battlefield battlefield = battlefieldRepository.findById(battlefieldId);
         for (ShipsInventory.Item item : battlefield.shipsInInventory())
             for (int i = 0; i < item.getCount(); i++)
-                battlefield.deployShip(new Coordinate(1, 1), Orientation.VERTICAL, item.getShipClass());
+                battlefield.deployShip(new Coordinate(i + 1, 1), Orientation.VERTICAL, item.getShipClass());
         battlefieldService.commitBattlefield(battlefield);
     }
 }

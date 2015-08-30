@@ -105,4 +105,18 @@ public class BattlefieldTest {
         assertEquals(1, battlefield.getShots().length);
 
     }
+
+    @Test
+    public void allShipsDestroyed() {
+        battlefield.deployShip(new Coordinate(1, 3), Orientation.HORIZONTAL, destroyer);
+        battlefield.deployShip(new Coordinate(3, 3), Orientation.HORIZONTAL, keel);
+        battlefield.attack(new Coordinate(1, 3));
+        battlefield.attack(new Coordinate(1, 4));
+
+        assertFalse(battlefield.isConquered());
+
+        battlefield.attack(new Coordinate(3, 3));
+
+        assertTrue(battlefield.isConquered());
+    }
 }
