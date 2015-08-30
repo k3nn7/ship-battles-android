@@ -12,11 +12,13 @@ public class Battlefield {
     private int battleId;
     private ShipsInventory shipsInventory;
     private ArrayList<Ship> deployedShips;
+    private ArrayList<Shot> shots;
 
     public Battlefield(int id, ShipsInventory shipsInventory, ArrayList<Ship> deployedShips) {
         this.id = id;
         this.shipsInventory = shipsInventory;
         this.deployedShips = deployedShips;
+        this.shots = new ArrayList<>();
     }
 
     public void setId(int id) {
@@ -53,10 +55,15 @@ public class Battlefield {
     }
 
     public AttackResult attack(Coordinate coordinate) {
+        shots.add(new Shot(coordinate));
         for (Ship ship : deployedShips)
             if (ship.within(coordinate))
                 return ship.attack();
         return AttackResult.MISS;
+    }
+
+    public Shot[] getShots() {
+        return shots.toArray(new Shot[shots.size()]);
     }
 
     public class Ship {
@@ -101,6 +108,18 @@ public class Battlefield {
                 return AttackResult.DESTROYED;
             }
             return AttackResult.HIT;
+        }
+    }
+
+    public class Shot {
+        private Coordinate coordinate;
+
+        public Shot(Coordinate coordinate) {
+            this.coordinate = coordinate;
+        }
+
+        public Coordinate getCoordinate() {
+            return coordinate;
         }
     }
 }

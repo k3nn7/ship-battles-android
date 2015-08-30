@@ -97,4 +97,12 @@ public class BattlefieldTest {
                 battlefield.attack(new Coordinate(3, 3))
         );
     }
+
+    @Test
+    public void attackAddsShot() {
+        assertEquals(0, battlefield.getShots().length);
+        battlefield.attack(new Coordinate(1, 1));
+        assertEquals(1, battlefield.getShots().length);
+
+    }
 }
