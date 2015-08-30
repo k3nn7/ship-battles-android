@@ -2,6 +2,7 @@ package net.lalik.shipbattles;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -19,6 +20,8 @@ import net.lalik.shipbattles.sdk.service.exception.InvalidCredentialsException;
 import net.lalik.shipbattles.sdk.values.AttackResult;
 import net.lalik.shipbattles.sdk.values.Coordinate;
 import net.lalik.shipbattles.views.BattlefieldView;
+
+import java.util.Random;
 
 public class AttackActivity extends Activity {
 
@@ -68,10 +71,29 @@ public class AttackActivity extends Activity {
         dialog.setListener(new CoordinatesDialogFragment.CoordinatesDialogListener() {
             @Override
             public void onDeployClicked(Coordinate coordinate) {
-                AttackResult result = ShipBattlesSDK.getInstance().attackBattlefield(battlefield, coordinate);
-                battlefieldView.updateShots();
-                myBattlefield.attack(new Coordinate(1, 1));
-                myBattlefieldView.updateShots();
+                try {
+                    AttackResult result = ShipBattlesSDK.getInstance().attackBattlefield(battlefield, coordinate);
+                    ShipBattlesSDK.getInstance().attackBattlefield(
+                            myBattlefield,
+                            new Coordinate(new Random().nextInt(10) + 1, new Random().nextInt(10) + 1)
+                    );
+                    battlefieldView.updateShots();
+                    myBattlefieldView.updateShots();
+
+                    battle = ShipBattlesSDK.getInstance().getBattleById(battle.getId());
+                    if (battle.getState() == Battle.STATE.FINISHED) {
+                        new AlertDialog.Builder(AttackActivity.this)
+                                .setMessage("Bitwa zakończona")
+                                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        finish();
+                                    }
+                                })
+                                .show();
+                    }
+                } catch (Exception e) {
+                }
             }
         });
         return dialog;
