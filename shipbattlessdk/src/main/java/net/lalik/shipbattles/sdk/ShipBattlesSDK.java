@@ -17,6 +17,7 @@ import net.lalik.shipbattles.sdk.service.AccountService;
 import net.lalik.shipbattles.sdk.service.BattleService;
 import net.lalik.shipbattles.sdk.service.BattlefieldService;
 import net.lalik.shipbattles.sdk.service.exception.InvalidCredentialsException;
+import net.lalik.shipbattles.sdk.values.AttackResult;
 import net.lalik.shipbattles.sdk.values.Coordinate;
 import net.lalik.shipbattles.sdk.values.Orientation;
 import net.lalik.shipbattles.sdk.values.ShipsInventory;
@@ -108,5 +109,11 @@ public class ShipBattlesSDK {
             for (int i = 0; i < item.getCount(); i++)
                 secondBattlefield.deployShip(new Coordinate(1, 1), Orientation.VERTICAL, item.getShipClass());
         battlefieldService.commitBattlefield(secondBattlefield);
+    }
+
+    public AttackResult attackBattlefield(Battlefield battlefield, Coordinate coordinate) {
+        AttackResult result = battlefield.attack(coordinate);
+        battlefieldRepository.save(battlefield);
+        return result;
     }
 }

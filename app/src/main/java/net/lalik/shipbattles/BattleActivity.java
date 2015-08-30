@@ -80,6 +80,7 @@ public class BattleActivity extends Activity {
     public void attackClicked(View view) {
         Intent intent = new Intent(this, AttackActivity.class);
         intent.putExtra(BATTLE_ID, battle.getId());
+        intent.putExtra(BattleCenterActivity.AUTH_TOKEN, account.getAuthToken());
         startActivity(intent);
     }
 
