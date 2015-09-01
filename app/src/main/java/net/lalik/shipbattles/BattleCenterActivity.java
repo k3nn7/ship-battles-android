@@ -26,7 +26,9 @@ public class BattleCenterActivity extends Activity {
     private Account account;
     private TextView userNick;
     private Battle[] activeBattles;
+    private Battle[] finishedBattles;
     private ListView activeBattlesList;
+    private ListView finishedBattlesList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +36,7 @@ public class BattleCenterActivity extends Activity {
         setContentView(R.layout.activity_battle_center);
 
         activeBattlesList = (ListView)findViewById(R.id.active_battles_list);
+        finishedBattlesList = (ListView)findViewById(R.id.finished_battles_list);
         userNick = (TextView)findViewById(R.id.user_nick);
     }
 
@@ -59,14 +62,23 @@ public class BattleCenterActivity extends Activity {
         activeBattles = ShipBattlesSDK
                 .getInstance()
                 .getActiveBattlesForAccountId(account.getId());
+        finishedBattles = ShipBattlesSDK
+                .getInstance()
+                .getFinishedBattlesForAccountId(account.getId());
 
-        ActiveBattleListViewAdapter adapter = new ActiveBattleListViewAdapter(
+        ActiveBattleListViewAdapter activeBattlesAdapter = new ActiveBattleListViewAdapter(
                 this,
                 activeBattles,
                 account
         );
+        ActiveBattleListViewAdapter finishedBattlesAdapter = new ActiveBattleListViewAdapter(
+                this,
+                finishedBattles,
+                account
+        );
 
-        activeBattlesList.setAdapter(adapter);
+        activeBattlesList.setAdapter(activeBattlesAdapter);
+        finishedBattlesList.setAdapter(finishedBattlesAdapter);
 
         activeBattlesList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
