@@ -76,4 +76,8 @@ public class BattleService {
         }
         return battle.getState();
     }
+
+    public Battle[] getFinishedBattlesForAccountId(int accountId) {
+        return battleRepository.getFinishedBattlesForAccountId(accountId);
+    }
 }

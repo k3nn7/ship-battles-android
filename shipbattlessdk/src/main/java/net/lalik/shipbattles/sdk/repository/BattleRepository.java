@@ -7,4 +7,6 @@ public interface BattleRepository {
     Battle[] getActiveBattlesForAccountId(int accountId);
     Battle save(Battle battle);
     Battle findByid(int battleId) throws EntityNotFoundException;
+
+    Battle[] getFinishedBattlesForAccountId(int accountId);
 }

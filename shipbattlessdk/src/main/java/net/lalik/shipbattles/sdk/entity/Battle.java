@@ -89,7 +89,7 @@ public class Battle {
     }
 
     public boolean isActive() {
-        STATE []activeStates = {STATE.DEPLOY, STATE.LEFT_ATTACKS, STATE.RIGHT_ATTACKS};
+        STATE []activeStates = {STATE.DEPLOY, STATE.LEFT_ATTACKS, STATE.RIGHT_ATTACKS, STATE.FIRE_EXCHANGE};
         return Arrays.asList(activeStates).contains(state);
     }
 

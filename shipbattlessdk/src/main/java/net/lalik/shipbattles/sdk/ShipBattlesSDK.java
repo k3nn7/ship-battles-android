@@ -78,6 +78,10 @@ public class ShipBattlesSDK {
         return battleService.getActiveBattlesForAccountId(accountId);
     }
 
+    public Battle[] getFinishedBattlesForAccountId(int accountId) {
+        return battleService.getFinishedBattlesForAccountId(accountId);
+    }
+
     public Battle attackRandomOpponent(Account attacker) {
         return battleService.attackRandomOpponent(attacker);
     }

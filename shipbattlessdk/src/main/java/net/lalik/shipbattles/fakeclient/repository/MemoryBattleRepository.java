@@ -71,4 +71,16 @@ public class MemoryBattleRepository implements BattleRepository {
                 return battle;
         throw new EntityNotFoundException();
     }
+
+    @Override
+    public Battle[] getFinishedBattlesForAccountId(int accountId) {
+        ArrayList<Battle> finishedBattles = new ArrayList<>();
+        for (Battle battle : battles) {
+            if (!battle.isActive() && battle.isAccountIdParticipant(accountId)) {
+                finishedBattles.add(battle);
+            }
+        }
+
+        return finishedBattles.toArray(new Battle[finishedBattles.size()]);
+    }
 }
