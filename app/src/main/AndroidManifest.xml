@@ -30,6 +30,7 @@
         <activity
             android:name=".BattleCenterActivity"
             android:label="@string/title_activity_battle_center"
+            android:screenOrientation="landscape"
             android:theme="@style/BattleCenter" >
         </activity>
         <activity
@@ -37,6 +38,7 @@
             android:label="@string/title_activity_battle"
             android:parentActivityName=".BattleCenterActivity"
             android:theme="@style/BattleCenter"
+            android:screenOrientation="landscape"
             android:launchMode="singleTop" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -46,6 +48,7 @@
             android:name=".DeployFleetActivity"
             android:label="@string/title_activity_deploy_fleet"
             android:parentActivityName=".BattleActivity"
+            android:screenOrientation="landscape"
             android:theme="@style/BattleCenter" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -55,6 +58,7 @@
             android:name=".AttackActivity"
             android:label="@string/title_activity_attack"
             android:parentActivityName=".BattleActivity"
+            android:screenOrientation="landscape"
             android:theme="@style/BattleCenter" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
