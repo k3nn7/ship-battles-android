@@ -2,100 +2,64 @@
     xmlns:shipbattles="http://schemas.android.com/apk/res-auto"
     android:layout_height="fill_parent"
     android:layout_width="fill_parent"
-    android:orientation="vertical"
-    android:weightSum="1">
+    android:orientation="horizontal"
+    android:baselineAligned="false">
 
-    <GridLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:columnCount="3"
-        android:rowCount="3" >
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/imageView4"
-            android:layout_gravity="right"
-            android:src="@android:drawable/sym_def_app_icon"
-            android:layout_row="0"
-            android:layout_column="0" />
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1">
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/imageView5"
-            android:src="@android:drawable/sym_def_app_icon"
-            android:layout_row="0"
-            android:layout_column="2" />
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Woduj okręt"
+                android:id="@+id/deploy_ship_button"
+                android:onClick="deployShipClicked" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="VS"
-            android:id="@+id/textView8"
-            android:layout_gravity="center_horizontal"
-            android:layout_row="0"
-            android:layout_column="1"
-            android:layout_marginTop="20dp" />
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Od nowa"
+                android:id="@+id/clear_battlefield_button"
+                android:onClick="clearBattlefieldClicked"/>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="K3nn7"
-            android:id="@+id/textView9"
-            android:layout_gravity="right" />
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Gotowy"
+                android:id="@+id/commit_battlefield_button"
+                android:onClick="commitBattlefieldClicked"/>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Aneta"
-            android:id="@+id/textView10"
-            android:layout_row="1"
-            android:layout_column="2" />
-    </GridLayout>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Dostępne okręty:"
+                android:id="@+id/textView11" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Dostępne okręty:"
-        android:id="@+id/textView11" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="Kuter(4) Fregata (3) Krążownik (2) Pancernik (1)"
+                android:id="@+id/ships_inventory_text" />
+        </LinearLayout>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Kuter(4) Fregata (3) Krążownik (2) Pancernik (1)"
-        android:id="@+id/ships_inventory_text" />
+        <FrameLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_gravity="bottom"
+            android:layout_weight="1">
 
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+            <net.lalik.shipbattles.views.BattlefieldView
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                shipbattles:showGrid="true"
+                android:id="@+id/battlefield"
+                android:layout_gravity="center" />
+        </FrameLayout>
 
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Woduj okręt"
-            android:id="@+id/deploy_ship_button"
-            android:onClick="deployShipClicked" />
 
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Od nowa"
-            android:id="@+id/clear_battlefield_button"
-            android:onClick="clearBattlefieldClicked"/>
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Gotowy"
-            android:id="@+id/commit_battlefield_button"
-            android:onClick="commitBattlefieldClicked"/>
-    </LinearLayout>
-
-    <net.lalik.shipbattles.views.BattlefieldView
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        shipbattles:showGrid="true"
-        android:id="@+id/battlefield" />
 </LinearLayout>
