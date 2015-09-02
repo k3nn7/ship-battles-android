@@ -6,6 +6,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.view.View;
 
@@ -70,7 +71,7 @@ public class BattlefieldView extends View {
 
         int smallestDimension = Math.min(width, height);
         gridSize = smallestDimension / 11;
-        textPaint.setTextSize(gridSize);
+        textPaint.setTextSize(gridSize / 2);
     }
 
     @Override
@@ -98,8 +99,8 @@ public class BattlefieldView extends View {
         for (int i = 0; i < 10; i++) {
             canvas.drawText(
                     String.format("%d", i + 1),
-                    gridSize + (i * gridSize),
-                    gridSize,
+                    3 * gridSize / 2 + (i * gridSize),
+                    gridSize - 5,
                     textPaint
             );
         }
@@ -107,8 +108,8 @@ public class BattlefieldView extends View {
         for (int i = 0; i < 10; i++) {
             canvas.drawText(
                     String.format("%c", letters[i]),
-                    0,
-                    gridSize + gridSize + (gridSize * i),
+                    gridSize / 2,
+                    7 * gridSize / 4  + (gridSize * i),
                     textPaint
             );
         }
@@ -151,7 +152,10 @@ public class BattlefieldView extends View {
         y1 = (start.getY() - 1) * gridSize + gridSize;
         x2 = (end.getX() - 1) * gridSize + gridSize;
         y2 = (end.getY() - 1) * gridSize + gridSize;
-        canvas.drawRect(x1, y1, x2, y2, shipPaint);
+
+        Drawable d = getResources().getDrawable(R.drawable.ship_horizontal);
+        d.setBounds((int)x1, (int)y1, (int)x2, (int)y2);
+        d.draw(canvas);
     }
 
     private void drawShot(Canvas canvas, Coordinate coordinate) {
@@ -166,8 +170,9 @@ public class BattlefieldView extends View {
 
     private void initPaints() {
         textPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        textPaint.setColor(Color.rgb(0, 0, 0));
-        textPaint.setTypeface(Typeface.MONOSPACE);
+        textPaint.setColor(Color.rgb(255, 0, 0));
+        textPaint.setTypeface(Typeface.create("Arial", Typeface.NORMAL));
+        textPaint.setTextAlign(Paint.Align.CENTER);
 
         shipPaint = new Paint(0);
         shipPaint.setColor(Color.rgb(255, 0, 0));
