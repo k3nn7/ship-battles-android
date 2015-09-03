@@ -58,7 +58,9 @@
                 android:layout_height="fill_parent"
                 shipbattles:showGrid="true"
                 android:id="@+id/battlefield"
-                android:layout_gravity="center" />
+                android:layout_gravity="center"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="5dp" />
         </FrameLayout>
 
 

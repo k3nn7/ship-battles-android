@@ -23,6 +23,8 @@ public class BattlefieldView extends View {
     private int width, height, gridSize;
     private Stack<Ship> ships;
     private Battlefield battlefield = null;
+    private Drawable horizontalShip;
+    private Drawable verticalShip;
 
     public BattlefieldView(Context context, AttributeSet attributeSet) {
         super(context, attributeSet);
@@ -41,6 +43,9 @@ public class BattlefieldView extends View {
 
         ships = new Stack<>();
         initPaints();
+
+        horizontalShip = getResources().getDrawable(R.drawable.ship_horizontal);
+        verticalShip = getResources().getDrawable(R.drawable.ship_vertical);
     }
 
     public void setBattlefield(Battlefield battlefield) {
@@ -80,10 +85,6 @@ public class BattlefieldView extends View {
         drawLabels(canvas);
         drawGrid(canvas);
 
-        for (Ship ship : ships) {
-            drawShip(canvas, ship.getTopCoordinate(), ship.getBottomCoordinate());
-        }
-
         if (null != battlefield)
             for (Battlefield.Ship ship : battlefield.deployedShips()) {
                 drawShip(canvas, ship);
@@ -109,7 +110,7 @@ public class BattlefieldView extends View {
             canvas.drawText(
                     String.format("%c", letters[i]),
                     gridSize / 2,
-                    7 * gridSize / 4  + (gridSize * i),
+                    7 * gridSize / 4 + (gridSize * i),
                     textPaint
             );
         }
@@ -141,11 +142,12 @@ public class BattlefieldView extends View {
         drawShip(
                 canvas,
                 ship.getCoordinate(),
-                getBottomCoordinate(ship)
+                getBottomCoordinate(ship),
+                ship.getOrientation()
         );
     }
 
-    private void drawShip(Canvas canvas, Coordinate start, Coordinate end) {
+    private void drawShip(Canvas canvas, Coordinate start, Coordinate end, Orientation orientation) {
         float x1, y1, x2, y2;
 
         x1 = (start.getX() - 1) * gridSize + gridSize;
@@ -153,9 +155,13 @@ public class BattlefieldView extends View {
         x2 = (end.getX() - 1) * gridSize + gridSize;
         y2 = (end.getY() - 1) * gridSize + gridSize;
 
-        Drawable d = getResources().getDrawable(R.drawable.ship_horizontal);
-        d.setBounds((int)x1, (int)y1, (int)x2, (int)y2);
-        d.draw(canvas);
+        if (orientation == Orientation.HORIZONTAL) {
+            horizontalShip.setBounds((int) x1, (int) y1, (int) x2, (int) y2);
+            horizontalShip.draw(canvas);
+        } else {
+            verticalShip.setBounds((int) x1, (int) y1, (int) x2, (int) y2);
+            verticalShip.draw(canvas);
+        }
     }
 
     private void drawShot(Canvas canvas, Coordinate coordinate) {
@@ -170,12 +176,12 @@ public class BattlefieldView extends View {
 
     private void initPaints() {
         textPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        textPaint.setColor(Color.rgb(255, 0, 0));
+        textPaint.setColor(Color.rgb(0, 0, 0));
         textPaint.setTypeface(Typeface.create("Arial", Typeface.NORMAL));
         textPaint.setTextAlign(Paint.Align.CENTER);
 
         shipPaint = new Paint(0);
-        shipPaint.setColor(Color.rgb(255, 0, 0));
+        shipPaint.setColor(Color.rgb(0, 0, 0));
         shipPaint.setStyle(Paint.Style.STROKE);
         shipPaint.setStrokeWidth(4);
     }
