@@ -38,6 +38,7 @@ public class AttackActivity extends Activity {
         setContentView(R.layout.activity_attack);
         battlefieldView = (BattlefieldView)findViewById(R.id.battlefield);
         myBattlefieldView = (BattlefieldView)findViewById(R.id.battlefield2);
+        battlefieldView.setCoordinateSelectedListener(new AttackListener());
 
         Intent intent = getIntent();
         try {
@@ -71,31 +72,42 @@ public class AttackActivity extends Activity {
         dialog.setListener(new CoordinatesDialogFragment.CoordinatesDialogListener() {
             @Override
             public void onDeployClicked(Coordinate coordinate) {
-                try {
-                    AttackResult result = ShipBattlesSDK.getInstance().attackBattlefield(battlefield, coordinate);
-                    ShipBattlesSDK.getInstance().attackBattlefield(
-                            myBattlefield,
-                            new Coordinate(new Random().nextInt(10) + 1, new Random().nextInt(10) + 1)
-                    );
-                    battlefieldView.updateShots();
-                    myBattlefieldView.updateShots();
 
-                    battle = ShipBattlesSDK.getInstance().getBattleById(battle.getId());
-                    if (battle.getState() == Battle.STATE.FINISHED) {
-                        new AlertDialog.Builder(AttackActivity.this)
-                                .setMessage("Bitwa zakończona")
-                                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        finish();
-                                    }
-                                })
-                                .show();
-                    }
-                } catch (Exception e) {
-                }
             }
         });
         return dialog;
+    }
+
+    private void attack(Coordinate coordinate) {
+        try {
+            AttackResult result = ShipBattlesSDK.getInstance().attackBattlefield(battlefield, coordinate);
+            ShipBattlesSDK.getInstance().attackBattlefield(
+                    myBattlefield,
+                    new Coordinate(new Random().nextInt(10) + 1, new Random().nextInt(10) + 1)
+            );
+            battlefieldView.updateShots();
+            myBattlefieldView.updateShots();
+
+            battle = ShipBattlesSDK.getInstance().getBattleById(battle.getId());
+            if (battle.getState() == Battle.STATE.FINISHED) {
+                new AlertDialog.Builder(AttackActivity.this)
+                        .setMessage("Bitwa zakończona")
+                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                finish();
+                            }
+                        })
+                        .show();
+            }
+        } catch (Exception e) {
+        }
+    }
+
+    private class AttackListener implements BattlefieldView.CoordinateSelectedListener {
+        @Override
+        public void onCoordinateSelected(Coordinate coordinate) {
+            attack(coordinate);
+        }
     }
 }

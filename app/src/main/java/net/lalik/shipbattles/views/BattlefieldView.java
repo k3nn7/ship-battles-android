@@ -8,6 +8,8 @@ import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
+import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 
 import net.lalik.shipbattles.R;
@@ -25,6 +27,13 @@ public class BattlefieldView extends View {
     private Battlefield battlefield = null;
     private Drawable horizontalShip;
     private Drawable verticalShip;
+    private boolean drawSelector = false;
+    private Coordinate selectorPosition;
+    private CoordinateSelectedListener coordinateSelectedListener;
+
+    public interface CoordinateSelectedListener {
+        void onCoordinateSelected(Coordinate coordinate);
+    }
 
     public BattlefieldView(Context context, AttributeSet attributeSet) {
         super(context, attributeSet);
@@ -46,6 +55,8 @@ public class BattlefieldView extends View {
 
         horizontalShip = getResources().getDrawable(R.drawable.ship_horizontal);
         verticalShip = getResources().getDrawable(R.drawable.ship_vertical);
+
+        selectorPosition = new Coordinate(0,0);
     }
 
     public void setBattlefield(Battlefield battlefield) {
@@ -85,13 +96,17 @@ public class BattlefieldView extends View {
         drawLabels(canvas);
         drawGrid(canvas);
 
-        if (null != battlefield)
+        if (null != battlefield) {
             for (Battlefield.Ship ship : battlefield.deployedShips()) {
                 drawShip(canvas, ship);
             }
 
             for (Battlefield.Shot shot : battlefield.getShots())
                 drawShot(canvas, shot.getCoordinate());
+        }
+
+        if (drawSelector)
+            drawSelection(canvas, selectorPosition);
     }
 
     private void drawLabels(Canvas canvas) {
@@ -197,5 +212,54 @@ public class BattlefieldView extends View {
             y = ship.getCoordinate().getY() + ship.getShipClass().getSize();
         }
         return new Coordinate(y, x);
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        if (event.getAction() == MotionEvent.ACTION_DOWN) {
+            selectorPosition.setX((int)event.getX());
+            selectorPosition.setY((int) event.getY());
+            drawSelector = true;
+            updateShots();
+        }
+
+        if (event.getAction() == MotionEvent.ACTION_MOVE) {
+            selectorPosition.setX((int)event.getX());
+            selectorPosition.setY((int)event.getY());
+            updateShots();
+        }
+
+        if (event.getAction() == MotionEvent.ACTION_UP) {
+            drawSelector = false;
+            updateShots();
+            if (coordinateSelectedListener != null) {
+                coordinateSelectedListener.onCoordinateSelected(new Coordinate(
+                        (int)Math.floor(event.getY() / gridSize) -1,
+                        (int)Math.floor(event.getX() / gridSize) -1
+                ));
+            }
+        }
+
+        return true;
+    }
+
+    private void drawSelection(Canvas canvas, Coordinate coordinate) {
+        float x1, y1, x2, y2;
+
+        int x = (int)Math.floor(coordinate.getX() / gridSize) * gridSize;
+        int y = (int)Math.floor(coordinate.getY() / gridSize) * gridSize;
+
+        x1 = x;
+        y1 = y;
+        x2 = x + gridSize;
+        y2 = y + gridSize;
+
+        canvas.drawRect(x1 - gridSize, y1 - gridSize, x1, y1, shipPaint);
+        canvas.drawLine((float) x1, 0, (float) x1, (float) height, shipPaint);
+        canvas.drawLine((float)0, y1, (float)width, (float)y1, shipPaint);
+    }
+
+    public void setCoordinateSelectedListener(CoordinateSelectedListener coordinateSelectedListener) {
+        this.coordinateSelectedListener = coordinateSelectedListener;
     }
 }
