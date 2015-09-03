@@ -9,31 +9,36 @@
         android:layout_gravity="center_horizontal"
         android:layout_weight="1" />
 
-    <Space
-        android:layout_width="match_parent"
+    <TextView
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_weight="1" />
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Bitwa Morska"
+        android:id="@+id/entry_text"
+        android:layout_weight="1.71"
+        android:textSize="60dp"
+        android:layout_marginLeft="30dp"
+        android:textColor="#c8000000" />
 
     <Button
         android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:text="@string/register"
         android:id="@+id/register_button"
-        android:layout_gravity="center_horizontal"
-        android:onClick="registerClicked" />
+        android:onClick="registerClicked"
+        android:layout_marginLeft="30dp" />
 
     <Button
         android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:text="@string/sign_in"
         android:id="@+id/sign_in_button"
-        android:layout_gravity="center_horizontal"
-        android:onClick="signInClicked" />
+        android:onClick="signInClicked"
+        android:layout_marginLeft="30dp" />
 
     <Space
         android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_height="50dp"
         android:layout_gravity="center_horizontal"
         android:layout_weight="0" />
 </LinearLayout>

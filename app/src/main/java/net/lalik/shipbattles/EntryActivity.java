@@ -5,20 +5,26 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.TextView;
 
 import net.lalik.shipbattles.sdk.ShipBattlesSDK;
 import net.lalik.shipbattles.sdk.entity.Account;
 
 public class EntryActivity extends Activity {
     private ProgressDialog registerProgress;
+    private TextView entryText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_entry);
+        entryText = (TextView)findViewById(R.id.entry_text);
+        Typeface font = Typeface.createFromAsset(getAssets(), "black_chancery.ttf");
+        entryText.setTypeface(font);
     }
 
     public void signInClicked(View view) {
