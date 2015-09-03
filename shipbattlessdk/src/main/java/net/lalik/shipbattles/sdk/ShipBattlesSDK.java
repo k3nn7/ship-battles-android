@@ -22,6 +22,8 @@ import net.lalik.shipbattles.sdk.values.Coordinate;
 import net.lalik.shipbattles.sdk.values.Orientation;
 import net.lalik.shipbattles.sdk.values.ShipsInventory;
 
+import java.util.Random;
+
 public class ShipBattlesSDK {
     private static ShipBattlesSDK instance = null;
 
@@ -110,8 +112,21 @@ public class ShipBattlesSDK {
         }
 
         for (ShipsInventory.Item item : secondBattlefield.shipsInInventory())
-            for (int i = 0; i < item.getCount(); i++)
-                secondBattlefield.deployShip(new Coordinate(i + 1, 1), Orientation.VERTICAL, item.getShipClass());
+            for (int i = 0; i < item.getCount(); i++) {
+                int orientation = new Random().nextInt(1);
+                if (orientation == 0) {
+                    secondBattlefield.deployShip(new Coordinate(
+                            new Random().nextInt(8) + 2,
+                            new Random().nextInt(8) + 2
+                    ), Orientation.VERTICAL, item.getShipClass());
+                } else {
+                    secondBattlefield.deployShip(new Coordinate(
+                            new Random().nextInt(8) + 2,
+                            new Random().nextInt(8) + 2
+                    ), Orientation.HORIZONTAL, item.getShipClass());
+                }
+            }
+
         battlefieldService.commitBattlefield(secondBattlefield);
     }
 
