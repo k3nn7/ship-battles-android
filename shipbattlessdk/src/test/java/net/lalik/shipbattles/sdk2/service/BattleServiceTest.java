@@ -27,6 +27,12 @@ public class BattleServiceTest {
     }
 
     @Test
+    public void getCurrentBattleWhenNoneExists() {
+        Battle battle = battleService.getCurrentBattles(new Account("a", "b", "foo"));
+        assertNull(battle);
+    }
+
+    @Test
     public void getCurrentBattleWhenOneExists() {
         Battle battle = battleService.getCurrentBattles(account);
 

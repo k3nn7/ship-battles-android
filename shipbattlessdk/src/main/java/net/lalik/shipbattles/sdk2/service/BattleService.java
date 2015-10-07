@@ -19,6 +19,9 @@ public class BattleService {
         Response response = api.doRequest(
                 new Request("GET", "battles", account.getSessionToken())
         );
+        if (!response.isSuccess()) {
+            return null;
+        }
         Gson gson = new Gson();
         return gson.fromJson(
                 response.getBody(),

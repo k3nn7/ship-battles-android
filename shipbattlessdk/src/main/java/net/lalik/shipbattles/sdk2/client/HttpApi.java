@@ -19,9 +19,9 @@ public class HttpApi implements Api {
             String body = readBody(connection.getInputStream());
             String sessionToken = connection.getHeaderField("X-AuthToken");
 
-            return new Response(body, sessionToken);
+            return new Response(body, sessionToken, true);
         } catch (IOException e) {
-            return new Response(e.getClass().toString(), "foo");
+            return new Response(e.getClass().toString(), "foo", false);
         }
     }
 
@@ -36,6 +36,14 @@ public class HttpApi implements Api {
         connection.setConnectTimeout(10000);
         connection.setRequestMethod(request.getMethod());
         connection.setDoInput(true);
+
+        if (request.getSessionToken() != null) {
+            connection.setRequestProperty(
+                "X-AuthToken",
+                request.getSessionToken()
+            );
+        }
+
         return connection;
     }
 
