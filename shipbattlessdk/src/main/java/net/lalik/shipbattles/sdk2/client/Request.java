@@ -25,4 +25,8 @@ public class Request {
     public String getAction() {
         return action;
     }
+
+    public String getSessionToken() {
+        return sessionToken;
+    }
 }
