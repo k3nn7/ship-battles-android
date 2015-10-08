@@ -11,8 +11,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
-import net.lalik.shipbattles.sdk.ShipBattlesSDK;
-import net.lalik.shipbattles.sdk.entity.Account;
+import net.lalik.shipbattles.sdk2.ShipBattles;
+import net.lalik.shipbattles.sdk2.entity.Account;
 
 public class EntryActivity extends Activity {
     private ProgressDialog registerProgress;
@@ -48,7 +48,7 @@ public class EntryActivity extends Activity {
                 Context.MODE_PRIVATE
         );
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString("AUTH_TOKEN", account.getAuthToken());
+        editor.putString("AUTH_TOKEN", account.getSessionToken());
         editor.commit();
         Intent intent = new Intent(this, BattleCenterActivity.class);
         startActivity(intent);
@@ -58,7 +58,7 @@ public class EntryActivity extends Activity {
     private class RegisterAccountTask extends AsyncTask<Void, Void, Void> {
         @Override
         protected Void doInBackground(Void... params) {
-            Account account = ShipBattlesSDK.getInstance().createRandomAccount();
+            Account account = ShipBattles.getInstance().createRandomAccount();
             registerProgress.dismiss();
             enterBattleCenter(account);
             return null;

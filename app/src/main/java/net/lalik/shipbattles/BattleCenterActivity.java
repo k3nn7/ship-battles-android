@@ -15,9 +15,10 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import net.lalik.shipbattles.sdk.ShipBattlesSDK;
-import net.lalik.shipbattles.sdk.entity.Account;
 import net.lalik.shipbattles.sdk.entity.Battle;
 import net.lalik.shipbattles.sdk.service.exception.InvalidCredentialsException;
+import net.lalik.shipbattles.sdk2.ShipBattles;
+import net.lalik.shipbattles.sdk2.entity.Account;
 import net.lalik.shipbattles.views.ActiveBattleListViewAdapter;
 
 public class BattleCenterActivity extends Activity {
@@ -50,44 +51,42 @@ public class BattleCenterActivity extends Activity {
         );
         String authToken = sharedPreferences.getString("AUTH_TOKEN", "");
 
-        try {
-            account = ShipBattlesSDK
-                    .getInstance()
-                    .authenticate(authToken);
+//        try {
+            account = ShipBattles.getInstance().authenticate(authToken);
             userNick.setText(account.getNick());
-        } catch (InvalidCredentialsException e) {
-            finish();
-        }
+//        } catch (InvalidCredentialsException e) {
+//            finish();
+//        }
 
-        activeBattles = ShipBattlesSDK
-                .getInstance()
-                .getActiveBattlesForAccountId(account.getId());
-        finishedBattles = ShipBattlesSDK
-                .getInstance()
-                .getFinishedBattlesForAccountId(account.getId());
+//        activeBattles = ShipBattlesSDK
+//                .getInstance()
+//                .getActiveBattlesForAccountId(account.getId());
+//        finishedBattles = ShipBattlesSDK
+//                .getInstance()
+//                .getFinishedBattlesForAccountId(account.getId());
+//
+//        ActiveBattleListViewAdapter activeBattlesAdapter = new ActiveBattleListViewAdapter(
+//                this,
+//                activeBattles,
+//                account
+//        );
+//        ActiveBattleListViewAdapter finishedBattlesAdapter = new ActiveBattleListViewAdapter(
+//                this,
+//                finishedBattles,
+//                account
+//        );
 
-        ActiveBattleListViewAdapter activeBattlesAdapter = new ActiveBattleListViewAdapter(
-                this,
-                activeBattles,
-                account
-        );
-        ActiveBattleListViewAdapter finishedBattlesAdapter = new ActiveBattleListViewAdapter(
-                this,
-                finishedBattles,
-                account
-        );
-
-        activeBattlesList.setAdapter(activeBattlesAdapter);
-        finishedBattlesList.setAdapter(finishedBattlesAdapter);
-
-        activeBattlesList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long battleId) {
-                Intent intent = new Intent(BattleCenterActivity.this, BattleActivity.class);
-                intent.putExtra(BattleActivity.BATTLE_ID, (int)battleId);
-                startActivity(intent);
-            }
-        });
+//        activeBattlesList.setAdapter(activeBattlesAdapter);
+//        finishedBattlesList.setAdapter(finishedBattlesAdapter);
+//
+//        activeBattlesList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View view, int position, long battleId) {
+//                Intent intent = new Intent(BattleCenterActivity.this, BattleActivity.class);
+//                intent.putExtra(BattleActivity.BATTLE_ID, (int)battleId);
+//                startActivity(intent);
+//            }
+//        });
     }
 
     public void newBattleClicked(View view) {
@@ -109,7 +108,8 @@ public class BattleCenterActivity extends Activity {
 
         @Override
         protected Battle doInBackground(Void... params) {
-            return ShipBattlesSDK.getInstance().attackRandomOpponent(account);
+//            return ShipBattlesSDK.getInstance().attackRandomOpponent(account);
+            return null;
         }
 
         @Override
