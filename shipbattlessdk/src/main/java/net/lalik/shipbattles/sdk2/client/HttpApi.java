@@ -16,6 +16,11 @@ public class HttpApi implements Api {
             HttpURLConnection connection = createConnection(request);
             connection.connect();
 
+            int statusCode = connection.getResponseCode();
+            if (statusCode >= 400) {
+                return new Response("", "", false);
+            }
+
             String body = readBody(connection.getInputStream());
             String sessionToken = connection.getHeaderField("X-AuthToken");
 

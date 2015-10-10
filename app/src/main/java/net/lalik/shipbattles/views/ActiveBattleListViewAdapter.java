@@ -9,8 +9,8 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import net.lalik.shipbattles.R;
-import net.lalik.shipbattles.sdk.entity.Account;
-import net.lalik.shipbattles.sdk.entity.Battle;
+import net.lalik.shipbattles.sdk2.entity.Account;
+import net.lalik.shipbattles.sdk2.entity.Battle;
 
 public class ActiveBattleListViewAdapter extends ArrayAdapter<Battle> {
     private final Context context;
@@ -41,16 +41,15 @@ public class ActiveBattleListViewAdapter extends ArrayAdapter<Battle> {
     private String buildBattleStateText(int position) {
         Battle battle = battles[position];
         switch (battle.getState()) {
-            case DEPLOY:
+            case 2:
                 return "wodowanie statków";
-            case LEFT_ATTACKS:
-            case RIGHT_ATTACKS:
-                if (battle.getCurrentAccount().getId() == account.getId()) {
+            case 3:
+//                if (battle.getCurrentAccount().getId() == account.getId()) {
                     return "twoja tura";
-                } else {
-                    return "oczekiwanie na ruch przeciwnika";
-                }
-            case FINISHED:
+//                } else {
+//                    return "oczekiwanie na ruch przeciwnika";
+//                }
+            case 4:
                 return "bitwa zakończona";
         }
         return "invalid";
@@ -58,14 +57,15 @@ public class ActiveBattleListViewAdapter extends ArrayAdapter<Battle> {
 
     private String buildOpponentNameText(int position) {
         Battle battle = battles[position];
-        Account opponent = battle.getSecondAccountId(account.getId());
-        return String.format("z %s", opponent.getNick());
+//        Account opponent = battle.getSecondAccountId(account.getId());
+//        return String.format("z %s", opponent.getNick());
+        return "foo";
     }
 
-    @Override
-    public long getItemId(int position) {
-        return battles[position].getId();
-    }
+//    @Override
+//    public long getItemId(int position) {
+//        return battles[position].getId();
+//    }
 
     @Override
     public boolean hasStableIds() {

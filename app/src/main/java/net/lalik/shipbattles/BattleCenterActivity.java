@@ -15,10 +15,10 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import net.lalik.shipbattles.sdk.ShipBattlesSDK;
-import net.lalik.shipbattles.sdk.entity.Battle;
 import net.lalik.shipbattles.sdk.service.exception.InvalidCredentialsException;
 import net.lalik.shipbattles.sdk2.ShipBattles;
 import net.lalik.shipbattles.sdk2.entity.Account;
+import net.lalik.shipbattles.sdk2.entity.Battle;
 import net.lalik.shipbattles.views.ActiveBattleListViewAdapter;
 
 public class BattleCenterActivity extends Activity {
@@ -26,7 +26,7 @@ public class BattleCenterActivity extends Activity {
     private ProgressDialog findOpponentProgress;
     private Account account;
     private TextView userNick;
-    private Battle[] activeBattles;
+    private Battle activeBattle;
     private Battle[] finishedBattles;
     private ListView activeBattlesList;
     private ListView finishedBattlesList;
@@ -49,35 +49,7 @@ public class BattleCenterActivity extends Activity {
                 "net.lalik.shipbattles.SECRETS",
                 Context.MODE_PRIVATE
         );
-        String authToken = sharedPreferences.getString("AUTH_TOKEN", "");
-
-//        try {
-            account = ShipBattles.getInstance().authenticate(authToken);
-            userNick.setText(account.getNick());
-//        } catch (InvalidCredentialsException e) {
-//            finish();
-//        }
-
-//        activeBattles = ShipBattlesSDK
-//                .getInstance()
-//                .getActiveBattlesForAccountId(account.getId());
-//        finishedBattles = ShipBattlesSDK
-//                .getInstance()
-//                .getFinishedBattlesForAccountId(account.getId());
-//
-//        ActiveBattleListViewAdapter activeBattlesAdapter = new ActiveBattleListViewAdapter(
-//                this,
-//                activeBattles,
-//                account
-//        );
-//        ActiveBattleListViewAdapter finishedBattlesAdapter = new ActiveBattleListViewAdapter(
-//                this,
-//                finishedBattles,
-//                account
-//        );
-
-//        activeBattlesList.setAdapter(activeBattlesAdapter);
-//        finishedBattlesList.setAdapter(finishedBattlesAdapter);
+        new GetBattlesTask().execute(sharedPreferences.getString("AUTH_TOKEN", ""));
 //
 //        activeBattlesList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 //            @Override
@@ -90,38 +62,79 @@ public class BattleCenterActivity extends Activity {
     }
 
     public void newBattleClicked(View view) {
-        new AttackRandomOpponentTask().execute();
+//        new AttackRandomOpponentTask().execute();
     }
 
-    private class AttackRandomOpponentTask extends AsyncTask<Void, Void, Battle> {
-        private ProgressDialog findOpponentProgress;
+//    private class AttackRandomOpponentTask extends AsyncTask<Void, Void, Battle> {
+//        private ProgressDialog findOpponentProgress;
+//
+//        @Override
+//        protected void onPreExecute() {
+//            findOpponentProgress = ProgressDialog.show(
+//                    BattleCenterActivity.this,
+//                    getText(R.string.app_name),
+//                    getText(R.string.we_are_finding_opponnent_for_you),
+//                    true
+//            );
+//        }
+//
+//        @Override
+//        protected Battle doInBackground(Void... params) {
+////            return ShipBattlesSDK.getInstance().attackRandomOpponent(account);
+//            return null;
+//        }
+//
+//        @Override
+//        protected void onPostExecute(Battle battle) {
+//            findOpponentProgress.dismiss();
+//            enterBattle(battle);
+//        }
+//
+//        private void enterBattle(Battle battle) {
+//            Intent intent = new Intent(BattleCenterActivity.this, BattleActivity.class);
+//            intent.putExtra(BattleActivity.BATTLE_ID, battle.getId());
+//            startActivity(intent);
+//        }
+//    }
+
+    private class GetBattlesTask extends AsyncTask<String, Void, Battle> {
+        private ProgressDialog registerProgress;
 
         @Override
         protected void onPreExecute() {
-            findOpponentProgress = ProgressDialog.show(
+            registerProgress = ProgressDialog.show(
                     BattleCenterActivity.this,
-                    getText(R.string.app_name),
-                    getText(R.string.we_are_finding_opponnent_for_you),
+                    "ShipBattles",
+                    "Fetching current battles",
                     true
             );
         }
 
         @Override
-        protected Battle doInBackground(Void... params) {
-//            return ShipBattlesSDK.getInstance().attackRandomOpponent(account);
-            return null;
+        protected Battle doInBackground(String... authToken) {
+            account = ShipBattles.getInstance().authenticate(authToken[0]);
+            activeBattle = ShipBattles.getInstance().getCurrentBattleForAccount(account);
+            return activeBattle;
         }
 
         @Override
         protected void onPostExecute(Battle battle) {
-            findOpponentProgress.dismiss();
-            enterBattle(battle);
-        }
+            userNick.setText(account.getNick());
 
-        private void enterBattle(Battle battle) {
-            Intent intent = new Intent(BattleCenterActivity.this, BattleActivity.class);
-            intent.putExtra(BattleActivity.BATTLE_ID, battle.getId());
-            startActivity(intent);
+            Battle[] battles = new Battle[1];
+            if (activeBattle != null)
+                battles[0] = activeBattle;
+            else
+                battles = new Battle[0];
+
+            ActiveBattleListViewAdapter activeBattlesAdapter = new ActiveBattleListViewAdapter(
+                    BattleCenterActivity.this,
+                    battles,
+                    account
+            );
+            activeBattlesList.setAdapter(activeBattlesAdapter);
+
+            registerProgress.dismiss();
         }
     }
 }
