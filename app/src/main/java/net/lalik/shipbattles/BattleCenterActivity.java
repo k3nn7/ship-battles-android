@@ -66,6 +66,7 @@ public class BattleCenterActivity extends Activity {
 
     private class AttackRandomOpponentTask extends AsyncTask<Void, Void, Battle> {
         private ProgressDialog findOpponentProgress;
+        private boolean interrupt = false;
 
         @Override
         protected void onPreExecute() {
@@ -80,7 +81,24 @@ public class BattleCenterActivity extends Activity {
         @Override
         protected Battle doInBackground(Void... params) {
             Battle battle = ShipBattles.getInstance().newBattle(account);
+            if (battle.getState() == 1)
+                return waitForOpponent();
             return battle;
+        }
+
+        private Battle waitForOpponent() {
+            while (!interrupt) {
+                try {
+                    Thread.sleep(5000);
+                    Battle battle1 = ShipBattles.getInstance().getCurrentBattleForAccount(account);
+                    if (battle1.getState() == 2) {
+                        return battle1;
+                    }
+                } catch(InterruptedException e) {
+                    interrupt = true;
+                }
+            }
+            return null;
         }
 
         @Override
