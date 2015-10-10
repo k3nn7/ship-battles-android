@@ -23,7 +23,6 @@ import net.lalik.shipbattles.views.ActiveBattleListViewAdapter;
 
 public class BattleCenterActivity extends Activity {
     public final static String AUTH_TOKEN = "net.lalik.shipbattles.AUTH_TOKEN";
-    private ProgressDialog findOpponentProgress;
     private Account account;
     private TextView userNick;
     private Battle activeBattle;
@@ -62,40 +61,42 @@ public class BattleCenterActivity extends Activity {
     }
 
     public void newBattleClicked(View view) {
-//        new AttackRandomOpponentTask().execute();
+        new AttackRandomOpponentTask().execute();
     }
 
-//    private class AttackRandomOpponentTask extends AsyncTask<Void, Void, Battle> {
-//        private ProgressDialog findOpponentProgress;
-//
-//        @Override
-//        protected void onPreExecute() {
-//            findOpponentProgress = ProgressDialog.show(
-//                    BattleCenterActivity.this,
-//                    getText(R.string.app_name),
-//                    getText(R.string.we_are_finding_opponnent_for_you),
-//                    true
-//            );
-//        }
-//
-//        @Override
-//        protected Battle doInBackground(Void... params) {
-////            return ShipBattlesSDK.getInstance().attackRandomOpponent(account);
-//            return null;
-//        }
-//
-//        @Override
-//        protected void onPostExecute(Battle battle) {
-//            findOpponentProgress.dismiss();
-//            enterBattle(battle);
-//        }
-//
-//        private void enterBattle(Battle battle) {
-//            Intent intent = new Intent(BattleCenterActivity.this, BattleActivity.class);
-//            intent.putExtra(BattleActivity.BATTLE_ID, battle.getId());
-//            startActivity(intent);
-//        }
-//    }
+    private class AttackRandomOpponentTask extends AsyncTask<Void, Void, Battle> {
+        private ProgressDialog findOpponentProgress;
+
+        @Override
+        protected void onPreExecute() {
+            findOpponentProgress = ProgressDialog.show(
+                    BattleCenterActivity.this,
+                    getText(R.string.app_name),
+                    getText(R.string.we_are_finding_opponnent_for_you),
+                    true
+            );
+        }
+
+        @Override
+        protected Battle doInBackground(Void... params) {
+            Battle battle = ShipBattles.getInstance().newBattle(account);
+            return battle;
+        }
+
+        @Override
+        protected void onPostExecute(Battle battle) {
+            if (battle.getState() == 2) {
+                findOpponentProgress.dismiss();
+                enterBattle(battle);
+            }
+        }
+
+        private void enterBattle(Battle battle) {
+            Intent intent = new Intent(BattleCenterActivity.this, BattleActivity.class);
+            intent.putExtra(BattleActivity.BATTLE_ID, battle.getId());
+            startActivity(intent);
+        }
+    }
 
     private class GetBattlesTask extends AsyncTask<String, Void, Battle> {
         private ProgressDialog registerProgress;

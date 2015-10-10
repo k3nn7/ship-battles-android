@@ -1,23 +1,20 @@
 package net.lalik.shipbattles;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
-import net.lalik.shipbattles.sdk.ShipBattlesSDK;
-import net.lalik.shipbattles.sdk.entity.Account;
-import net.lalik.shipbattles.sdk.entity.Battle;
-import net.lalik.shipbattles.sdk.repository.exception.EntityNotFoundException;
-import net.lalik.shipbattles.sdk.service.exception.InvalidCredentialsException;
-
-import org.w3c.dom.Text;
+import net.lalik.shipbattles.sdk2.ShipBattles;
+import net.lalik.shipbattles.sdk2.entity.Account;
+import net.lalik.shipbattles.sdk2.entity.Battle;
+import net.lalik.shipbattles.views.ActiveBattleListViewAdapter;
 
 public class BattleActivity extends Activity {
     public static final String BATTLE_ID = "net.lalik.shipbattles.BATTLE_ID";
@@ -41,7 +38,6 @@ public class BattleActivity extends Activity {
     @Override
     protected void onStart() {
         super.onStart();
-        Log.d("A", "ON START INVOKED");
         SharedPreferences sharedPreferences = getSharedPreferences(
                 "net.lalik.shipbattles.SECRETS",
                 Context.MODE_PRIVATE
@@ -52,43 +48,63 @@ public class BattleActivity extends Activity {
             battleId = intent.getIntExtra(BATTLE_ID, -1);
         }
 
-        try {
-            account = ShipBattlesSDK
-                    .getInstance()
-                    .authenticate(authToken);
-            battle = ShipBattlesSDK
-                    .getInstance()
-                    .getBattleById(battleId);
-        } catch (InvalidCredentialsException e) {
-        } catch (EntityNotFoundException e) {
-        }
-
-        attackerNick.setText(battle.getLeftAccount().getNick());
-        defenderNick.setText(battle.getRightAccount().getNick());
-        battleState.setText(formatBattleState());
+        new GetBattlesTask().execute(authToken);
     }
 
     public void deployFleetClicked(View view) {
         Intent intent = new Intent(this, DeployFleetActivity.class);
         intent.putExtra(BattleActivity.BATTLE_ID, battle.getId());
-        intent.putExtra(BattleCenterActivity.AUTH_TOKEN, account.getAuthToken());
+        intent.putExtra(BattleCenterActivity.AUTH_TOKEN, account.getSessionToken());
         startActivity(intent);
     }
 
     public void attackClicked(View view) {
         Intent intent = new Intent(this, AttackActivity.class);
         intent.putExtra(BATTLE_ID, battle.getId());
-        intent.putExtra(BattleCenterActivity.AUTH_TOKEN, account.getAuthToken());
+        intent.putExtra(BattleCenterActivity.AUTH_TOKEN, account.getSessionToken());
         startActivity(intent);
     }
 
     private String formatBattleState() {
         switch (battle.getState()) {
-            case DEPLOY:
+            case 1:
+                return "oczekiwanie na przeciwnika";
+            case 2:
                 return "wodowanie statków";
-            case FIRE_EXCHANGE:
+            case 3:
                 return "w trakcie bitwy";
         }
         return "invalid ";
+    }
+
+    private class GetBattlesTask extends AsyncTask<String, Void, Battle> {
+        private ProgressDialog registerProgress;
+
+        @Override
+        protected void onPreExecute() {
+            registerProgress = ProgressDialog.show(
+                    BattleActivity.this,
+                    "ShipBattles",
+                    "Fetching current battles",
+                    true
+            );
+        }
+
+        @Override
+        protected Battle doInBackground(String... authToken) {
+            account = ShipBattles.getInstance().authenticate(authToken[0]);
+            return ShipBattles.getInstance().getCurrentBattleForAccount(account);
+        }
+
+        @Override
+        protected void onPostExecute(Battle b) {
+            battle = b;
+
+            attackerNick.setText(battle.getAttackerId());
+            defenderNick.setText(battle.getDefenderId());
+            battleState.setText(formatBattleState());
+
+            registerProgress.dismiss();
+        }
     }
 }
