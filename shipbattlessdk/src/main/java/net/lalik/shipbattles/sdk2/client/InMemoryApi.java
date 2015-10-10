@@ -11,7 +11,7 @@ public class InMemoryApi implements Api {
             );
         }
 
-        if (request.getAction().equals("battle") && request.getMethod().equals("POST")) {
+        if (request.getAction().equals("battle") && request.getMethod().equals("POST") && request.getSessionToken().equals("172bc83648184fe9b296321cd1184911")) {
             return new Response(
                     "{\"attacker_id\": \"560affde3492eb00087355f9\", \"id\": \"560affee3492eb00087355fb\", \"state\": 2, \"defender_id\": \"561439f48d5e0e000c8e7f42\"}",
                     "172bc83648184fe9b296321cd1184900",
@@ -26,6 +26,23 @@ public class InMemoryApi implements Api {
                     true
             );
         }
+
+        if (request.getAction().equals("battle") && request.getMethod().equals("POST") && request.getSessionToken().equals("172bc83648184fe9b296321cd1184900")) {
+            return new Response(
+                    "{\"attacker_id\": \"5618e5c28d5e0e000c8e7f74\", \"id\": \"5618e5d78d5e0e000c8e7f76\", \"state\": 1, \"defender_id\": null}",
+                    "172bc83648184fe9b296321cd1184900",
+                    true
+            );
+        }
+
+        if (request.getAction().equals("battle") && request.getMethod().equals("POST") && request.getSessionToken().equals("b8fb6f1d9141fcc4b3ffe4795056194d")) {
+            return new Response(
+                    "{\"attacker_id\": \"5618e7dc8d5e0e000c8e7f7b\", \"id\": \"5618e7f38d5e0e000c8e7f7d\", \"state\": 2, \"defender_id\": \"5618e7f88d5e0e000c8e7f7e\"}",
+                    "172bc83648184fe9b296321cd1184900",
+                    true
+            );
+        }
+
         return new Response("", "", false);
     }
 }

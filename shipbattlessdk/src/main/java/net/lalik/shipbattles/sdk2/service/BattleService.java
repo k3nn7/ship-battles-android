@@ -28,4 +28,15 @@ public class BattleService {
                 Battle.class
         );
     }
+
+    public Battle newBattle(Account account) {
+        Response response = api.doRequest(
+                new Request("POST", "battle", account.getSessionToken())
+        );
+        Gson gson = new Gson();
+        return gson.fromJson(
+                response.getBody(),
+                Battle.class
+        );
+    }
 }

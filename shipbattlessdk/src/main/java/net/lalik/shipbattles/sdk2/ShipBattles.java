@@ -40,4 +40,8 @@ public class ShipBattles {
     public Battle getCurrentBattleForAccount(Account account) {
         return battleService.getCurrentBattles(account);
     }
+
+    public Battle newBattle(Account account) {
+        return battleService.newBattle(account);
+    }
 }

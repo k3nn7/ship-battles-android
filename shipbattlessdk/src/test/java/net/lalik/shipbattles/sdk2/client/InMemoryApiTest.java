@@ -35,7 +35,7 @@ public class InMemoryApiTest {
         Request request = new Request(
                 "POST",
                 "battle",
-                "172bc83648184fe9b296321cd1184900"
+                "172bc83648184fe9b296321cd1184911"
         );
         Response response = api.doRequest(request);
 
