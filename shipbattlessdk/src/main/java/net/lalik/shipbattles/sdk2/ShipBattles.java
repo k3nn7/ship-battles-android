@@ -15,6 +15,7 @@ public class ShipBattles {
     private final AccountService accountService;
     private final BattleService battleService;
     private Account authenticatedAccount = null;
+    private Map<String, ShipClass> shipClasses = null;
 
     private ShipBattles() {
         Api api = new HttpApi();
@@ -49,6 +50,8 @@ public class ShipBattles {
     }
 
     public Map<String, ShipClass> getShipClasses() {
-        return battleService.getShipClasses();
+        if (shipClasses == null)
+            shipClasses = battleService.getShipClasses();
+        return shipClasses;
     }
 }
