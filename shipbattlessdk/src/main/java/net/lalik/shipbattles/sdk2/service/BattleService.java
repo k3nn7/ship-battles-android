@@ -7,6 +7,7 @@ import net.lalik.shipbattles.sdk2.client.Request;
 import net.lalik.shipbattles.sdk2.client.Response;
 import net.lalik.shipbattles.sdk2.entity.Account;
 import net.lalik.shipbattles.sdk2.entity.Battle;
+import net.lalik.shipbattles.sdk2.entity.ShipClass;
 
 public class BattleService {
     private Api api;
@@ -37,6 +38,17 @@ public class BattleService {
         return gson.fromJson(
                 response.getBody(),
                 Battle.class
+        );
+    }
+
+    public ShipClass[] getShipClasses() {
+        Response response = api.doRequest(
+                new Request("GET", "ship_classes")
+        );
+        Gson gson = new Gson();
+        return gson.fromJson(
+                response.getBody(),
+                ShipClass[].class
         );
     }
 }

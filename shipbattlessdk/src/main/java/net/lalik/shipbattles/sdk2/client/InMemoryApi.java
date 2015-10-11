@@ -43,6 +43,14 @@ public class InMemoryApi implements Api {
             );
         }
 
+        if (request.getAction().equals("ship_classes") && request.getMethod().equals("GET")) {
+            return new Response(
+                    "[{\"size\": 1, \"id\": \"is:0\", \"name\": \"keel\"}, {\"size\": 2, \"id\": \"is:1\", \"name\": \"destroyer\"}]",
+                    null,
+                    true
+            );
+        }
+
         return new Response("", "", false);
     }
 }

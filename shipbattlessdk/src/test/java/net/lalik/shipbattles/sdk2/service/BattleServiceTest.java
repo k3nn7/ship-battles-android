@@ -3,6 +3,7 @@ package net.lalik.shipbattles.sdk2.service;
 import net.lalik.shipbattles.sdk2.client.InMemoryApi;
 import net.lalik.shipbattles.sdk2.entity.Account;
 import net.lalik.shipbattles.sdk2.entity.Battle;
+import net.lalik.shipbattles.sdk2.entity.ShipClass;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -10,7 +11,6 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
 
 public class BattleServiceTest {
     private BattleService battleService;
@@ -75,5 +75,20 @@ public class BattleServiceTest {
         assertEquals("5618e7dc8d5e0e000c8e7f7b", battle.getAttackerId());
         assertEquals("5618e7f88d5e0e000c8e7f7e", battle.getDefenderId());
         assertEquals(2, battle.getState());
+    }
+
+    @Test
+    public void getShipClasses() {
+        ShipClass[] shipClasses = battleService.getShipClasses();
+
+        assertEquals(2, shipClasses.length);
+
+        assertEquals(1, shipClasses[0].getSize());
+        assertEquals("is:0", shipClasses[0].getId());
+        assertEquals("keel", shipClasses[0].getName());
+
+        assertEquals(2, shipClasses[1].getSize());
+        assertEquals("is:1", shipClasses[1].getId());
+        assertEquals("destroyer", shipClasses[1].getName());
     }
 }
