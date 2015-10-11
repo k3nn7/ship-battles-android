@@ -12,7 +12,7 @@ public class Battle {
     @SerializedName("state")
     private int state;
     @SerializedName("my_battlefield")
-    private Battlefield myBattlefield;
+    private MyBattlefield myBattlefield;
     @SerializedName("opponent_battlefield")
     private Battlefield opponentBattlefield;
 
@@ -32,7 +32,7 @@ public class Battle {
         return state;
     }
 
-    public Battlefield getMyBattlefield() {
+    public MyBattlefield getMyBattlefield() {
         return myBattlefield;
     }
 

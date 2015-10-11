@@ -4,8 +4,11 @@ import net.lalik.shipbattles.sdk2.client.Api;
 import net.lalik.shipbattles.sdk2.client.HttpApi;
 import net.lalik.shipbattles.sdk2.entity.Account;
 import net.lalik.shipbattles.sdk2.entity.Battle;
+import net.lalik.shipbattles.sdk2.entity.ShipClass;
 import net.lalik.shipbattles.sdk2.service.AccountService;
 import net.lalik.shipbattles.sdk2.service.BattleService;
+
+import java.util.Map;
 
 public class ShipBattles {
     private static ShipBattles instance = null;
@@ -43,5 +46,9 @@ public class ShipBattles {
 
     public Battle newBattle(Account account) {
         return battleService.newBattle(account);
+    }
+
+    public Map<String, ShipClass> getShipClasses() {
+        return battleService.getShipClasses();
     }
 }

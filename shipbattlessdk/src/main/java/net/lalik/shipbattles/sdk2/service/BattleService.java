@@ -9,6 +9,8 @@ import net.lalik.shipbattles.sdk2.entity.Account;
 import net.lalik.shipbattles.sdk2.entity.Battle;
 import net.lalik.shipbattles.sdk2.entity.ShipClass;
 
+import java.util.HashMap;
+
 public class BattleService {
     private Api api;
 
@@ -41,14 +43,19 @@ public class BattleService {
         );
     }
 
-    public ShipClass[] getShipClasses() {
+    public HashMap<String, ShipClass> getShipClasses() {
         Response response = api.doRequest(
                 new Request("GET", "ship_classes")
         );
         Gson gson = new Gson();
-        return gson.fromJson(
+        ShipClass[] classes = gson.fromJson(
                 response.getBody(),
                 ShipClass[].class
         );
+        HashMap<String, ShipClass> shipClassMap = new HashMap<>();
+        for (ShipClass shipClass : classes) {
+            shipClassMap.put(shipClass.getId(), shipClass);
+        }
+        return shipClassMap;
     }
 }

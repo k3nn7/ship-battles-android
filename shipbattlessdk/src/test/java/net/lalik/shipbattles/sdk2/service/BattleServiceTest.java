@@ -8,6 +8,8 @@ import net.lalik.shipbattles.sdk2.entity.ShipClass;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.HashMap;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
@@ -50,6 +52,8 @@ public class BattleServiceTest {
 
         assertEquals("56143bec8d5e0e000c8e7f47", battle.getMyBattlefield().getId());
         assertEquals("561439f48d5e0e000c8e7f42", battle.getMyBattlefield().getAccountId());
+        assertEquals(1, battle.getMyBattlefield().getInventory().get("is:0").intValue());
+        assertEquals(1, battle.getMyBattlefield().getInventory().get("is:1").intValue());
         assertEquals(false, battle.getMyBattlefield().isReadyForBattle());
 
         assertEquals("56143bec8d5e0e000c8e7f46", battle.getOpponentBattlefield().getId());
@@ -79,16 +83,16 @@ public class BattleServiceTest {
 
     @Test
     public void getShipClasses() {
-        ShipClass[] shipClasses = battleService.getShipClasses();
+        HashMap<String, ShipClass> shipClasses = battleService.getShipClasses();
 
-        assertEquals(2, shipClasses.length);
+        assertEquals(2, shipClasses.size());
 
-        assertEquals(1, shipClasses[0].getSize());
-        assertEquals("is:0", shipClasses[0].getId());
-        assertEquals("keel", shipClasses[0].getName());
+        assertEquals(1, shipClasses.get("is:0").getSize());
+        assertEquals("is:0", shipClasses.get("is:0").getId());
+        assertEquals("keel", shipClasses.get("is:0").getName());
 
-        assertEquals(2, shipClasses[1].getSize());
-        assertEquals("is:1", shipClasses[1].getId());
-        assertEquals("destroyer", shipClasses[1].getName());
+        assertEquals(2, shipClasses.get("is:1").getSize());
+        assertEquals("is:1", shipClasses.get("is:1").getId());
+        assertEquals("destroyer", shipClasses.get("is:1").getName());
     }
 }
