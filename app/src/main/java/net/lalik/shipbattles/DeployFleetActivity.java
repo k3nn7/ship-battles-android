@@ -12,25 +12,25 @@ import android.view.View;
 import android.widget.TextView;
 
 import net.lalik.shipbattles.fragments.CoordinatesOrientationDialogFragment;
-import net.lalik.shipbattles.sdk.ShipBattlesSDK;
-import net.lalik.shipbattles.sdk.entity.Account;
-import net.lalik.shipbattles.sdk.entity.Battle;
-import net.lalik.shipbattles.sdk.entity.ShipClass;
-import net.lalik.shipbattles.sdk.repository.exception.EntityNotFoundException;
-import net.lalik.shipbattles.sdk.service.exception.InvalidCredentialsException;
-import net.lalik.shipbattles.sdk.values.Coordinate;
-import net.lalik.shipbattles.sdk.values.Orientation;
-import net.lalik.shipbattles.sdk.values.ShipsInventory;
+import net.lalik.shipbattles.sdk2.ShipBattles;
+import net.lalik.shipbattles.sdk2.entity.Account;
+import net.lalik.shipbattles.sdk2.entity.Battle;
+import net.lalik.shipbattles.sdk2.entity.Battlefield;
+import net.lalik.shipbattles.sdk2.entity.MyBattlefield;
+import net.lalik.shipbattles.sdk2.entity.ShipClass;
 import net.lalik.shipbattles.views.BattlefieldView;
 import net.lalik.shipbattles.views.Ship;
 import net.lalik.shipbattles.views.ShipsInventoryListAdapter;
 
+import java.util.Map;
+
 public class DeployFleetActivity extends Activity {
     private Account account;
     private Battle battle;
-    private net.lalik.shipbattles.sdk.entity.Battlefield battlefield;
-    BattlefieldView oldBattlefield;
-    TextView shipsInventoryText;
+    private MyBattlefield battlefield;
+    private BattlefieldView oldBattlefield;
+    private TextView shipsInventoryText;
+    private Map<String, ShipClass> shipClasses;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,26 +40,11 @@ public class DeployFleetActivity extends Activity {
         shipsInventoryText = (TextView)findViewById(R.id.ships_inventory_text);
 
         Intent intent = getIntent();
-        try {
-            account = ShipBattlesSDK
-                    .getInstance()
-                    .authenticate(intent.getStringExtra(BattleCenterActivity.AUTH_TOKEN));
-            battle = ShipBattlesSDK
-                    .getInstance()
-                    .getBattleById(intent.getIntExtra(BattleActivity.BATTLE_ID, -1));
-            battlefield = ShipBattlesSDK.getInstance().getBattlefieldById(
-                    battle.getBattlefieldIdForAccountId(account.getId())
-            );
-            oldBattlefield.setBattlefield(battlefield);
-        } catch (InvalidCredentialsException e) {
-        } catch (EntityNotFoundException e) {
-        }
-
-        updateInventoryDisplay();
+        new GetBattlesTask().execute(intent.getStringExtra(BattleCenterActivity.AUTH_TOKEN));
     }
 
     public void deployShipClicked(View view) {
-        getSelectShipClassDialog().show();
+//        getSelectShipClassDialog().show();
     }
 
     public void clearBattlefieldClicked(View view) {
@@ -67,84 +52,121 @@ public class DeployFleetActivity extends Activity {
     }
 
     public void commitBattlefieldClicked(View view) {
-        new CommitBattlefieldTask().execute();
+//        new CommitBattlefieldTask().execute();
     }
 
     private void updateInventoryDisplay() {
         shipsInventoryText.setText("");
-        for (ShipsInventory.Item item : battlefield.shipsInInventory())
+        for (Map.Entry<String, Integer> entry : battlefield.getInventory().entrySet()) {
+            String shipClassId = entry.getKey();
+            Integer shipsCount = entry.getValue();
             shipsInventoryText.append(String.format(
-                    "%s (%d) ",
-                    item.getShipClass().getName(),
-                    item.getCount()
+                    "%s (%d)",
+                    shipClasses.get(shipClassId).getName(),
+                    shipsCount
             ));
+        }
     }
 
-    private AlertDialog.Builder getSelectShipClassDialog() {
-        final ShipsInventoryListAdapter adapter = new ShipsInventoryListAdapter(
-                this,
-                battlefield.shipsInInventory()
-        );
-        return new AlertDialog.Builder(this)
-                .setAdapter(adapter, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                        getSelectCoordinatesDialog(
-                                battlefield.shipsInInventory()[which].getShipClass()
-                        ).show(getFragmentManager(), "CoordinatesOrientationDialogFragment");
-                    }
-                });
-    }
+//    private AlertDialog.Builder getSelectShipClassDialog() {
+//        final ShipsInventoryListAdapter adapter = new ShipsInventoryListAdapter(
+//                this,
+//                battlefield.shipsInInventory()
+//        );
+//        return new AlertDialog.Builder(this)
+//                .setAdapter(adapter, new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialog, int which) {
+//                        dialog.dismiss();
+//                        getSelectCoordinatesDialog(
+//                                battlefield.shipsInInventory()[which].getShipClass()
+//                        ).show(getFragmentManager(), "CoordinatesOrientationDialogFragment");
+//                    }
+//                });
+//    }
+//
+//    private CoordinatesOrientationDialogFragment getSelectCoordinatesDialog(final ShipClass shipClass) {
+//        CoordinatesOrientationDialogFragment dialog = new CoordinatesOrientationDialogFragment();
+//        dialog.setListener(new CoordinatesOrientationDialogFragment.CoordinatesDialogListener() {
+//            @Override
+//            public void onDeployClicked(Coordinate coordinate, Orientation orientation) {
+//                battlefield.deployShip(coordinate, orientation, shipClass);
+//                oldBattlefield.updateShots();
+//                updateInventoryDisplay();
+//            }
+//        });
+//        return dialog;
+//    }
 
-    private CoordinatesOrientationDialogFragment getSelectCoordinatesDialog(final ShipClass shipClass) {
-        CoordinatesOrientationDialogFragment dialog = new CoordinatesOrientationDialogFragment();
-        dialog.setListener(new CoordinatesOrientationDialogFragment.CoordinatesDialogListener() {
-            @Override
-            public void onDeployClicked(Coordinate coordinate, Orientation orientation) {
-                battlefield.deployShip(coordinate, orientation, shipClass);
-                oldBattlefield.updateShots();
-                updateInventoryDisplay();
-            }
-        });
-        return dialog;
-    }
+//    private class CommitBattlefieldTask extends AsyncTask<Void, Void, Void> {
+//        private ProgressDialog commitBattlefieldProgress;
+//
+//        @Override
+//        protected void onPreExecute() {
+//            commitBattlefieldProgress = ProgressDialog.show(
+//                    DeployFleetActivity.this,
+//                    "ShipBattles",
+//                    "Wodowanie okrętów...",
+//                    true
+//            );
+//        }
+//
+//        @Override
+//        protected Void doInBackground(Void... params) {
+//            try {
+//                ShipBattlesSDK.getInstance().deployShipsToBattlefield(battlefield);
+//            } catch (EntityNotFoundException e) {
+//            }
+//
+//            return null;
+//        }
+//
+//        @Override
+//        protected void onPostExecute(Void aVoid) {
+//            try {
+//                Log.d("A", "BATTLE STATE: " + ShipBattlesSDK.getInstance().getBattleById(
+//                        battle.getId()
+//                ).getState());
+//            } catch (Exception e) {
+//
+//            }
+//
+//            commitBattlefieldProgress.dismiss();
+//            finish();
+//        }
+//    }
 
-    private class CommitBattlefieldTask extends AsyncTask<Void, Void, Void> {
-        private ProgressDialog commitBattlefieldProgress;
+    private class GetBattlesTask extends AsyncTask<String, Void, net.lalik.shipbattles.sdk2.entity.Battle> {
+        private ProgressDialog registerProgress;
 
         @Override
         protected void onPreExecute() {
-            commitBattlefieldProgress = ProgressDialog.show(
+            registerProgress = ProgressDialog.show(
                     DeployFleetActivity.this,
                     "ShipBattles",
-                    "Wodowanie okrętów...",
+                    "Fetching current battles",
                     true
             );
         }
 
         @Override
-        protected Void doInBackground(Void... params) {
-            try {
-                ShipBattlesSDK.getInstance().deployShipsToBattlefield(battlefield);
-            } catch (EntityNotFoundException e) {
-            }
-
-            return null;
+        protected net.lalik.shipbattles.sdk2.entity.Battle doInBackground(String... authToken) {
+            account = ShipBattles.getInstance().authenticate(authToken[0]);
+            shipClasses = ShipBattles.getInstance().getShipClasses();
+            return ShipBattles.getInstance().getCurrentBattleForAccount(account);
         }
 
         @Override
-        protected void onPostExecute(Void aVoid) {
-            try {
-                Log.d("A", "BATTLE STATE: " + ShipBattlesSDK.getInstance().getBattleById(
-                        battle.getId()
-                ).getState());
-            } catch (Exception e) {
+        protected void onPostExecute(net.lalik.shipbattles.sdk2.entity.Battle b) {
+            battle = b;
 
-            }
+            battlefield = battle.getMyBattlefield();
 
-            commitBattlefieldProgress.dismiss();
-            finish();
+//            oldBattlefield.setBattlefield(battlefield);
+
+            updateInventoryDisplay();
+
+            registerProgress.dismiss();
         }
     }
 }
