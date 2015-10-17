@@ -37,9 +37,11 @@ public class BattleService {
                 Battle.class
         );
 
-        battle.getMyBattlefield().setAvailableShipClasses(
-                determineAvailableShipClasses(battle.getMyBattlefield())
-        );
+        if (battle.getMyBattlefield() != null) {
+            battle.getMyBattlefield().setAvailableShipClasses(
+                    determineAvailableShipClasses(battle.getMyBattlefield())
+            );
+        }
         return battle;
     }
 
@@ -70,7 +72,7 @@ public class BattleService {
         if (shipClassMap != null) {
             return shipClassMap;
         }
-        HashMap<String, ShipClass> shipClassMap = new HashMap<>();
+        shipClassMap = new HashMap<>();
 
         Response response = api.doRequest(
                 new Request("GET", "ship_classes")
