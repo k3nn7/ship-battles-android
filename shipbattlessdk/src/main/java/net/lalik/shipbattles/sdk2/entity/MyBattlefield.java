@@ -14,6 +14,8 @@ public class MyBattlefield {
     @SerializedName("inventory")
     private Map<String, Integer> inventory;
 
+    private ShipClass[] availableShipClasses;
+
     public String getId() {
         return id;
     }
@@ -28,5 +30,13 @@ public class MyBattlefield {
 
     public Map<String, Integer> getInventory() {
         return inventory;
+    }
+
+    public void setAvailableShipClasses(ShipClass[] availableShipClasses) {
+        this.availableShipClasses = availableShipClasses;
+    }
+
+    public ShipClass[] getAvailableShipClasses() {
+        return this.availableShipClasses;
     }
 }

@@ -1,18 +1,24 @@
 package net.lalik.shipbattles.sdk2.service;
 
 import com.google.gson.Gson;
+import com.google.gson.annotations.SerializedName;
 
 import net.lalik.shipbattles.sdk2.client.Api;
 import net.lalik.shipbattles.sdk2.client.Request;
 import net.lalik.shipbattles.sdk2.client.Response;
 import net.lalik.shipbattles.sdk2.entity.Account;
 import net.lalik.shipbattles.sdk2.entity.Battle;
+import net.lalik.shipbattles.sdk2.entity.Battlefield;
+import net.lalik.shipbattles.sdk2.entity.MyBattlefield;
 import net.lalik.shipbattles.sdk2.entity.ShipClass;
 
 import java.util.HashMap;
+import java.util.Map;
+import java.util.Stack;
 
 public class BattleService {
     private Api api;
+    private HashMap<String, ShipClass> shipClassMap = null;
 
     public BattleService(Api api) {
         this.api = api;
@@ -26,10 +32,27 @@ public class BattleService {
             return null;
         }
         Gson gson = new Gson();
-        return gson.fromJson(
+        Battle battle = gson.fromJson(
                 response.getBody(),
                 Battle.class
         );
+
+        battle.getMyBattlefield().setAvailableShipClasses(
+                determineAvailableShipClasses(battle.getMyBattlefield())
+        );
+        return battle;
+    }
+
+    private ShipClass[] determineAvailableShipClasses(MyBattlefield battlefield) {
+        Map<String, ShipClass> allShipClasses = getShipClasses();
+        Stack<ShipClass> availableShipClasses = new Stack<>();
+        for (Map.Entry<String, Integer> entry : battlefield.getInventory().entrySet()) {
+            String shipClassId = entry.getKey();
+            Integer shipsCount = entry.getValue();
+            if (shipsCount > 0)
+                availableShipClasses.push(allShipClasses.get(shipClassId));
+        }
+        return availableShipClasses.toArray(new ShipClass[availableShipClasses.size()]);
     }
 
     public Battle newBattle(Account account) {
@@ -44,6 +67,11 @@ public class BattleService {
     }
 
     public HashMap<String, ShipClass> getShipClasses() {
+        if (shipClassMap != null) {
+            return shipClassMap;
+        }
+        HashMap<String, ShipClass> shipClassMap = new HashMap<>();
+
         Response response = api.doRequest(
                 new Request("GET", "ship_classes")
         );
@@ -52,7 +80,7 @@ public class BattleService {
                 response.getBody(),
                 ShipClass[].class
         );
-        HashMap<String, ShipClass> shipClassMap = new HashMap<>();
+
         for (ShipClass shipClass : classes) {
             shipClassMap.put(shipClass.getId(), shipClass);
         }

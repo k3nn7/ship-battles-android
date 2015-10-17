@@ -3,6 +3,7 @@ package net.lalik.shipbattles.sdk2.service;
 import net.lalik.shipbattles.sdk2.client.InMemoryApi;
 import net.lalik.shipbattles.sdk2.entity.Account;
 import net.lalik.shipbattles.sdk2.entity.Battle;
+import net.lalik.shipbattles.sdk2.entity.MyBattlefield;
 import net.lalik.shipbattles.sdk2.entity.ShipClass;
 
 import org.junit.Before;
@@ -50,15 +51,24 @@ public class BattleServiceTest {
         assertEquals("561439f48d5e0e000c8e7f42", battle.getDefenderId());
         assertEquals(2, battle.getState());
 
-        assertEquals("56143bec8d5e0e000c8e7f47", battle.getMyBattlefield().getId());
-        assertEquals("561439f48d5e0e000c8e7f42", battle.getMyBattlefield().getAccountId());
-        assertEquals(1, battle.getMyBattlefield().getInventory().get("is:0").intValue());
-        assertEquals(1, battle.getMyBattlefield().getInventory().get("is:1").intValue());
-        assertEquals(false, battle.getMyBattlefield().isReadyForBattle());
+        testMyBattlefield(battle.getMyBattlefield());
 
         assertEquals("56143bec8d5e0e000c8e7f46", battle.getOpponentBattlefield().getId());
         assertEquals("560affde3492eb00087355f9", battle.getOpponentBattlefield().getAccountId());
         assertEquals(false, battle.getOpponentBattlefield().isReadyForBattle());
+    }
+
+    private void testMyBattlefield(MyBattlefield battlefield) {
+        assertEquals("56143bec8d5e0e000c8e7f47", battlefield.getId());
+        assertEquals("561439f48d5e0e000c8e7f42", battlefield.getAccountId());
+        assertEquals(1, battlefield.getInventory().get("is:0").intValue());
+        assertEquals(1, battlefield.getInventory().get("is:1").intValue());
+        assertEquals(false, battlefield.isReadyForBattle());
+
+        ShipClass[] shipClasses = battlefield.getAvailableShipClasses();
+        assertEquals(2, shipClasses.length);
+        assertEquals("keel", shipClasses[0].getName());
+        assertEquals("destroyer", shipClasses[1].getName());
     }
 
     @Test
