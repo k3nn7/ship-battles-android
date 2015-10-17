@@ -39,4 +39,8 @@ public class MyBattlefield {
     public ShipClass[] getAvailableShipClasses() {
         return this.availableShipClasses;
     }
+
+    public int shipsCountInInventory(ShipClass shipClass) {
+        return inventory.get(shipClass.getId()).intValue();
+    }
 }

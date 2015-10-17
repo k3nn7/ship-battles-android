@@ -10,6 +10,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -69,6 +70,8 @@ public class BattleServiceTest {
         assertEquals(2, shipClasses.length);
         assertEquals("keel", shipClasses[0].getName());
         assertEquals("destroyer", shipClasses[1].getName());
+        assertEquals(1, battlefield.shipsCountInInventory(shipClasses[0]));
+        assertEquals(1, battlefield.shipsCountInInventory(shipClasses[1]));
     }
 
     @Test
