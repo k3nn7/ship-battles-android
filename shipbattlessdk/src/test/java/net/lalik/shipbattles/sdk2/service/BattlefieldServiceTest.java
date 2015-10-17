@@ -28,7 +28,7 @@ public class BattlefieldServiceTest {
                 "172bc83648184fe9b296321cd1184900"
         );
         battleService = new BattleService(new InMemoryApi());
-        battlefieldService = new BattlefieldService(new InMemoryApi());
+        battlefieldService = new BattlefieldService(new InMemoryApi(), battleService);
     }
 
     @Test

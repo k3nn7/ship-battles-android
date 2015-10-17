@@ -60,4 +60,8 @@ public class ShipBattles {
     public MyBattlefield deployShip(Account account, ShipClass shipClass, Coordinate coordinate) {
         return battlefieldService.deployShip(account, shipClass, coordinate);
     }
+
+    public void readyForBattle(Account account) {
+        battleService.readyForBattle(account);
+    }
 }

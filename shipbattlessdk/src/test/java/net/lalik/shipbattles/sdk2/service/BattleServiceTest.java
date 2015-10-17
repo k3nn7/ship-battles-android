@@ -108,4 +108,9 @@ public class BattleServiceTest {
         assertEquals("is:1", shipClasses.get("is:1").getId());
         assertEquals("destroyer", shipClasses.get("is:1").getName());
     }
+
+    @Test
+    public void readyForBattle() {
+        battleService.readyForBattle(account);
+    }
 }

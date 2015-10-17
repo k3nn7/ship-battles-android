@@ -86,4 +86,10 @@ public class BattleService {
         }
         return shipClassMap;
     }
+
+    public void readyForBattle(Account account) {
+        Response response = api.doRequest(
+                new Request("PUT", "battle/ready", account.getSessionToken())
+        );
+    }
 }
