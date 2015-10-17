@@ -4,9 +4,12 @@ import net.lalik.shipbattles.sdk2.client.Api;
 import net.lalik.shipbattles.sdk2.client.HttpApi;
 import net.lalik.shipbattles.sdk2.entity.Account;
 import net.lalik.shipbattles.sdk2.entity.Battle;
+import net.lalik.shipbattles.sdk2.entity.MyBattlefield;
 import net.lalik.shipbattles.sdk2.entity.ShipClass;
 import net.lalik.shipbattles.sdk2.service.AccountService;
 import net.lalik.shipbattles.sdk2.service.BattleService;
+import net.lalik.shipbattles.sdk2.service.BattlefieldService;
+import net.lalik.shipbattles.sdk2.value.Coordinate;
 
 import java.util.Map;
 
@@ -14,12 +17,14 @@ public class ShipBattles {
     private static ShipBattles instance = null;
     private final AccountService accountService;
     private final BattleService battleService;
+    private final BattlefieldService battlefieldService;
     private Account authenticatedAccount = null;
 
     private ShipBattles() {
         Api api = new HttpApi();
         accountService = new AccountService(api);
         battleService = new BattleService(api);
+        battlefieldService = new BattlefieldService(api, battleService);
     }
 
     static public ShipBattles getInstance() {
@@ -50,5 +55,9 @@ public class ShipBattles {
 
     public Map<String, ShipClass> getShipClasses() {
         return battleService.getShipClasses();
+    }
+
+    public MyBattlefield deployShip(Account account, ShipClass shipClass, Coordinate coordinate) {
+        return battlefieldService.deployShip(account, shipClass, coordinate);
     }
 }

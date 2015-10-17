@@ -14,9 +14,11 @@ import net.lalik.shipbattles.sdk2.value.Coordinate;
 
 public class BattlefieldService {
     private final Api api;
+    private BattleService battleService;
 
-    public BattlefieldService(Api api) {
+    public BattlefieldService(Api api, BattleService battleService) {
         this.api = api;
+        this.battleService = battleService;
     }
 
     public MyBattlefield deployShip(Account account, ShipClass shipClass, Coordinate coordinate) {
@@ -33,7 +35,9 @@ public class BattlefieldService {
         Response response = api.doRequest(
                 new Request("PUT", "battle/my-battlefield", requestJson, account.getSessionToken())
         );
-        return gson.fromJson(response.getBody(), MyBattlefield.class);
+        MyBattlefield battlefield = gson.fromJson(response.getBody(), MyBattlefield.class);
+        battlefield.setAvailableShipClasses(battleService.determineAvailableShipClasses(battlefield));
+        return battlefield;
     }
 
     private class DeployShipRequestBody {

@@ -43,7 +43,7 @@ public class BattleService {
         return battle;
     }
 
-    private ShipClass[] determineAvailableShipClasses(MyBattlefield battlefield) {
+    public ShipClass[] determineAvailableShipClasses(MyBattlefield battlefield) {
         Map<String, ShipClass> allShipClasses = getShipClasses();
         Stack<ShipClass> availableShipClasses = new Stack<>();
         for (Map.Entry<String, Integer> entry : battlefield.getInventory().entrySet()) {
