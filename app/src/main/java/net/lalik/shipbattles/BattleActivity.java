@@ -7,14 +7,12 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
 import net.lalik.shipbattles.sdk2.ShipBattles;
 import net.lalik.shipbattles.sdk2.entity.Account;
 import net.lalik.shipbattles.sdk2.entity.Battle;
-import net.lalik.shipbattles.views.ActiveBattleListViewAdapter;
 
 public class BattleActivity extends Activity {
     public static final String BATTLE_ID = "net.lalik.shipbattles.BATTLE_ID";
@@ -59,10 +57,7 @@ public class BattleActivity extends Activity {
     }
 
     public void attackClicked(View view) {
-        Intent intent = new Intent(this, AttackActivity.class);
-        intent.putExtra(BATTLE_ID, battle.getId());
-        intent.putExtra(BattleCenterActivity.AUTH_TOKEN, account.getSessionToken());
-        startActivity(intent);
+        new BeginFireExchangeTask().execute();
     }
 
     private String formatBattleState() {
@@ -105,6 +100,59 @@ public class BattleActivity extends Activity {
             battleState.setText(formatBattleState());
 
             registerProgress.dismiss();
+        }
+    }
+
+    private class BeginFireExchangeTask extends AsyncTask<Void, Void, Battle> {
+        private ProgressDialog waitForOpponentProgress;
+        private boolean interrupt = false;
+
+        @Override
+        protected void onPreExecute() {
+            waitForOpponentProgress = ProgressDialog.show(
+                    BattleActivity.this,
+                    "ShipBattles",
+                    "Waiting for opponent to be ready",
+                    true
+            );
+        }
+
+        @Override
+        protected Battle doInBackground(Void... params) {
+            Battle battle = ShipBattles.getInstance().getCurrentBattleForAccount(account);
+            if (battle.getState() != 3)
+                return waitForOpponent();
+            return battle;
+        }
+
+        private Battle waitForOpponent() {
+            while (!interrupt) {
+                try {
+                    Thread.sleep(5000);
+                    Battle battle1 = ShipBattles.getInstance().getCurrentBattleForAccount(account);
+                    if (battle1.getState() == 3) {
+                        return battle1;
+                    }
+                } catch(InterruptedException e) {
+                    interrupt = true;
+                }
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Battle battle) {
+            if (battle.getState() == 3) {
+                waitForOpponentProgress.dismiss();
+                enterFireExchange(battle);
+            }
+        }
+
+        private void enterFireExchange(Battle battle) {
+            Intent intent = new Intent(BattleActivity.this, AttackActivity.class);
+            intent.putExtra(BATTLE_ID, battle.getId());
+            intent.putExtra(BattleCenterActivity.AUTH_TOKEN, account.getSessionToken());
+            startActivity(intent);
         }
     }
 }
