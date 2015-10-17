@@ -8,13 +8,13 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-import net.lalik.shipbattles.sdk.values.ShipsInventory;
+import net.lalik.shipbattles.sdk2.entity.ShipClass;
 
-public class ShipsInventoryListAdapter extends ArrayAdapter<ShipsInventory.Item> {
+public class ShipsInventoryListAdapter extends ArrayAdapter<ShipClass> {
     private final Context context;
-    private final ShipsInventory.Item[] items;
+    private final ShipClass[] items;
 
-    public ShipsInventoryListAdapter(Context context, ShipsInventory.Item[] items) {
+    public ShipsInventoryListAdapter(Context context, ShipClass[] items) {
         super(context, -1, items);
         this.context = context;
         this.items = items;
@@ -25,13 +25,13 @@ public class ShipsInventoryListAdapter extends ArrayAdapter<ShipsInventory.Item>
         LayoutInflater inflater = (LayoutInflater)context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         TextView rowView = (TextView)inflater.inflate(android.R.layout.select_dialog_item, parent, false);
-        rowView.setText(items[position].getShipClass().getName());
+        rowView.setText(items[position].getName());
         return rowView;
     }
 
     @Override
     public long getItemId(int position) {
-        return items[position].getShipClass().getId();
+        return position;
     }
 
     @Override

@@ -10,8 +10,8 @@ import android.view.View;
 import android.widget.NumberPicker;
 
 import net.lalik.shipbattles.R;
-import net.lalik.shipbattles.sdk.values.Coordinate;
-import net.lalik.shipbattles.sdk.values.Orientation;
+import net.lalik.shipbattles.sdk2.value.Coordinate;
+import net.lalik.shipbattles.sdk2.value.Orientation;
 
 public class CoordinatesOrientationDialogFragment extends DialogFragment {
     public interface CoordinatesDialogListener {
