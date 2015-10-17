@@ -51,6 +51,14 @@ public class InMemoryApi implements Api {
             );
         }
 
+        if (request.getAction().equals("battle/my-battlefield") && request.getMethod().equals("PUT") && request.getSessionToken().equals("172bc83648184fe9b296321cd1184900") && request.getBody().equals("{\"ships\":[{\"id\":\"is:0\",\"x\":3,\"y\":4}]}")) {
+            return new Response(
+                    "{\"inventory\": {\"is:1\": 1, \"is:0\": 0}, \"battle_id\": \"56222c50f27e57000aa0bdc0\", \"id\": \"56222c6ef27e57000aa0bdc3\", \"ready_for_battle\": false, \"shots\": [], \"account_id\": \"562217c5f27e57000aa0bdba\", \"ships\": [{\"x\": 3, \"id\": \"is:0\", \"y\": 5}]}",
+                    null,
+                    true
+            );
+        }
+
         return new Response("", "", false);
     }
 }

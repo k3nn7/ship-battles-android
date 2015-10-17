@@ -1,11 +1,13 @@
 package net.lalik.shipbattles.sdk2.client;
 
 import java.io.BufferedReader;
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.charset.Charset;
 
 public class HttpApi implements Api {
     private static final String API_HOST = "46.101.215.179:8080";
@@ -47,6 +49,17 @@ public class HttpApi implements Api {
                 "X-AuthToken",
                 request.getSessionToken()
             );
+        }
+
+        if (request.getBody() != null) {
+            byte[] requestBody = request.getBody().getBytes(Charset.forName("UTF-8"));
+            int bodyLength = requestBody.length;
+            connection.setRequestProperty("Content-Type", "application/json");
+            connection.setRequestProperty("charset", "UTF-8");
+            connection.setRequestProperty("Content-Length", Integer.toString(bodyLength));
+            DataOutputStream writer = new DataOutputStream(connection.getOutputStream());
+            writer.write(requestBody);
+            writer.close();
         }
 
         return connection;
