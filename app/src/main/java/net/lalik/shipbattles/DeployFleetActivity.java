@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -88,9 +89,11 @@ public class DeployFleetActivity extends Activity {
         dialog.setListener(new CoordinatesOrientationDialogFragment.CoordinatesDialogListener() {
             @Override
             public void onDeployClicked(Coordinate coordinate, Orientation orientation) {
-//                battlefield.deployShip(coordinate, orientation, shipClass);
-                battlefieldView.updateShots();
-                updateInventoryDisplay();
+                new DeployShipTask().execute(
+                        account,
+                        shipClass,
+                        coordinate
+                );
             }
         });
         return dialog;
@@ -164,6 +167,27 @@ public class DeployFleetActivity extends Activity {
             updateInventoryDisplay();
 
             registerProgress.dismiss();
+        }
+    }
+
+    private class DeployShipTask extends AsyncTask<Object, Void, Void> {
+        @Override
+        protected Void doInBackground(Object... params) {
+            Account account = (Account)params[0];
+            ShipClass shipClass = (ShipClass)params[1];
+            Coordinate coordinate = (Coordinate)params[2];
+
+            battlefield = ShipBattles.getInstance().deployShip(
+                    account,
+                    shipClass,
+                    coordinate);
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            battlefieldView.updateShots();
+            updateInventoryDisplay();
         }
     }
 }
