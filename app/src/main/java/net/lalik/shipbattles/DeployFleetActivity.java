@@ -52,7 +52,7 @@ public class DeployFleetActivity extends Activity {
     }
 
     public void commitBattlefieldClicked(View view) {
-//        new CommitBattlefieldTask().execute();
+        new CommitBattlefieldTask().execute();
     }
 
     private void updateInventoryDisplay() {
@@ -98,44 +98,6 @@ public class DeployFleetActivity extends Activity {
         });
         return dialog;
     }
-
-//    private class CommitBattlefieldTask extends AsyncTask<Void, Void, Void> {
-//        private ProgressDialog commitBattlefieldProgress;
-//
-//        @Override
-//        protected void onPreExecute() {
-//            commitBattlefieldProgress = ProgressDialog.show(
-//                    DeployFleetActivity.this,
-//                    "ShipBattles",
-//                    "Wodowanie okrętów...",
-//                    true
-//            );
-//        }
-//
-//        @Override
-//        protected Void doInBackground(Void... params) {
-//            try {
-//                ShipBattlesSDK.getInstance().deployShipsToBattlefield(battlefield);
-//            } catch (EntityNotFoundException e) {
-//            }
-//
-//            return null;
-//        }
-//
-//        @Override
-//        protected void onPostExecute(Void aVoid) {
-//            try {
-//                Log.d("A", "BATTLE STATE: " + ShipBattlesSDK.getInstance().getBattleById(
-//                        battle.getId()
-//                ).getState());
-//            } catch (Exception e) {
-//
-//            }
-//
-//            commitBattlefieldProgress.dismiss();
-//            finish();
-//        }
-//    }
 
     private class GetBattlesTask extends AsyncTask<String, Void, net.lalik.shipbattles.sdk2.entity.Battle> {
         private ProgressDialog registerProgress;
@@ -188,6 +150,22 @@ public class DeployFleetActivity extends Activity {
         protected void onPostExecute(Void aVoid) {
             battlefieldView.updateShots();
             updateInventoryDisplay();
+        }
+    }
+
+    private class CommitBattlefieldTask extends AsyncTask<Void, Void, Void> {
+        private ProgressDialog commitBattlefieldProgress;
+
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            ShipBattles.getInstance().readyForBattle(account);
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            finish();
         }
     }
 }
