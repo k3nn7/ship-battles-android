@@ -2,6 +2,7 @@ package net.lalik.shipbattles.sdk2.entity;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.List;
 import java.util.Map;
 
 public class MyBattlefield {
@@ -13,6 +14,8 @@ public class MyBattlefield {
     private String accountId;
     @SerializedName("inventory")
     private Map<String, Integer> inventory;
+    @SerializedName("ships")
+    private List<Ship> ships;
 
     private ShipClass[] availableShipClasses;
 
@@ -42,5 +45,9 @@ public class MyBattlefield {
 
     public int shipsCountInInventory(ShipClass shipClass) {
         return inventory.get(shipClass.getId()).intValue();
+    }
+
+    public List<Ship> getShips() {
+        return ships;
     }
 }
