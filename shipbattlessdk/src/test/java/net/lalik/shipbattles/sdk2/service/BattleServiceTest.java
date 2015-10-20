@@ -4,12 +4,15 @@ import net.lalik.shipbattles.sdk2.client.InMemoryApi;
 import net.lalik.shipbattles.sdk2.entity.Account;
 import net.lalik.shipbattles.sdk2.entity.Battle;
 import net.lalik.shipbattles.sdk2.entity.MyBattlefield;
+import net.lalik.shipbattles.sdk2.entity.Ship;
 import net.lalik.shipbattles.sdk2.entity.ShipClass;
+import net.lalik.shipbattles.sdk2.value.Coordinate;
 
 import org.junit.Before;
 import org.junit.Test;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
@@ -63,15 +66,21 @@ public class BattleServiceTest {
         assertEquals("56143bec8d5e0e000c8e7f47", battlefield.getId());
         assertEquals("561439f48d5e0e000c8e7f42", battlefield.getAccountId());
         assertEquals(1, battlefield.getInventory().get("is:0").intValue());
-        assertEquals(1, battlefield.getInventory().get("is:1").intValue());
+        assertEquals(0, battlefield.getInventory().get("is:1").intValue());
         assertEquals(false, battlefield.isReadyForBattle());
 
         ShipClass[] shipClasses = battlefield.getAvailableShipClasses();
-        assertEquals(2, shipClasses.length);
+        assertEquals(1, shipClasses.length);
         assertEquals("keel", shipClasses[0].getName());
-        assertEquals("destroyer", shipClasses[1].getName());
         assertEquals(1, battlefield.shipsCountInInventory(shipClasses[0]));
-        assertEquals(1, battlefield.shipsCountInInventory(shipClasses[1]));
+
+        List<Ship> ships = battlefield.getShips();
+        assertEquals(1, ships.size());
+        assertEquals("is:1", ships.get(0).getId());
+        assertEquals(5, ships.get(0).getX());
+        assertEquals(5, ships.get(0).getY());
+        assertEquals(new Coordinate(5, 5).getX(), ships.get(0).getCoordinates().getX());
+        assertEquals(new Coordinate(5, 5).getY(), ships.get(0).getCoordinates().getY());
     }
 
     @Test
@@ -113,4 +122,6 @@ public class BattleServiceTest {
     public void readyForBattle() {
         battleService.readyForBattle(account);
     }
+
+
 }
