@@ -124,7 +124,7 @@ public class DeployFleetActivity extends Activity {
 
             battlefield = battle.getMyBattlefield();
 
-//            battlefieldView.setBattlefield(battlefield);
+            battlefieldView.setBattlefield(battlefield);
 
             updateInventoryDisplay();
 
@@ -148,6 +148,7 @@ public class DeployFleetActivity extends Activity {
 
         @Override
         protected void onPostExecute(Void aVoid) {
+            battlefieldView.setBattlefield(battlefield);
             battlefieldView.updateShots();
             updateInventoryDisplay();
         }
