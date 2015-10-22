@@ -16,6 +16,8 @@ public class MyBattlefield {
     private Map<String, Integer> inventory;
     @SerializedName("ships")
     private List<Ship> ships;
+    @SerializedName("shots")
+    private List<Shot> shots;
 
     private ShipClass[] availableShipClasses;
 
@@ -49,5 +51,9 @@ public class MyBattlefield {
 
     public List<Ship> getShips() {
         return ships;
+    }
+
+    public List<Shot> getShots() {
+        return shots;
     }
 }

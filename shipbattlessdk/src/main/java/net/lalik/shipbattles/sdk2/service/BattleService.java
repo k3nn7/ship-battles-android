@@ -11,6 +11,7 @@ import net.lalik.shipbattles.sdk2.entity.Battle;
 import net.lalik.shipbattles.sdk2.entity.Battlefield;
 import net.lalik.shipbattles.sdk2.entity.MyBattlefield;
 import net.lalik.shipbattles.sdk2.entity.ShipClass;
+import net.lalik.shipbattles.sdk2.value.Coordinate;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -93,5 +94,26 @@ public class BattleService {
         Response response = api.doRequest(
                 new Request("PUT", "battle/ready", account.getSessionToken())
         );
+    }
+
+    public void fire(Account account, Coordinate coordinate) {
+        FireRequestBody requestBody = new FireRequestBody(coordinate.getX(), coordinate.getY());
+        Gson gson = new Gson();
+        String requestJson = gson.toJson(requestBody);
+        Response response = api.doRequest(
+                new Request("PUT", "battle/shots", requestJson, account.getSessionToken())
+        );
+    }
+
+    private class FireRequestBody {
+        @SerializedName("x")
+        private int x;
+        @SerializedName("y")
+        private int y;
+
+        public FireRequestBody(int x, int y) {
+            this.x = x;
+            this.y = y;
+        }
     }
 }

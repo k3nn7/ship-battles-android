@@ -3,9 +3,11 @@ package net.lalik.shipbattles.sdk2.service;
 import net.lalik.shipbattles.sdk2.client.InMemoryApi;
 import net.lalik.shipbattles.sdk2.entity.Account;
 import net.lalik.shipbattles.sdk2.entity.Battle;
+import net.lalik.shipbattles.sdk2.entity.Battlefield;
 import net.lalik.shipbattles.sdk2.entity.MyBattlefield;
 import net.lalik.shipbattles.sdk2.entity.Ship;
 import net.lalik.shipbattles.sdk2.entity.ShipClass;
+import net.lalik.shipbattles.sdk2.entity.Shot;
 import net.lalik.shipbattles.sdk2.value.Coordinate;
 
 import org.junit.Before;
@@ -13,7 +15,6 @@ import org.junit.Test;
 
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -56,10 +57,7 @@ public class BattleServiceTest {
         assertEquals(2, battle.getState());
 
         testMyBattlefield(battle.getMyBattlefield());
-
-        assertEquals("56143bec8d5e0e000c8e7f46", battle.getOpponentBattlefield().getId());
-        assertEquals("560affde3492eb00087355f9", battle.getOpponentBattlefield().getAccountId());
-        assertEquals(false, battle.getOpponentBattlefield().isReadyForBattle());
+        testOpponentBattlefield(battle.getOpponentBattlefield());
     }
 
     private void testMyBattlefield(MyBattlefield battlefield) {
@@ -81,6 +79,22 @@ public class BattleServiceTest {
         assertEquals(5, ships.get(0).getY());
         assertEquals(new Coordinate(5, 5).getX(), ships.get(0).getCoordinates().getX());
         assertEquals(new Coordinate(5, 5).getY(), ships.get(0).getCoordinates().getY());
+
+        List<Shot> shots = battlefield.getShots();
+        assertEquals(1, shots.size());
+        assertEquals(3, shots.get(0).getX());
+        assertEquals(2, shots.get(0).getY());
+    }
+
+    private void testOpponentBattlefield(Battlefield battlefield) {
+        assertEquals("56143bec8d5e0e000c8e7f46", battlefield.getId());
+        assertEquals("560affde3492eb00087355f9", battlefield.getAccountId());
+        assertEquals(false, battlefield.isReadyForBattle());
+
+        List<Shot> shots = battlefield.getShots();
+        assertEquals(1, shots.size());
+        assertEquals(3, shots.get(0).getX());
+        assertEquals(2, shots.get(0).getY());
     }
 
     @Test
@@ -123,5 +137,8 @@ public class BattleServiceTest {
         battleService.readyForBattle(account);
     }
 
-
+    @Test
+    public void fireInTheHole() {
+        battleService.fire(account, new Coordinate(3, 4));
+    }
 }
