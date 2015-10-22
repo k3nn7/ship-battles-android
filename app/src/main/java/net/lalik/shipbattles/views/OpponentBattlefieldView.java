@@ -12,7 +12,7 @@ import android.view.MotionEvent;
 import android.view.View;
 
 import net.lalik.shipbattles.R;
-import net.lalik.shipbattles.sdk2.entity.MyBattlefield;
+import net.lalik.shipbattles.sdk2.entity.Battlefield;
 import net.lalik.shipbattles.sdk2.entity.Ship;
 import net.lalik.shipbattles.sdk2.entity.Shot;
 import net.lalik.shipbattles.sdk2.value.Coordinate;
@@ -20,12 +20,12 @@ import net.lalik.shipbattles.sdk2.value.Orientation;
 
 import java.util.Stack;
 
-public class BattlefieldView extends View {
+public class OpponentBattlefieldView extends View {
     private boolean showGrid;
     private Paint textPaint, shipPaint;
     private int width, height, gridSize;
     private Stack<Ship> ships;
-    private MyBattlefield battlefield = null;
+    private Battlefield battlefield = null;
     private Drawable horizontalShip;
     private Drawable verticalShip;
     private boolean drawSelector = false;
@@ -37,7 +37,7 @@ public class BattlefieldView extends View {
         void onCoordinateSelected(Coordinate coordinate);
     }
 
-    public BattlefieldView(Context context, AttributeSet attributeSet) {
+    public OpponentBattlefieldView(Context context, AttributeSet attributeSet) {
         super(context, attributeSet);
         TypedArray attributes = context.getTheme().obtainStyledAttributes(
                 attributeSet,
@@ -59,7 +59,7 @@ public class BattlefieldView extends View {
         verticalShip = getResources().getDrawable(R.drawable.ship_vertical);
     }
 
-    public void setBattlefield(MyBattlefield battlefield) {
+    public void setBattlefield(Battlefield battlefield) {
         this.battlefield = battlefield;
     }
 
@@ -91,9 +91,6 @@ public class BattlefieldView extends View {
         drawGrid(canvas);
 
         if (null != battlefield) {
-            for (Ship ship : battlefield.getShips())
-                drawShip(canvas, ship);
-
             for (Shot shot : battlefield.getShots())
                 drawShot(canvas, shot.getCoordinates());
         }
