@@ -7,7 +7,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -19,24 +18,21 @@ import net.lalik.shipbattles.sdk2.entity.MyBattlefield;
 import net.lalik.shipbattles.sdk2.entity.ShipClass;
 import net.lalik.shipbattles.sdk2.value.Coordinate;
 import net.lalik.shipbattles.sdk2.value.Orientation;
-import net.lalik.shipbattles.views.BattlefieldView;
+import net.lalik.shipbattles.views.MyBattlefieldView;
 import net.lalik.shipbattles.views.ShipsInventoryListAdapter;
-
-import java.util.Map;
-import java.util.Stack;
 
 public class DeployFleetActivity extends Activity {
     private Account account;
     private Battle battle;
     private MyBattlefield battlefield;
-    private BattlefieldView battlefieldView;
+    private MyBattlefieldView myBattlefieldView;
     private TextView shipsInventoryText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_deploy_fleet);
-        battlefieldView = (BattlefieldView)findViewById(R.id.battlefield);
+        myBattlefieldView = (MyBattlefieldView)findViewById(R.id.battlefield);
         shipsInventoryText = (TextView)findViewById(R.id.ships_inventory_text);
 
         Intent intent = getIntent();
@@ -48,11 +44,11 @@ public class DeployFleetActivity extends Activity {
     }
 
     public void clearBattlefieldClicked(View view) {
-        battlefieldView.clear();
+        myBattlefieldView.clear();
     }
 
     public void commitBattlefieldClicked(View view) {
-        new CommitBattlefieldTask().execute();
+        new ReadyForBattleTask().execute();
     }
 
     private void updateInventoryDisplay() {
@@ -124,7 +120,7 @@ public class DeployFleetActivity extends Activity {
 
             battlefield = battle.getMyBattlefield();
 
-            battlefieldView.setBattlefield(battlefield);
+            myBattlefieldView.setBattlefield(battlefield);
 
             updateInventoryDisplay();
 
@@ -148,16 +144,13 @@ public class DeployFleetActivity extends Activity {
 
         @Override
         protected void onPostExecute(Void aVoid) {
-            battlefieldView.setBattlefield(battlefield);
-            battlefieldView.updateShots();
+            myBattlefieldView.setBattlefield(battlefield);
+            myBattlefieldView.updateShots();
             updateInventoryDisplay();
         }
     }
 
-    private class CommitBattlefieldTask extends AsyncTask<Void, Void, Void> {
-        private ProgressDialog commitBattlefieldProgress;
-
-
+    private class ReadyForBattleTask extends AsyncTask<Void, Void, Void> {
         @Override
         protected Void doInBackground(Void... params) {
             ShipBattles.getInstance().readyForBattle(account);

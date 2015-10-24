@@ -23,18 +23,18 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <net.lalik.shipbattles.views.BattlefieldView
+        <net.lalik.shipbattles.views.MyBattlefieldView
             android:layout_width="wrap_content"
             android:layout_height="fill_parent"
             shipbattles:showGrid="true"
-            android:id="@+id/battlefield2"
+            android:id="@+id/myBattlefield"
             android:layout_weight="1" />
 
         <net.lalik.shipbattles.views.OpponentBattlefieldView
             android:layout_width="wrap_content"
             android:layout_height="fill_parent"
             shipbattles:showGrid="true"
-            android:id="@+id/battlefield"
+            android:id="@+id/opponentBattlefield"
             android:layout_weight="1" />
     </LinearLayout>
 

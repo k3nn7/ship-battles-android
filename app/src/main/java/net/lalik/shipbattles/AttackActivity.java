@@ -13,7 +13,7 @@ import net.lalik.shipbattles.sdk2.entity.Battle;
 import net.lalik.shipbattles.sdk2.entity.Battlefield;
 import net.lalik.shipbattles.sdk2.entity.MyBattlefield;
 import net.lalik.shipbattles.sdk2.value.Coordinate;
-import net.lalik.shipbattles.views.BattlefieldView;
+import net.lalik.shipbattles.views.MyBattlefieldView;
 import net.lalik.shipbattles.views.OpponentBattlefieldView;
 
 public class AttackActivity extends Activity {
@@ -22,15 +22,15 @@ public class AttackActivity extends Activity {
     private Battle battle;
     private Battlefield battlefield;
     private OpponentBattlefieldView battlefieldView;
-    private BattlefieldView myBattlefieldView;
+    private MyBattlefieldView myBattlefieldView;
     private MyBattlefield myBattlefield;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_attack);
-        battlefieldView = (OpponentBattlefieldView)findViewById(R.id.battlefield);
-        myBattlefieldView = (BattlefieldView)findViewById(R.id.battlefield2);
+        battlefieldView = (OpponentBattlefieldView)findViewById(R.id.opponentBattlefield);
+        myBattlefieldView = (MyBattlefieldView)findViewById(R.id.myBattlefield);
         battlefieldView.setCoordinateSelectedListener(new AttackListener());
 
         SharedPreferences sharedPreferences = getSharedPreferences(

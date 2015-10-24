@@ -53,7 +53,7 @@
             android:layout_gravity="bottom"
             android:layout_weight="1">
 
-            <net.lalik.shipbattles.views.BattlefieldView
+            <net.lalik.shipbattles.views.MyBattlefieldView
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 shipbattles:showGrid="true"

@@ -95,8 +95,8 @@ public class CoordinatesOrientationDialogFragment extends DialogFragment {
 
     private Coordinate getCoordinate() {
         return new Coordinate(
-                yCoordinatePicker.getValue(),
-                xCoordinatePicker.getValue()
+                xCoordinatePicker.getValue(),
+                yCoordinatePicker.getValue()
         );
     }
 }

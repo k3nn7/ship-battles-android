@@ -41,13 +41,13 @@ public class OpponentBattlefieldView extends View {
         super(context, attributeSet);
         TypedArray attributes = context.getTheme().obtainStyledAttributes(
                 attributeSet,
-                R.styleable.BattlefieldView,
+                R.styleable.MyBattlefieldView,
                 0,
                 0
         );
 
         try {
-            showGrid = attributes.getBoolean(R.styleable.BattlefieldView_showGrid, true);
+            showGrid = attributes.getBoolean(R.styleable.MyBattlefieldView_showGrid, true);
         } finally {
             attributes.recycle();
         }
@@ -201,7 +201,7 @@ public class OpponentBattlefieldView extends View {
             x = ship.getX() + 1;
             y = ship.getY() + 2;
         }
-        return new Coordinate(y, x);
+        return new Coordinate(x, y);
     }
 
     @Override
@@ -224,8 +224,8 @@ public class OpponentBattlefieldView extends View {
             updateShots();
             if (coordinateSelectedListener != null) {
                 coordinateSelectedListener.onCoordinateSelected(new Coordinate(
-                        (int)Math.floor(event.getY() / gridSize) -1,
-                        (int)Math.floor(event.getX() / gridSize) -1
+                        (int)Math.floor(event.getX() / gridSize) -1,
+                        (int)Math.floor(event.getY() / gridSize) -1
                 ));
             }
         }

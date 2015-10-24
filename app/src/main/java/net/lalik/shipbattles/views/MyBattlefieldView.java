@@ -8,7 +8,6 @@ import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
-import android.view.MotionEvent;
 import android.view.View;
 
 import net.lalik.shipbattles.R;
@@ -20,37 +19,22 @@ import net.lalik.shipbattles.sdk2.value.Orientation;
 
 import java.util.Stack;
 
-public class BattlefieldView extends View {
-    private boolean showGrid;
+public class MyBattlefieldView extends View {
     private Paint textPaint, shipPaint;
-    private int width, height, gridSize;
+    private int gridSize;
     private Stack<Ship> ships;
     private MyBattlefield battlefield = null;
     private Drawable horizontalShip;
     private Drawable verticalShip;
-    private boolean drawSelector = false;
-    private int selectorX = 0;
-    private int selectorY = 0;
-    private CoordinateSelectedListener coordinateSelectedListener;
 
-    public interface CoordinateSelectedListener {
-        void onCoordinateSelected(Coordinate coordinate);
-    }
-
-    public BattlefieldView(Context context, AttributeSet attributeSet) {
+    public MyBattlefieldView(Context context, AttributeSet attributeSet) {
         super(context, attributeSet);
         TypedArray attributes = context.getTheme().obtainStyledAttributes(
                 attributeSet,
-                R.styleable.BattlefieldView,
+                R.styleable.MyBattlefieldView,
                 0,
                 0
         );
-
-        try {
-            showGrid = attributes.getBoolean(R.styleable.BattlefieldView_showGrid, true);
-        } finally {
-            attributes.recycle();
-        }
 
         ships = new Stack<>();
         initPaints();
@@ -76,9 +60,6 @@ public class BattlefieldView extends View {
 
     @Override
     protected void onSizeChanged(int width, int height, int oldw, int oldh) {
-        this.width = width;
-        this.height = height;
-
         int smallestDimension = Math.min(width, height);
         gridSize = smallestDimension / 11;
         textPaint.setTextSize(gridSize / 2);
@@ -97,9 +78,6 @@ public class BattlefieldView extends View {
             for (Shot shot : battlefield.getShots())
                 drawShot(canvas, shot.getCoordinates());
         }
-
-        if (drawSelector)
-            drawSelection(canvas, selectorX, selectorY);
     }
 
     private void drawLabels(Canvas canvas) {
@@ -204,55 +182,6 @@ public class BattlefieldView extends View {
             x = ship.getX() + 1;
             y = ship.getY() + 2;
         }
-        return new Coordinate(y, x);
-    }
-
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        if (event.getAction() == MotionEvent.ACTION_DOWN) {
-            selectorX = (int)event.getX();
-            selectorY = (int) event.getY();
-            drawSelector = true;
-            updateShots();
-        }
-
-        if (event.getAction() == MotionEvent.ACTION_MOVE) {
-            selectorX = (int)event.getX();
-            selectorY = (int)event.getY();
-            updateShots();
-        }
-
-        if (event.getAction() == MotionEvent.ACTION_UP) {
-            drawSelector = false;
-            updateShots();
-            if (coordinateSelectedListener != null) {
-                coordinateSelectedListener.onCoordinateSelected(new Coordinate(
-                        (int)Math.floor(event.getY() / gridSize) -1,
-                        (int)Math.floor(event.getX() / gridSize) -1
-                ));
-            }
-        }
-
-        return true;
-    }
-
-    private void drawSelection(Canvas canvas, int selX, int selY) {
-        float x1, y1, x2, y2;
-
-        int x = (int)Math.floor(selX / gridSize) * gridSize;
-        int y = (int)Math.floor(selY / gridSize) * gridSize;
-
-        x1 = x;
-        y1 = y;
-        x2 = x + gridSize;
-        y2 = y + gridSize;
-
-        canvas.drawRect(x1 - gridSize, y1 - gridSize, x1, y1, shipPaint);
-        canvas.drawLine((float) x1, 0, (float) x1, (float) height, shipPaint);
-        canvas.drawLine((float)0, y1, (float)width, (float)y1, shipPaint);
-    }
-
-    public void setCoordinateSelectedListener(CoordinateSelectedListener coordinateSelectedListener) {
-        this.coordinateSelectedListener = coordinateSelectedListener;
+        return new Coordinate(x, y);
     }
 }
