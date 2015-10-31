@@ -12,6 +12,7 @@ import net.lalik.shipbattles.sdk2.entity.Account;
 import net.lalik.shipbattles.sdk2.entity.Battle;
 import net.lalik.shipbattles.sdk2.entity.Battlefield;
 import net.lalik.shipbattles.sdk2.entity.MyBattlefield;
+import net.lalik.shipbattles.sdk2.entity.Ship;
 import net.lalik.shipbattles.sdk2.value.Coordinate;
 import net.lalik.shipbattles.views.MyBattlefieldView;
 import net.lalik.shipbattles.views.OpponentBattlefieldView;
@@ -94,6 +95,52 @@ public class AttackActivity extends Activity {
 
         @Override
         protected void onPostExecute(Battle b) {
+            battle = b;
+            battlefieldView.setBattlefield(b.getOpponentBattlefield());
+            myBattlefieldView.setBattlefield(b.getMyBattlefield());
+            battlefieldView.updateShots();
+            myBattlefieldView.updateShots();
+            new WaitForOpponentTask().execute();
+        }
+    }
+
+    private class WaitForOpponentTask extends AsyncTask<Void, Void, Battle> {
+        private ProgressDialog waitForOpponentProgress;
+        private boolean interrupt = false;
+
+        @Override
+        protected void onPreExecute() {
+            waitForOpponentProgress = ProgressDialog.show(
+                    AttackActivity.this,
+                    "ShipBattles",
+                    "Waiting for opponent attack",
+                    true
+            );
+        }
+
+        @Override
+        protected Battle doInBackground(Void... params) {
+            return waitForOpponent();
+        }
+
+        private Battle waitForOpponent() {
+            while (!interrupt) {
+                try {
+                    Thread.sleep(5000);
+                    Battle battle1 = ShipBattles.getInstance().getCurrentBattleForAccount(account);
+                    if (battle1.getTurnAccountId().equals(account.getId())) {
+                        return battle1;
+                    }
+                } catch(InterruptedException e) {
+                    interrupt = true;
+                }
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Battle b) {
+            waitForOpponentProgress.dismiss();
             battle = b;
             battlefieldView.setBattlefield(b.getOpponentBattlefield());
             myBattlefieldView.setBattlefield(b.getMyBattlefield());
