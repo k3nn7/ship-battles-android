@@ -39,8 +39,8 @@ public class HttpApi implements Api {
                 request.getAction()
         ));
         HttpURLConnection connection = (HttpURLConnection)url.openConnection();
-        connection.setReadTimeout(10000);
-        connection.setConnectTimeout(10000);
+        connection.setReadTimeout(20000);
+        connection.setConnectTimeout(20000);
         connection.setRequestMethod(request.getMethod());
         connection.setDoInput(true);
 

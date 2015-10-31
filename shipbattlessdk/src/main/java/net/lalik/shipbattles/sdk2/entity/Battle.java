@@ -15,6 +15,8 @@ public class Battle {
     private MyBattlefield myBattlefield;
     @SerializedName("opponent_battlefield")
     private Battlefield opponentBattlefield;
+    @SerializedName("turn_account_id")
+    private String turnAccountId;
 
     public String getAttackerId() {
         return attackerId;
@@ -38,5 +40,9 @@ public class Battle {
 
     public Battlefield getOpponentBattlefield() {
         return opponentBattlefield;
+    }
+
+    public String getTurnAccountId() {
+        return turnAccountId;
     }
 }

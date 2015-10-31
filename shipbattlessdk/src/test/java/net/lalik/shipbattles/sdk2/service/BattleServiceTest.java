@@ -55,6 +55,7 @@ public class BattleServiceTest {
         assertEquals("560affde3492eb00087355f9", battle.getAttackerId());
         assertEquals("561439f48d5e0e000c8e7f42", battle.getDefenderId());
         assertEquals(2, battle.getState());
+        assertEquals("562c9347309dc5000aea0301", battle.getTurnAccountId());
 
         testMyBattlefield(battle.getMyBattlefield());
         testOpponentBattlefield(battle.getOpponentBattlefield());
