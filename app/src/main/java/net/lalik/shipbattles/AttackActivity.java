@@ -1,8 +1,10 @@
 package net.lalik.shipbattles;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -87,9 +89,10 @@ public class AttackActivity extends Activity {
     }
 
     private class FireTask extends AsyncTask<Coordinate, Void, Battle> {
+        int result;
         @Override
         protected Battle doInBackground(Coordinate... params) {
-            ShipBattles.getInstance().fire(account, params[0]);
+            result = ShipBattles.getInstance().fire(account, params[0]);
             return ShipBattles.getInstance().getCurrentBattleForAccount(account);
         }
 
@@ -100,7 +103,26 @@ public class AttackActivity extends Activity {
             myBattlefieldView.setBattlefield(b.getMyBattlefield());
             battlefieldView.updateShots();
             myBattlefieldView.updateShots();
-            new WaitForOpponentTask().execute();
+            
+            AlertDialog.Builder alert = new AlertDialog.Builder(AttackActivity.this);
+            switch (result) {
+                case 1:
+                    alert.setMessage("Pudło!");
+                    break;
+                case 2:
+                    alert.setMessage("Trafiony!");
+                    break;
+                case 3:
+                    alert.setMessage("Zatopiony");
+                    break;
+            }
+            alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    new WaitForOpponentTask().execute();
+                }
+            });
+            alert.create().show();
         }
     }
 
