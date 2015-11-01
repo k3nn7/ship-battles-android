@@ -59,6 +59,14 @@ public class InMemoryApi implements Api {
             );
         }
 
+        if (request.getAction().equals("battle/shots") && request.getMethod().equals("PUT") && request.getSessionToken().equals("172bc83648184fe9b296321cd1184900") && request.getBody().equals("{\"x\":3,\"y\":4}")) {
+            return new Response(
+                    "{\"fire_result\":2}",
+                    null,
+                    true
+            );
+        }
+
         return new Response("", "", false);
     }
 }

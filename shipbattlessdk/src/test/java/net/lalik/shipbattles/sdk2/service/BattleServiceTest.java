@@ -140,6 +140,7 @@ public class BattleServiceTest {
 
     @Test
     public void fireInTheHole() {
-        battleService.fire(account, new Coordinate(3, 4));
+        int result = battleService.fire(account, new Coordinate(3, 4));
+        assertEquals(2, result);
     }
 }

@@ -65,7 +65,7 @@ public class ShipBattles {
         battleService.readyForBattle(account);
     }
 
-    public void fire(Account account, Coordinate coordinate) {
-        battleService.fire(account, coordinate);
+    public int fire(Account account, Coordinate coordinate) {
+        return battleService.fire(account, coordinate);
     }
 }

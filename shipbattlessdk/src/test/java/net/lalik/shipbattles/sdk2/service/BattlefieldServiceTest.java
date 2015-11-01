@@ -36,6 +36,7 @@ public class BattlefieldServiceTest {
         ShipClass[] shipClasses = battleService.getShipClasses().values().toArray(
                 new ShipClass[battleService.getShipClasses().values().size()]
         );
+
         MyBattlefield result = battlefieldService.deployShip(account, shipClasses[0], new Coordinate(3, 4));
 
         assertEquals(1, result.getInventory().get("is:1").intValue());

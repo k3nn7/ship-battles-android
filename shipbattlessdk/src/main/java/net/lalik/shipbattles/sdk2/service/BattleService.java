@@ -96,13 +96,15 @@ public class BattleService {
         );
     }
 
-    public void fire(Account account, Coordinate coordinate) {
+    public int fire(Account account, Coordinate coordinate) {
         FireRequestBody requestBody = new FireRequestBody(coordinate.getX(), coordinate.getY());
         Gson gson = new Gson();
         String requestJson = gson.toJson(requestBody);
         Response response = api.doRequest(
                 new Request("PUT", "battle/shots", requestJson, account.getSessionToken())
         );
+        FireResultBody resultBody = gson.fromJson(response.getBody(), FireResultBody.class);
+        return resultBody.getFireResult();
     }
 
     private class FireRequestBody {
@@ -114,6 +116,15 @@ public class BattleService {
         public FireRequestBody(int x, int y) {
             this.x = x;
             this.y = y;
+        }
+    }
+
+    private class FireResultBody {
+        @SerializedName("fire_result")
+        private int fireResult;
+
+        public int getFireResult() {
+            return fireResult;
         }
     }
 }
