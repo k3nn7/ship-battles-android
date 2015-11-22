@@ -21,6 +21,8 @@ import net.lalik.shipbattles.sdk2.value.Orientation;
 import net.lalik.shipbattles.views.MyBattlefieldView;
 import net.lalik.shipbattles.views.ShipsInventoryListAdapter;
 
+import java.util.Map;
+
 public class DeployFleetActivity extends Activity {
     private Account account;
     private Battle battle;
@@ -88,7 +90,8 @@ public class DeployFleetActivity extends Activity {
                 new DeployShipTask().execute(
                         account,
                         shipClass,
-                        coordinate
+                        coordinate,
+                        orientation
                 );
             }
         });
@@ -97,6 +100,7 @@ public class DeployFleetActivity extends Activity {
 
     private class GetBattlesTask extends AsyncTask<String, Void, net.lalik.shipbattles.sdk2.entity.Battle> {
         private ProgressDialog registerProgress;
+        private Map<String, ShipClass> shipClasses;
 
         @Override
         protected void onPreExecute() {
@@ -111,12 +115,14 @@ public class DeployFleetActivity extends Activity {
         @Override
         protected net.lalik.shipbattles.sdk2.entity.Battle doInBackground(String... authToken) {
             account = ShipBattles.getInstance().authenticate(authToken[0]);
+            shipClasses = ShipBattles.getInstance().getShipClasses();
             return ShipBattles.getInstance().getCurrentBattleForAccount(account);
         }
 
         @Override
         protected void onPostExecute(net.lalik.shipbattles.sdk2.entity.Battle b) {
             battle = b;
+            myBattlefieldView.setShipClasses(shipClasses);
 
             battlefield = battle.getMyBattlefield();
 
@@ -134,11 +140,13 @@ public class DeployFleetActivity extends Activity {
             Account account = (Account)params[0];
             ShipClass shipClass = (ShipClass)params[1];
             Coordinate coordinate = (Coordinate)params[2];
+            Orientation orientation = (Orientation)params[3];
 
             battlefield = ShipBattles.getInstance().deployShip(
                     account,
                     shipClass,
-                    coordinate);
+                    coordinate,
+                    orientation);
             return null;
         }
 

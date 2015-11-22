@@ -13,10 +13,12 @@ import android.view.View;
 import net.lalik.shipbattles.R;
 import net.lalik.shipbattles.sdk2.entity.MyBattlefield;
 import net.lalik.shipbattles.sdk2.entity.Ship;
+import net.lalik.shipbattles.sdk2.entity.ShipClass;
 import net.lalik.shipbattles.sdk2.entity.Shot;
 import net.lalik.shipbattles.sdk2.value.Coordinate;
 import net.lalik.shipbattles.sdk2.value.Orientation;
 
+import java.util.Map;
 import java.util.Stack;
 
 public class MyBattlefieldView extends View {
@@ -26,6 +28,7 @@ public class MyBattlefieldView extends View {
     private MyBattlefield battlefield = null;
     private Drawable horizontalShip;
     private Drawable verticalShip;
+    private Map<String, ShipClass> shipClasses;
 
     public MyBattlefieldView(Context context, AttributeSet attributeSet) {
         super(context, attributeSet);
@@ -41,6 +44,10 @@ public class MyBattlefieldView extends View {
 
         horizontalShip = getResources().getDrawable(R.drawable.ship_horizontal);
         verticalShip = getResources().getDrawable(R.drawable.ship_vertical);
+    }
+
+    public void setShipClasses(Map<String, ShipClass> shipClasses) {
+        this.shipClasses = shipClasses;
     }
 
     public void setBattlefield(MyBattlefield battlefield) {
@@ -174,13 +181,14 @@ public class MyBattlefieldView extends View {
 
     public Coordinate getBottomCoordinate(Ship ship) {
         int x = 0, y = 0;
+        int size = shipClasses.get(ship.getId()).getSize();
         if (ship.getOrientation() == Orientation.HORIZONTAL) {
-            x = ship.getX() + 2;
+            x = ship.getX() + size;
             y = ship.getY() + 1;
         }
         if (ship.getOrientation()== Orientation.VERTICAL) {
             x = ship.getX() + 1;
-            y = ship.getY() + 2;
+            y = ship.getY() + size;
         }
         return new Coordinate(x, y);
     }

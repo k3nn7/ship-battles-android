@@ -103,7 +103,7 @@ public class AttackActivity extends Activity {
             myBattlefieldView.setBattlefield(b.getMyBattlefield());
             battlefieldView.updateShots();
             myBattlefieldView.updateShots();
-            
+
             AlertDialog.Builder alert = new AlertDialog.Builder(AttackActivity.this);
             switch (result) {
                 case 1:
