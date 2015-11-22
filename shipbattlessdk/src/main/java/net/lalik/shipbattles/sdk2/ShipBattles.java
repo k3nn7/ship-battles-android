@@ -10,6 +10,7 @@ import net.lalik.shipbattles.sdk2.service.AccountService;
 import net.lalik.shipbattles.sdk2.service.BattleService;
 import net.lalik.shipbattles.sdk2.service.BattlefieldService;
 import net.lalik.shipbattles.sdk2.value.Coordinate;
+import net.lalik.shipbattles.sdk2.value.Orientation;
 
 import java.util.Map;
 
@@ -57,8 +58,8 @@ public class ShipBattles {
         return battleService.getShipClasses();
     }
 
-    public MyBattlefield deployShip(Account account, ShipClass shipClass, Coordinate coordinate) {
-        return battlefieldService.deployShip(account, shipClass, coordinate);
+    public MyBattlefield deployShip(Account account, ShipClass shipClass, Coordinate coordinate, Orientation orientation) {
+        return battlefieldService.deployShip(account, shipClass, coordinate, orientation);
     }
 
     public void readyForBattle(Account account) {

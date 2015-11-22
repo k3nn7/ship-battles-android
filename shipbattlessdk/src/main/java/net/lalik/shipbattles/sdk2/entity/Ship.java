@@ -12,6 +12,8 @@ public class Ship {
     int x;
     @SerializedName("y")
     int y;
+    @SerializedName("orientation")
+    int orientation;
 
     public String getId() {
         return id;
@@ -30,6 +32,12 @@ public class Ship {
     }
 
     public Orientation getOrientation() {
-        return Orientation.VERTICAL;
+        switch (orientation) {
+            case 1:
+                return Orientation.VERTICAL;
+            case 2:
+            default:
+                return Orientation.HORIZONTAL;
+        }
     }
 }

@@ -11,6 +11,7 @@ import net.lalik.shipbattles.sdk2.entity.Battlefield;
 import net.lalik.shipbattles.sdk2.entity.MyBattlefield;
 import net.lalik.shipbattles.sdk2.entity.ShipClass;
 import net.lalik.shipbattles.sdk2.value.Coordinate;
+import net.lalik.shipbattles.sdk2.value.Orientation;
 
 public class BattlefieldService {
     private final Api api;
@@ -21,12 +22,18 @@ public class BattlefieldService {
         this.battleService = battleService;
     }
 
-    public MyBattlefield deployShip(Account account, ShipClass shipClass, Coordinate coordinate) {
+    public MyBattlefield deployShip(
+            Account account,
+            ShipClass shipClass,
+            Coordinate coordinate,
+            Orientation orientation
+    ) {
         DeployShipItem[] items = new DeployShipItem[1];
         items[0] = new DeployShipItem(
                 shipClass.getId(),
                 coordinate.getX(),
-                coordinate.getY()
+                coordinate.getY(),
+                orientation
         );
         DeployShipRequestBody requestBody = new DeployShipRequestBody(items);
         Gson gson = new Gson();
@@ -56,11 +63,21 @@ public class BattlefieldService {
         private final int x;
         @SerializedName("y")
         private final int y;
+        @SerializedName("orientation")
+        private final int orientation;
 
-        public DeployShipItem(String shipClassId, int x, int y) {
+        public DeployShipItem(String shipClassId, int x, int y, Orientation orientation) {
             this.shipClassId = shipClassId;
             this.x = x;
             this.y = y;
+            switch (orientation) {
+                case VERTICAL:
+                    this.orientation = 1;
+                    break;
+                case HORIZONTAL:
+                default:
+                    this.orientation = 2;
+            }
         }
     }
 }

@@ -5,6 +5,7 @@ import net.lalik.shipbattles.sdk2.entity.Account;
 import net.lalik.shipbattles.sdk2.entity.MyBattlefield;
 import net.lalik.shipbattles.sdk2.entity.ShipClass;
 import net.lalik.shipbattles.sdk2.value.Coordinate;
+import net.lalik.shipbattles.sdk2.value.Orientation;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -37,9 +38,15 @@ public class BattlefieldServiceTest {
                 new ShipClass[battleService.getShipClasses().values().size()]
         );
 
-        MyBattlefield result = battlefieldService.deployShip(account, shipClasses[0], new Coordinate(3, 4));
+        MyBattlefield result = battlefieldService.deployShip(
+                account, shipClasses[0], new Coordinate(3, 4), Orientation.HORIZONTAL);
 
         assertEquals(1, result.getInventory().get("is:1").intValue());
         assertEquals(0, result.getInventory().get("is:0").intValue());
+
+        assertEquals(1, result.getShips().size());
+        assertEquals(3, result.getShips().get(0).getX());
+        assertEquals(4, result.getShips().get(0).getY());
+        assertEquals(Orientation.HORIZONTAL, result.getShips().get(0).getOrientation());
     }
 }
