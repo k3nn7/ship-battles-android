@@ -28,6 +28,21 @@ public class AccountService {
         );
     }
 
+    public Account getForSessionToken(String sessionToken) {
+        Response response = api.doRequest(new Request("GET", "account", sessionToken));
+        Gson gson = new Gson();
+        AccountBody accountBody = gson.fromJson(
+                response.getBody(),
+                AccountBody.class
+        );
+        return new Account(
+                accountBody.getId(),
+                accountBody.getNick(),
+                response.getSessionToken()
+        );
+
+    }
+
     class AccountBody {
         private String id;
         private String nick;

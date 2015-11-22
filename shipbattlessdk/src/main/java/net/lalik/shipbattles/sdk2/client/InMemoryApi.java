@@ -11,6 +11,14 @@ public class InMemoryApi implements Api {
             );
         }
 
+        if (request.getAction().equals("account") && request.getMethod().equals("GET") && request.getSessionToken().equals("172bc83648184fe9b296321cd1184900")) {
+            return new Response(
+                    "{\"id\": \"561439f48d5e0e000c8e7f42\", \"nick\": \"user1444166132\"}",
+                    "172bc83648184fe9b296321cd1184900",
+                    true
+            );
+        }
+
         if (request.getAction().equals("battle") && request.getMethod().equals("POST") && request.getSessionToken().equals("172bc83648184fe9b296321cd1184911")) {
             return new Response(
                     "{\"attacker_id\": \"560affde3492eb00087355f9\", \"id\": \"560affee3492eb00087355fb\", \"state\": 2, \"defender_id\": \"561439f48d5e0e000c8e7f42\"}",

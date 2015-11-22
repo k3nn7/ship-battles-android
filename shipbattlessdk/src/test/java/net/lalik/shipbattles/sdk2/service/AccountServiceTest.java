@@ -24,4 +24,12 @@ public class AccountServiceTest {
         assertEquals("user1444166132", account.getNick());
         assertEquals("172bc83648184fe9b296321cd1184900", account.getSessionToken());
     }
+
+    @Test
+    public void getForSessionToken() {
+        Account account = accountService.getForSessionToken("172bc83648184fe9b296321cd1184900");
+        assertEquals("561439f48d5e0e000c8e7f42", account.getId());
+        assertEquals("user1444166132", account.getNick());
+        assertEquals("172bc83648184fe9b296321cd1184900", account.getSessionToken());
+    }
 }

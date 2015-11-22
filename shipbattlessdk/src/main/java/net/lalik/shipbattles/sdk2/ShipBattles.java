@@ -2,6 +2,7 @@ package net.lalik.shipbattles.sdk2;
 
 import net.lalik.shipbattles.sdk2.client.Api;
 import net.lalik.shipbattles.sdk2.client.HttpApi;
+import net.lalik.shipbattles.sdk2.client.InMemoryApi;
 import net.lalik.shipbattles.sdk2.entity.Account;
 import net.lalik.shipbattles.sdk2.entity.Battle;
 import net.lalik.shipbattles.sdk2.entity.MyBattlefield;
@@ -22,7 +23,7 @@ public class ShipBattles {
     private Account authenticatedAccount = null;
 
     private ShipBattles() {
-        Api api = new HttpApi();
+        Api api = new InMemoryApi();
         accountService = new AccountService(api);
         battleService = new BattleService(api);
         battlefieldService = new BattlefieldService(api, battleService);
@@ -39,11 +40,11 @@ public class ShipBattles {
         return authenticatedAccount = accountService.createRandomAccount();
     }
 
-    public Account authenticate(String accessToken) {
+    public Account authenticate(String sessionToken) {
         if (null != authenticatedAccount &&
-                authenticatedAccount.getSessionToken().equals(accessToken))
+                authenticatedAccount.getSessionToken().equals(sessionToken))
             return authenticatedAccount;
-        return null;
+        return authenticatedAccount = accountService.getForSessionToken(sessionToken);
     }
 
     public Battle getCurrentBattleForAccount(Account account) {
