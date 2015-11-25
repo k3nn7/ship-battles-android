@@ -6,62 +6,22 @@
     android:baselineAligned="false">
 
 
-        <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_gravity="center_vertical"
-            android:layout_weight="1">
-
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Woduj okręt"
-                android:id="@+id/deploy_ship_button"
-                android:onClick="deployShipClicked" />
-
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Od nowa"
-                android:id="@+id/clear_battlefield_button"
-                android:onClick="clearBattlefieldClicked"/>
-
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Gotowy"
-                android:id="@+id/commit_battlefield_button"
-                android:onClick="commitBattlefieldClicked"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Dostępne okręty:"
-                android:id="@+id/textView11" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:text="Kuter(4) Fregata (3) Krążownik (2) Pancernik (1)"
-                android:id="@+id/ships_inventory_text" />
-        </LinearLayout>
-
-        <FrameLayout
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
+    <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_gravity="bottom"
             android:layout_weight="1">
 
-            <net.lalik.shipbattles.views.MyBattlefieldView
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
+            <net.lalik.shipbattles.views.DeployBattlefieldView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 shipbattles:showGrid="true"
                 android:id="@+id/battlefield"
-                android:layout_gravity="center"
+                android:layout_gravity="top|center|right"
                 android:layout_marginTop="10dp"
                 android:layout_marginRight="5dp" />
-        </FrameLayout>
+
+    </FrameLayout>
 
 
 </LinearLayout>
