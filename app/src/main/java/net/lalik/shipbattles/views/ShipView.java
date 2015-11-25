@@ -14,6 +14,7 @@ public class ShipView {
     private final Drawable horizontalShip;
     private int gridSize;
     private int x1, y1, x2, y2;
+    private int localX, localY;
 
     public ShipView(
             Coordinate coordinate,
@@ -27,6 +28,8 @@ public class ShipView {
         this.size = size;
         this.verticalShip = verticalShip;
         this.horizontalShip = horizontalShip;
+        this.localX = 0;
+        this.localY = 0;
     }
 
     public void resize(int gridSize) {
@@ -35,8 +38,8 @@ public class ShipView {
     }
 
     private void updateBoundary() {
-        x1 = coordinate.getX() * gridSize;
-        y1 = coordinate.getY() * gridSize;
+        x1 = localX + coordinate.getX() * gridSize;
+        y1 = localY + coordinate.getY() * gridSize;
 
         if (orientation == Orientation.HORIZONTAL) {
             x2 = x1 + size * gridSize;
@@ -67,6 +70,12 @@ public class ShipView {
 
     public void moveTo(Coordinate coordinate) {
         this.coordinate = coordinate;
+        updateBoundary();
+    }
+
+    public void setLocalTransform(int x, int y) {
+        localX = x;
+        localY = y;
         updateBoundary();
     }
 }

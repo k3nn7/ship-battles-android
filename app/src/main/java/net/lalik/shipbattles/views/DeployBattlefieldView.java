@@ -101,6 +101,9 @@ public class DeployBattlefieldView extends View {
             if (shipView.contains(x, y)) {
                 pickedShip = shipView;
                 pickedCoordinate = pickedShip.getCoordinate();
+                pickedShip.setLocalTransform(-5, -5);
+                invalidate();
+                requestLayout();
             }
     }
 
@@ -116,12 +119,14 @@ public class DeployBattlefieldView extends View {
         if (pickedShip == null)
             return;
 
+        pickedShip.setLocalTransform(0, 0);
+
         if (!battlefieldGridView.isInside(x, y)) {
             pickedShip.moveTo(pickedCoordinate);
-            invalidate();
-            requestLayout();
         }
         pickedShip = null;
+        invalidate();
+        requestLayout();
     }
 
     public Coordinate positionToCoordinates(int x, int y) {
