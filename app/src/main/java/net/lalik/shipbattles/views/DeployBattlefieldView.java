@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -27,6 +28,7 @@ public class DeployBattlefieldView extends View {
     private Coordinate pickedCoordinate;
 
     private BattlefieldGridView battlefieldGridView;
+    private long lastTouchTime = 0;
 
     public DeployBattlefieldView(Context context, AttributeSet attributeSet) {
         super(context, attributeSet);
@@ -84,8 +86,12 @@ public class DeployBattlefieldView extends View {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        if (event.getAction() == MotionEvent.ACTION_DOWN)
+        if (event.getAction() == MotionEvent.ACTION_DOWN) {
+            if (isDoubleTouch(event.getEventTime()))
+                handleDoubleTouch((int) event.getX(), (int) event.getY());
             handlePick((int) event.getX(), (int) event.getY());
+            lastTouchTime = event.getEventTime();
+        }
 
         if (event.getAction() == MotionEvent.ACTION_MOVE)
             handleMove((int) event.getX(), (int) event.getY());
@@ -96,12 +102,32 @@ public class DeployBattlefieldView extends View {
         return true;
     }
 
+    private boolean isDoubleTouch(long touchTime) {
+        long delta = touchTime - lastTouchTime;
+        return delta <= 250;
+    }
+
     private void handlePick(int x, int y) {
         for (ShipView shipView : shipViewList)
             if (shipView.contains(x, y)) {
                 pickedShip = shipView;
                 pickedCoordinate = pickedShip.getCoordinate();
                 pickedShip.setLocalTransform(-5, -5);
+                invalidate();
+                requestLayout();
+            }
+    }
+
+    private void handleDoubleTouch(int x, int y) {
+        if (!battlefieldGridView.isInside(x, y))
+            return;
+
+        for (ShipView shipView : shipViewList)
+            if (shipView.contains(x, y)) {
+                if (shipView.getOrientation() == Orientation.VERTICAL)
+                    shipView.setOrientation(Orientation.HORIZONTAL);
+                else
+                    shipView.setOrientation(Orientation.VERTICAL);
                 invalidate();
                 requestLayout();
             }

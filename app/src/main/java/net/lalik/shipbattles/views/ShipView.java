@@ -8,7 +8,7 @@ import net.lalik.shipbattles.sdk2.value.Orientation;
 
 public class ShipView {
     private Coordinate coordinate;
-    private final Orientation orientation;
+    private Orientation orientation;
     private final int size;
     private final Drawable verticalShip;
     private final Drawable horizontalShip;
@@ -77,5 +77,13 @@ public class ShipView {
         localX = x;
         localY = y;
         updateBoundary();
+    }
+
+    public Orientation getOrientation() {
+        return orientation;
+    }
+
+    public void setOrientation(Orientation orientation) {
+        this.orientation = orientation;
     }
 }
