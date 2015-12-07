@@ -23,6 +23,13 @@
     <Button
         android:layout_width="200dp"
         android:layout_height="wrap_content"
+        android:text="Szybka bitwa"
+        android:id="@+id/fast_battle_button"
+        android:layout_marginLeft="30dp" />
+
+    <Button
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
         android:text="@string/register"
         android:id="@+id/register_button"
         android:onClick="registerClicked"

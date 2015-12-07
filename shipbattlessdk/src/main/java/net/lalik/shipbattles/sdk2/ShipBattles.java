@@ -3,6 +3,7 @@ package net.lalik.shipbattles.sdk2;
 import net.lalik.shipbattles.sdk2.client.Api;
 import net.lalik.shipbattles.sdk2.client.HttpApi;
 import net.lalik.shipbattles.sdk2.client.InMemoryApi;
+import net.lalik.shipbattles.sdk2.client.TestApi;
 import net.lalik.shipbattles.sdk2.entity.Account;
 import net.lalik.shipbattles.sdk2.entity.Battle;
 import net.lalik.shipbattles.sdk2.entity.MyBattlefield;
@@ -23,7 +24,7 @@ public class ShipBattles {
     private Account authenticatedAccount = null;
 
     private ShipBattles() {
-        Api api = new InMemoryApi();
+        Api api = new TestApi();
         accountService = new AccountService(api);
         battleService = new BattleService(api);
         battlefieldService = new BattlefieldService(api, battleService);
