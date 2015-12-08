@@ -25,6 +25,7 @@
         android:layout_height="wrap_content"
         android:text="Szybka bitwa"
         android:id="@+id/fast_battle_button"
+        android:onClick="fastBattleClicked"
         android:layout_marginLeft="30dp" />
 
     <Button
@@ -33,6 +34,7 @@
         android:text="@string/register"
         android:id="@+id/register_button"
         android:onClick="registerClicked"
+        android:enabled="false"
         android:layout_marginLeft="30dp" />
 
     <Button
@@ -41,6 +43,7 @@
         android:text="@string/sign_in"
         android:id="@+id/sign_in_button"
         android:onClick="signInClicked"
+        android:enabled="false"
         android:layout_marginLeft="30dp" />
 
     <Space

@@ -32,6 +32,11 @@ public class EntryActivity extends Activity {
         startActivity(intent);
     }
 
+    public void fastBattleClicked(View view) {
+        Intent intent = new Intent(this, FastDeployActivity.class);
+        startActivity(intent);
+    }
+
     public void registerClicked(View view) {
         registerProgress = ProgressDialog.show(
                 this,

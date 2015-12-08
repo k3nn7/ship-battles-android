@@ -17,6 +17,7 @@
             android:theme="@style/EntryTheme" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -38,10 +39,10 @@
         <activity
             android:name=".BattleActivity"
             android:label="@string/title_activity_battle"
+            android:launchMode="singleTop"
             android:parentActivityName=".BattleCenterActivity"
-            android:theme="@style/BattleCenter"
             android:screenOrientation="landscape"
-            android:launchMode="singleTop" >
+            android:theme="@style/BattleCenter" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="net.lalik.shipbattles.BattleCenterActivity" />
@@ -59,6 +60,16 @@
         <activity
             android:name=".AttackActivity"
             android:label="@string/title_activity_attack"
+            android:parentActivityName=".BattleActivity"
+            android:screenOrientation="landscape"
+            android:theme="@style/BattleCenter" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="net.lalik.shipbattles.BattleActivity" />
+        </activity>
+        <activity
+            android:name=".FastDeployActivity"
+            android:label="@string/title_activity_fast_deploy"
             android:parentActivityName=".BattleActivity"
             android:screenOrientation="landscape"
             android:theme="@style/BattleCenter" >
