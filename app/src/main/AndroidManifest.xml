@@ -77,6 +77,10 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="net.lalik.shipbattles.BattleActivity" />
         </activity>
+        <activity
+            android:name=".FastAttackActivity"
+            android:label="@string/title_activity_fast_attack" >
+        </activity>
     </application>
 
 </manifest>

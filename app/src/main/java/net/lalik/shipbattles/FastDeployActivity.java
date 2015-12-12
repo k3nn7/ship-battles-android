@@ -1,11 +1,12 @@
 package net.lalik.shipbattles;
 
-import android.os.Bundle;
 import android.app.Activity;
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.View;
 
 import net.lalik.shipbattles.offline.ShipBattles;
 import net.lalik.shipbattles.offline.entity.Battle;
-import net.lalik.shipbattles.views.DeployBattlefieldView;
 import net.lalik.shipbattles.views.OfflineDeployBattlefieldView;
 
 public class FastDeployActivity extends Activity {
@@ -23,4 +24,8 @@ public class FastDeployActivity extends Activity {
         deployBattlefieldView.invalidate();
     }
 
+    public void startBattleClicked(View view) {
+        Intent intent = new Intent(this, FastAttackActivity.class);
+        startActivity(intent);
+    }
 }

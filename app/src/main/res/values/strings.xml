@@ -17,4 +17,5 @@
     <string name="title_activity_deploy_fleet">DeployFleetActivity</string>
     <string name="title_activity_attack">AttackActivity</string>
     <string name="title_activity_fast_deploy">FastDeployActivity</string>
+    <string name="title_activity_fast_attack">FastAttackActivity</string>
 </resources>
