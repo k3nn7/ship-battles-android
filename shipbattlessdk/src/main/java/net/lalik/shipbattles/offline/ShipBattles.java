@@ -21,4 +21,8 @@ public class ShipBattles {
     public Battle startBattle() {
         return battleService.startBattle();
     }
+
+    public Battle getCurrentBattle() {
+        return battleService.getCurrentBattle();
+    }
 }

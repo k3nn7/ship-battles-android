@@ -8,12 +8,12 @@
     <net.lalik.shipbattles.views.OfflineMyBattlefieldView
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:id="@+id/view"
+        android:id="@+id/my_battlefield_view"
         android:layout_weight="1" />
 
     <net.lalik.shipbattles.views.OfflineOpponentBattlefieldView
         android:layout_width="wrap_content"
         android:layout_height="fill_parent"
-        android:id="@+id/view2"
+        android:id="@+id/opponent_battlefield_view"
         android:layout_weight="1" />
 </LinearLayout>
