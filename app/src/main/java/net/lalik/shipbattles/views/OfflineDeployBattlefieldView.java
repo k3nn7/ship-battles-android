@@ -30,25 +30,25 @@ public class OfflineDeployBattlefieldView extends View {
 
     private BattlefieldGridView battlefieldGridView;
     private long lastTouchTime = 0;
+    private final int battlefieldOffset = 5;
 
     public OfflineDeployBattlefieldView(Context context, AttributeSet attributeSet) {
         super(context, attributeSet);
         shipViewList = new ArrayList<>();
         horizontalShip = getResources().getDrawable(R.drawable.ship_horizontal);
         verticalShip = getResources().getDrawable(R.drawable.ship_vertical);
-        battlefieldGridView = new BattlefieldGridView(5, 0);
+        battlefieldGridView = new BattlefieldGridView(battlefieldOffset, 0);
     }
 
     private void initializeInventory() {
         int i = 1;
         for (Ship ship : battlefield.getInventory())  {
-            ShipView shipView = new ShipView(
-                    new Coordinate(0, i),
-                    Orientation.HORIZONTAL,
-                    ship.getSize(),
+            ShipView shipView = ShipView.fromShip(
+                    ship,
                     verticalShip,
                     horizontalShip
             );
+            shipView.moveTo(new Coordinate(0, i));
             shipView.resize(gridSize);
             shipViewList.add(shipView);
             i++;
@@ -80,6 +80,13 @@ public class OfflineDeployBattlefieldView extends View {
     private void drawInventory(Canvas canvas) {
         for (ShipView shipView : shipViewList) {
             shipView.draw(canvas);
+        }
+    }
+
+    public void updateOffset() {
+        for (ShipView shipView : shipViewList) {
+            Coordinate position = shipView.getCoordinate();
+            shipView.moveTo(new Coordinate(position.getX() - battlefieldOffset, position.getY()));
         }
     }
 

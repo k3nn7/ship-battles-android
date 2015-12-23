@@ -3,6 +3,7 @@ package net.lalik.shipbattles.views;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
 
+import net.lalik.shipbattles.offline.entity.Ship;
 import net.lalik.shipbattles.sdk2.value.Coordinate;
 import net.lalik.shipbattles.sdk2.value.Orientation;
 
@@ -15,6 +16,7 @@ public class ShipView {
     private int gridSize;
     private int x1, y1, x2, y2;
     private int localX, localY;
+    private Ship ship = null;
 
     public ShipView(
             Coordinate coordinate,
@@ -30,6 +32,27 @@ public class ShipView {
         this.horizontalShip = horizontalShip;
         this.localX = 0;
         this.localY = 0;
+    }
+
+    static public ShipView fromShip(Ship ship, Drawable vertical, Drawable horizontal) {
+        Orientation orientation = Orientation.HORIZONTAL;
+        switch (ship.getOrientation()) {
+            case 1:
+                orientation = Orientation.HORIZONTAL;
+                break;
+            case 2:
+                orientation = Orientation.VERTICAL;
+                break;
+        }
+        ShipView shipView = new ShipView(
+                new Coordinate(ship.getX(), ship.getY()),
+                orientation,
+                ship.getSize(),
+                vertical,
+                horizontal
+        );
+        shipView.ship = ship;
+        return shipView;
     }
 
     public void resize(int gridSize) {
@@ -69,6 +92,8 @@ public class ShipView {
     }
 
     public void moveTo(Coordinate coordinate) {
+        ship.setX(coordinate.getX());
+        ship.setY(coordinate.getY());
         this.coordinate = coordinate;
         updateBoundary();
     }
@@ -84,6 +109,14 @@ public class ShipView {
     }
 
     public void setOrientation(Orientation orientation) {
+        switch (orientation) {
+            case HORIZONTAL:
+                ship.setOrientation(1);
+                break;
+            case VERTICAL:
+                ship.setOrientation(2);
+                break;
+        }
         this.orientation = orientation;
     }
 }

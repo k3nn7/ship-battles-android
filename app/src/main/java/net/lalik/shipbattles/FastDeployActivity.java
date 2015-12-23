@@ -25,6 +25,7 @@ public class FastDeployActivity extends Activity {
     }
 
     public void startBattleClicked(View view) {
+        deployBattlefieldView.updateOffset();
         Intent intent = new Intent(this, FastAttackActivity.class);
         startActivity(intent);
     }
