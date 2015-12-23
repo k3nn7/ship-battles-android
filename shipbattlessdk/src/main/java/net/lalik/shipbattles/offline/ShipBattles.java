@@ -30,4 +30,8 @@ public class ShipBattles {
     public void playerShoot(Coordinate coordinate) {
         battleService.playerShoot(coordinate);
     }
+
+    public void opponentShot() {
+        battleService.opponentShot();
+    }
 }

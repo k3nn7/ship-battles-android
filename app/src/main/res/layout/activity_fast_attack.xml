@@ -15,7 +15,7 @@
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:text="Current turn: player"
-            android:id="@+id/textView3"
+            android:id="@+id/current_turn"
             android:layout_weight="0"
             android:textAlignment="center" />
 

@@ -1,8 +1,10 @@
 package net.lalik.shipbattles;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Activity;
 import android.util.Log;
+import android.widget.TextView;
 
 import net.lalik.shipbattles.offline.ShipBattles;
 import net.lalik.shipbattles.offline.entity.Battle;
@@ -14,6 +16,7 @@ import net.lalik.shipbattles.views.OfflineOpponentBattlefieldView;
 public class FastAttackActivity extends Activity {
     private OfflineMyBattlefieldView myBattlefieldView;
     private OfflineOpponentBattlefieldView opponentBattlefieldView;
+    private TextView currentTurn;
 
     private Battle battle;
 
@@ -21,6 +24,8 @@ public class FastAttackActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fast_attack);
+
+        currentTurn = (TextView)findViewById(R.id.current_turn);
 
         myBattlefieldView = (OfflineMyBattlefieldView)findViewById(R.id.my_battlefield_view);
         opponentBattlefieldView = (OfflineOpponentBattlefieldView)findViewById(R.id.opponent_battlefield_view);
@@ -40,6 +45,30 @@ public class FastAttackActivity extends Activity {
         public void onCoordinateSelected(Coordinate coordinate) {
             ShipBattles.getInstance().playerShoot(coordinate);
             opponentBattlefieldView.invalidate();
+            new OpponentAttackTask().execute();
+        }
+    }
+
+    private class OpponentAttackTask extends AsyncTask<Void, Void, Void> {
+        @Override
+        protected void onPreExecute() {
+            currentTurn.setText("Current turn: opponent");
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            try {
+                Thread.sleep(1500);
+            } catch (InterruptedException e) {
+            }
+            ShipBattles.getInstance().opponentShot();
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            currentTurn.setText("Current turn: player");
+            myBattlefieldView.invalidate();
         }
     }
 }

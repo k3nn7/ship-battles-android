@@ -25,4 +25,8 @@ public class PlayerBattlefield {
     public List<Ship> getInventory() {
         return inventory;
     }
+
+    public void addShot(Shot shot) {
+        shots.add(shot);
+    }
 }
