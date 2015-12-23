@@ -2,7 +2,6 @@ package net.lalik.shipbattles.views;
 
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.view.View;
@@ -10,17 +9,14 @@ import android.view.View;
 import net.lalik.shipbattles.R;
 import net.lalik.shipbattles.offline.entity.PlayerBattlefield;
 import net.lalik.shipbattles.offline.entity.Ship;
-import net.lalik.shipbattles.sdk2.value.Coordinate;
 import net.lalik.shipbattles.sdk2.value.Orientation;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Stack;
 
 public class OfflineMyBattlefieldView extends View {
     private int gridSize;
     private List<ShipView> shipViewList;
-    private Stack<Ship> ships;
     private PlayerBattlefield battlefield = null;
     private Drawable horizontalShip;
     private Drawable verticalShip;
@@ -39,11 +35,6 @@ public class OfflineMyBattlefieldView extends View {
         initializeInventory();
     }
 
-    public void clear() {
-        ships.clear();
-        invalidate();
-        requestLayout();
-    }
     @Override
     protected void onSizeChanged(int width, int height, int oldw, int oldh) {
         int smallestDimension = Math.min(width, height);
@@ -68,18 +59,7 @@ public class OfflineMyBattlefieldView extends View {
     }
 
     private void initializeInventory() {
-        int i = 1;
         for (Ship ship : battlefield.getInventory())  {
-            Orientation orientation = Orientation.HORIZONTAL;
-            switch(ship.getOrientation()) {
-                case 1:
-                    orientation = Orientation.HORIZONTAL;
-                    break;
-                case 2:
-                    orientation = Orientation.VERTICAL;
-                    break;
-            }
-
             ShipView shipView = ShipView.fromShip(
                     ship,
                     verticalShip,
@@ -88,7 +68,6 @@ public class OfflineMyBattlefieldView extends View {
 
             shipView.resize(gridSize);
             shipViewList.add(shipView);
-            i++;
         }
     }
 }

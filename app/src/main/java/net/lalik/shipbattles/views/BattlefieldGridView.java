@@ -11,7 +11,11 @@ public class BattlefieldGridView {
     private final int offsetYCells;
     private int gridSize;
     private Paint paint;
+    private Paint selectionPaint;
     private int x1, y1, x2, y2;
+    private boolean showSelection = false;
+    private int selectionX;
+    private int selectionY;
 
     public BattlefieldGridView(int offsetXCells, int offsetYCells) {
         this.offsetXCells = offsetXCells;
@@ -28,6 +32,11 @@ public class BattlefieldGridView {
         paint.setColor(Color.rgb(0, 0, 0));
         paint.setTypeface(Typeface.create("Arial", Typeface.NORMAL));
         paint.setTextAlign(Paint.Align.CENTER);
+
+        selectionPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        selectionPaint.setColor(Color.DKGRAY);
+        selectionPaint.setStyle(Paint.Style.STROKE);
+        selectionPaint.setStrokeWidth(4);
     }
 
     public void resize(int gridSize) {
@@ -47,6 +56,17 @@ public class BattlefieldGridView {
     public void draw(Canvas canvas) {
         drawLabels(canvas);
         drawGrid(canvas);
+        if (showSelection)
+            drawSelection(canvas);
+    }
+
+    public void showSelection(boolean show) {
+        this.showSelection = show;
+    }
+
+    public void setSelection(int x, int y) {
+        this.selectionX = x;
+        this.selectionY = y;
     }
 
     private void drawGrid(Canvas canvas) {
@@ -99,5 +119,14 @@ public class BattlefieldGridView {
                 7 * gridSize / 4 + (gridSize * i) + (offsetYCells * gridSize),
                 paint
         );
+    }
+
+    private void drawSelection(Canvas canvas) {
+        int x = (int)Math.floor(selectionX / gridSize) * gridSize;
+        int y = (int)Math.floor(selectionY / gridSize) * gridSize;
+
+        canvas.drawRect(x - gridSize, y - gridSize, x, y, selectionPaint);
+        canvas.drawLine((float) x, y1, (float) x, y2, selectionPaint);
+        canvas.drawLine(x1, y, x2, (float) y, selectionPaint);
     }
 }

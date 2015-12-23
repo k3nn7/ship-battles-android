@@ -24,8 +24,12 @@ public class FastAttackActivity extends Activity {
         opponentBattlefieldView = (OfflineOpponentBattlefieldView)findViewById(R.id.opponent_battlefield_view);
 
         battle = ShipBattles.getInstance().getCurrentBattle();
+
         myBattlefieldView.setBattlefield(battle.getPlayerBattlefield());
         myBattlefieldView.invalidate();
+
+        opponentBattlefieldView.setBattlefield(battle.getOpponentBattlefield());
+        opponentBattlefieldView.invalidate();
     }
 
 }
