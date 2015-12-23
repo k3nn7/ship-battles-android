@@ -2,6 +2,7 @@ package net.lalik.shipbattles.offline;
 
 import net.lalik.shipbattles.offline.entity.Battle;
 import net.lalik.shipbattles.offline.service.BattleService;
+import net.lalik.shipbattles.sdk2.value.Coordinate;
 
 public class ShipBattles {
     private static ShipBattles instance = null;
@@ -24,5 +25,9 @@ public class ShipBattles {
 
     public Battle getCurrentBattle() {
         return battleService.getCurrentBattle();
+    }
+
+    public void playerShoot(Coordinate coordinate) {
+        battleService.playerShoot(coordinate);
     }
 }

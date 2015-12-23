@@ -10,6 +10,7 @@ import android.view.View;
 import net.lalik.shipbattles.R;
 import net.lalik.shipbattles.offline.entity.OpponentBattlefield;
 import net.lalik.shipbattles.offline.entity.Ship;
+import net.lalik.shipbattles.offline.entity.Shot;
 import net.lalik.shipbattles.sdk2.value.Coordinate;
 
 import java.util.ArrayList;
@@ -17,6 +18,7 @@ import java.util.List;
 
 public class OfflineOpponentBattlefieldView extends View {
     private List<ShipView> shipViewList;
+    private List<ShotView> shotViewList;
     private int gridSize;
     private OpponentBattlefield battlefield = null;
     private Drawable horizontalShip;
@@ -31,6 +33,7 @@ public class OfflineOpponentBattlefieldView extends View {
     public OfflineOpponentBattlefieldView(Context context, AttributeSet attributeSet) {
         super(context, attributeSet);
         shipViewList = new ArrayList<>();
+        shotViewList = new ArrayList<>();
         horizontalShip = getResources().getDrawable(R.drawable.ship_horizontal);
         verticalShip = getResources().getDrawable(R.drawable.ship_vertical);
         battlefieldGridView = new BattlefieldGridView(0, 0);
@@ -39,6 +42,7 @@ public class OfflineOpponentBattlefieldView extends View {
     public void setBattlefield(OpponentBattlefield battlefield) {
         this.battlefield = battlefield;
         initializeInventory();
+        updateShots();
     }
 
     @Override
@@ -90,13 +94,21 @@ public class OfflineOpponentBattlefieldView extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
+        updateShots();
         battlefieldGridView.draw(canvas);
         drawShips(canvas);
+        drawShots(canvas);
     }
 
     private void drawShips(Canvas canvas) {
         for (ShipView shipView : shipViewList) {
             shipView.draw(canvas);
+        }
+    }
+
+    private void drawShots(Canvas canvas) {
+        for (ShotView shotView : shotViewList) {
+            shotView.draw(canvas);
         }
     }
 
@@ -110,6 +122,15 @@ public class OfflineOpponentBattlefieldView extends View {
 
             shipView.resize(gridSize);
             shipViewList.add(shipView);
+        }
+    }
+
+    private void updateShots() {
+       shotViewList.clear();
+        for (Shot shot : battlefield.getShots()) {
+            ShotView shotView = ShotView.fromShot(shot);
+            shotView.resize(gridSize);
+            shotViewList.add(shotView);
         }
     }
 }

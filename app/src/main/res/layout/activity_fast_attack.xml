@@ -5,15 +5,39 @@
     android:layout_height="fill_parent"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <net.lalik.shipbattles.views.OfflineMyBattlefieldView
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:id="@+id/my_battlefield_view"
-        android:layout_weight="1" />
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-    <net.lalik.shipbattles.views.OfflineOpponentBattlefieldView
-        android:layout_width="wrap_content"
-        android:layout_height="fill_parent"
-        android:id="@+id/opponent_battlefield_view"
-        android:layout_weight="1" />
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="Current turn: player"
+            android:id="@+id/textView3"
+            android:layout_weight="0"
+            android:textAlignment="center" />
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <net.lalik.shipbattles.views.OfflineMyBattlefieldView
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:id="@+id/my_battlefield_view"
+                android:layout_weight="1" />
+
+            <net.lalik.shipbattles.views.OfflineOpponentBattlefieldView
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                android:id="@+id/opponent_battlefield_view"
+                android:layout_weight="1" />
+        </LinearLayout>
+
+
+    </LinearLayout>
+
 </LinearLayout>

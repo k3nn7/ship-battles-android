@@ -5,15 +5,21 @@ import java.util.List;
 
 public class PlayerBattlefield {
     private List<Ship> inventory;
+    private List<Shot> shots;
 
     public PlayerBattlefield() {
         inventory = new ArrayList<>();
+        shots = new ArrayList<>();
 
         inventory.add(new Ship(1));
         inventory.add(new Ship(1));
         inventory.add(new Ship(2));
         inventory.add(new Ship(2));
         inventory.add(new Ship(3));
+    }
+
+    public List<Shot> getShots() {
+        return shots;
     }
 
     public List<Ship> getInventory() {
