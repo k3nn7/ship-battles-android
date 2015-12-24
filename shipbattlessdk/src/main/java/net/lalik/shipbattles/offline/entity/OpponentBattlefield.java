@@ -43,9 +43,21 @@ public class OpponentBattlefield {
 
     public void addShot(Shot shot) {
         shots.add(shot);
+        for (Ship ship : inventory)
+            if (ship.isInside(shot.getCoordinate()))
+                ship.addShot();
     }
 
     public List<Shot> getShots() {
         return shots;
+    }
+
+    public int getDestroyedShipsCount() {
+        int destroyedShipsCount = 0;
+        for (Ship ship : inventory) {
+            if (ship.isDestroyed())
+                destroyedShipsCount++;
+        }
+        return destroyedShipsCount;
     }
 }

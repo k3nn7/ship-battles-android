@@ -28,5 +28,17 @@ public class PlayerBattlefield {
 
     public void addShot(Shot shot) {
         shots.add(shot);
+        for (Ship ship : inventory)
+            if (ship.isInside(shot.getCoordinate()))
+                ship.addShot();
+    }
+
+    public int getDestroyedShipsCount() {
+        int destroyedShipsCount = 0;
+        for (Ship ship : inventory) {
+            if (ship.isDestroyed())
+                destroyedShipsCount++;
+        }
+        return destroyedShipsCount;
     }
 }
