@@ -13,7 +13,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Bitwa Morska"
+        android:text="@string/app_name"
         android:id="@+id/entry_text"
         android:layout_weight="1.71"
         android:textSize="60dp"
@@ -23,7 +23,7 @@
     <Button
         android:layout_width="200dp"
         android:layout_height="wrap_content"
-        android:text="Szybka bitwa"
+        android:text="@string/start_fast_battle"
         android:id="@+id/fast_battle_button"
         android:onClick="fastBattleClicked"
         android:layout_marginLeft="30dp" />
@@ -31,10 +31,10 @@
     <Button
         android:layout_width="200dp"
         android:layout_height="wrap_content"
-        android:text="@string/register"
+        android:text="@string/register_account"
         android:id="@+id/register_button"
         android:onClick="registerClicked"
-        android:enabled="false"
+        android:enabled="true"
         android:layout_marginLeft="30dp" />
 
     <Button
@@ -43,7 +43,7 @@
         android:text="@string/sign_in"
         android:id="@+id/sign_in_button"
         android:onClick="signInClicked"
-        android:enabled="false"
+        android:enabled="true"
         android:layout_marginLeft="30dp" />
 
     <Space

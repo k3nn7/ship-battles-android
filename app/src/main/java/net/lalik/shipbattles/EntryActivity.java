@@ -1,6 +1,8 @@
 package net.lalik.shipbattles;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -28,8 +30,7 @@ public class EntryActivity extends Activity {
     }
 
     public void signInClicked(View view) {
-        Intent intent = new Intent(this, SignInActivity.class);
-        startActivity(intent);
+        showNotAvailableYetDialog();
     }
 
     public void fastBattleClicked(View view) {
@@ -38,13 +39,7 @@ public class EntryActivity extends Activity {
     }
 
     public void registerClicked(View view) {
-        registerProgress = ProgressDialog.show(
-                this,
-                getText(R.string.app_name),
-                getText(R.string.registering_account),
-                true
-        );
-        new RegisterAccountTask().execute();
+        showNotAvailableYetDialog();
     }
 
     private void enterBattleCenter(Account account) {
@@ -58,6 +53,12 @@ public class EntryActivity extends Activity {
         Intent intent = new Intent(this, BattleCenterActivity.class);
         startActivity(intent);
         finish();
+    }
+
+    private void showNotAvailableYetDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(R.string.feature_not_available);
+        builder.create().show();
     }
 
     private class RegisterAccountTask extends AsyncTask<Void, Void, Void> {
