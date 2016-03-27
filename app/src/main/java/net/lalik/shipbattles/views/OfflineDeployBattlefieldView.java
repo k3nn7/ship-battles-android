@@ -9,9 +9,6 @@ import android.view.View;
 
 import net.lalik.shipbattles.R;
 import net.lalik.shipbattles.offline.entity.PlayerBattlefield;
-import net.lalik.shipbattles.offline.entity.Ship;
-import net.lalik.shipbattles.sdk2.entity.MyBattlefield;
-import net.lalik.shipbattles.sdk2.entity.ShipClass;
 import net.lalik.shipbattles.sdk2.value.Coordinate;
 import net.lalik.shipbattles.sdk2.value.Orientation;
 
@@ -19,45 +16,30 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class OfflineDeployBattlefieldView extends View {
+    private final int battlefieldOffset = 5;
     private int gridSize;
+    private ShipInventoryView shipInventoryView;
     private List<ShipView> shipViewList;
     private PlayerBattlefield battlefield = null;
     private Drawable horizontalShip;
     private Drawable verticalShip;
-
     private ShipView pickedShip = null;
     private Coordinate pickedCoordinate;
-
     private BattlefieldGridView battlefieldGridView;
     private long lastTouchTime = 0;
-    private final int battlefieldOffset = 5;
 
     public OfflineDeployBattlefieldView(Context context, AttributeSet attributeSet) {
         super(context, attributeSet);
+        shipInventoryView = new ShipInventoryView(getContext());
         shipViewList = new ArrayList<>();
         horizontalShip = getResources().getDrawable(R.drawable.ship_horizontal);
         verticalShip = getResources().getDrawable(R.drawable.ship_vertical);
         battlefieldGridView = new BattlefieldGridView(battlefieldOffset, 0);
     }
 
-    private void initializeInventory() {
-        int i = 1;
-        for (Ship ship : battlefield.getInventory())  {
-            ShipView shipView = ShipView.fromShip(
-                    ship,
-                    verticalShip,
-                    horizontalShip
-            );
-            shipView.moveTo(new Coordinate(0, i));
-            shipView.resize(gridSize);
-            shipViewList.add(shipView);
-            i++;
-        }
-    }
-
     public void setBattlefield(PlayerBattlefield battlefield) {
         this.battlefield = battlefield;
-        initializeInventory();
+        this.shipInventoryView.setInventory(battlefield.getInventory());
     }
 
     @Override
@@ -68,18 +50,23 @@ public class OfflineDeployBattlefieldView extends View {
         for (ShipView shipView : shipViewList) {
             shipView.resize(gridSize);
         }
+        this.shipInventoryView.setGridSize(gridSize);
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         battlefieldGridView.draw(canvas);
-        drawInventory(canvas);
-    }
+        shipInventoryView.draw(canvas);
 
-    private void drawInventory(Canvas canvas) {
-        for (ShipView shipView : shipViewList) {
-            shipView.draw(canvas);
+        for (ShipView ship : shipViewList) {
+            ship.resize(gridSize);
+            ship.draw(canvas);
+        }
+
+        if (pickedShip != null) {
+            pickedShip.resize(gridSize);
+            pickedShip.draw(canvas);
         }
     }
 
@@ -114,14 +101,20 @@ public class OfflineDeployBattlefieldView extends View {
     }
 
     private void handlePick(int x, int y) {
-        for (ShipView shipView : shipViewList)
-            if (shipView.contains(x, y)) {
-                pickedShip = shipView;
-                pickedCoordinate = pickedShip.getCoordinate();
-                pickedShip.setLocalTransform(-5, -5);
-                invalidate();
-                requestLayout();
-            }
+        pickedShip = shipInventoryView.pick(x, y);
+
+        for (ShipView ship : shipViewList)
+            if (ship.contains(x, y))
+                pickedShip = ship;
+
+
+        if (pickedShip != null) {
+            pickedShip.moveTo(positionToCoordinates(x, y));
+            pickedCoordinate = pickedShip.getCoordinate();
+            pickedShip.setLocalTransform(-5, -5);
+            invalidate();
+            requestLayout();
+        }
     }
 
     private void handleDoubleTouch(int x, int y) {
@@ -140,7 +133,7 @@ public class OfflineDeployBattlefieldView extends View {
     }
 
     private void handleMove(int x, int y) {
-        if (pickedShip != null){
+        if (pickedShip != null) {
             pickedShip.moveTo(positionToCoordinates(x, y));
             invalidate();
             requestLayout();
@@ -154,8 +147,15 @@ public class OfflineDeployBattlefieldView extends View {
         pickedShip.setLocalTransform(0, 0);
 
         if (!battlefieldGridView.isInside(x, y)) {
-            pickedShip.moveTo(pickedCoordinate);
+            if (shipViewList.contains(pickedShip))
+                shipViewList.remove(pickedShip);
+            shipInventoryView.returnShip(pickedShip);
+            pickedShip = null;
+            invalidate();
+            return;
         }
+        if (!shipViewList.contains(pickedShip))
+            shipViewList.add(pickedShip);
         pickedShip = null;
         invalidate();
         requestLayout();

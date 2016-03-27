@@ -55,6 +55,10 @@ public class ShipView {
         return shipView;
     }
 
+    public int getSize() {
+        return size;
+    }
+
     public void resize(int gridSize) {
         this.gridSize = gridSize;
         updateBoundary();
