@@ -109,7 +109,6 @@ public class OfflineDeployBattlefieldView extends View {
 
 
         if (pickedShip != null) {
-            pickedShip.moveTo(positionToCoordinates(x, y));
             pickedCoordinate = pickedShip.getCoordinate();
             pickedShip.setLocalTransform(-5, -5);
             invalidate();
@@ -134,7 +133,7 @@ public class OfflineDeployBattlefieldView extends View {
 
     private void handleMove(int x, int y) {
         if (pickedShip != null) {
-            pickedShip.moveTo(positionToCoordinates(x, y));
+            pickedShip.moveTo(positionToCoordinates(x - gridSize, y));
             invalidate();
             requestLayout();
         }

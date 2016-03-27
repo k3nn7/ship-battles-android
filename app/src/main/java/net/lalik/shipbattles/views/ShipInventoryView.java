@@ -109,7 +109,9 @@ public class ShipInventoryView extends View {
             if (view.contains(x, y)) {
                 shipSizeCounts.put(size, shipSizeCounts.get(size) - 1);
                 invalidate();
-                return inventoryViews.get(size).remove();
+                ShipView picked = inventoryViews.get(size).remove();
+                picked.moveTo(view.getCoordinate());
+                return picked;
             }
         }
         return null;
