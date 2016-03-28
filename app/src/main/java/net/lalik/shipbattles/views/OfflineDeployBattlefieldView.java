@@ -80,9 +80,11 @@ public class OfflineDeployBattlefieldView extends View {
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
-            if (isDoubleTouch(event.getEventTime()))
+            if (isDoubleTouch(event.getEventTime())) {
                 handleDoubleTouch((int) event.getX(), (int) event.getY());
-            handlePick((int) event.getX(), (int) event.getY());
+            } else {
+                handlePick((int) event.getX(), (int) event.getY());
+            }
             lastTouchTime = event.getEventTime();
         }
 
@@ -122,12 +124,11 @@ public class OfflineDeployBattlefieldView extends View {
 
         for (ShipView shipView : shipViewList)
             if (shipView.contains(x, y)) {
-                if (shipView.getOrientation() == Orientation.VERTICAL)
-                    shipView.setOrientation(Orientation.HORIZONTAL);
-                else
-                    shipView.setOrientation(Orientation.VERTICAL);
+                shipView.flipOrientation();
+                if (collidesWithDeployedShips(shipView))
+                    shipView.flipOrientation();
                 invalidate();
-                requestLayout();
+                return;
             }
     }
 
@@ -145,19 +146,32 @@ public class OfflineDeployBattlefieldView extends View {
 
         pickedShip.setLocalTransform(0, 0);
 
-        if (!battlefieldGridView.isInside(x, y)) {
-            if (shipViewList.contains(pickedShip))
-                shipViewList.remove(pickedShip);
-            shipInventoryView.returnShip(pickedShip);
-            pickedShip = null;
-            invalidate();
-            return;
+        if (!battlefieldGridView.isInside(x, y) || collidesWithDeployedShips(pickedShip)) {
+            returnShipToInventory(pickedShip);
+        } else {
+            deployPickedShip();
         }
-        if (!shipViewList.contains(pickedShip))
-            shipViewList.add(pickedShip);
         pickedShip = null;
         invalidate();
-        requestLayout();
+    }
+
+    private void returnShipToInventory(ShipView shipView) {
+        if (shipViewList.contains(shipView))
+            shipViewList.remove(shipView);
+        shipInventoryView.returnShip(shipView);
+        invalidate();
+    }
+
+    private void deployPickedShip() {
+        if (!shipViewList.contains(pickedShip))
+            shipViewList.add(pickedShip);
+    }
+
+    private boolean collidesWithDeployedShips(ShipView reference) {
+        for (ShipView shipView : shipViewList)
+            if (shipView.collides(reference) && shipView != reference)
+                return true;
+        return false;
     }
 
     public Coordinate positionToCoordinates(int x, int y) {

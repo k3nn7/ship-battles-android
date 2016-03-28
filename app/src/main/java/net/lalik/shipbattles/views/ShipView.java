@@ -1,6 +1,7 @@
 package net.lalik.shipbattles.views;
 
 import android.graphics.Canvas;
+import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 
 import net.lalik.shipbattles.offline.entity.Ship;
@@ -32,6 +33,7 @@ public class ShipView {
         this.horizontalShip = horizontalShip;
         this.localX = 0;
         this.localY = 0;
+        updateBoundary();
     }
 
     static public ShipView fromShip(Ship ship, Drawable vertical, Drawable horizontal) {
@@ -122,5 +124,22 @@ public class ShipView {
                 break;
         }
         this.orientation = orientation;
+        updateBoundary();
+    }
+
+    public Rect getBoundaries() {
+        return new Rect(x1, y1, x2, y2);
+    }
+
+    public boolean collides(ShipView other) {
+        return Rect.intersects(this.getBoundaries(), other.getBoundaries());
+    }
+
+    public void flipOrientation() {
+        if (orientation == Orientation.HORIZONTAL)
+            orientation = Orientation.VERTICAL;
+        else
+            orientation = Orientation.HORIZONTAL;
+        updateBoundary();
     }
 }
